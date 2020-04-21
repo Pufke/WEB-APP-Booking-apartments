@@ -1,0 +1,4 @@
+1; Apartmani Ivana, Trebinje;20
+2; Apartmani Pufke, Novi Sad;18
+3; Apartmani Vaksi, Zlatibor;10
+4; Apartmani Jovica, Futog;8
