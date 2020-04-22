@@ -6,7 +6,7 @@ Vue.component("web-apartments", {
 	},
 	template: ` 
 <div>
-	Apartments with available rooms!!:
+	<h1> Apartments with available rooms!!: </h1>
 	<table border="1">
 	<tr bgcolor="lightgrey">
 		<th>Name</th>
@@ -24,7 +24,8 @@ Vue.component("web-apartments", {
 		</td>
 	</tr>
 </table>
-
+	
+	
 </div>		  
 `
 	, 
