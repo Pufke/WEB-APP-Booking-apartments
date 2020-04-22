@@ -21,7 +21,7 @@ public class Apartments {
 	private ArrayList<Apartment> apartmentList = new ArrayList<Apartment>();
 
 	public Apartments() {
-		this("C:\\Users\\Vaxi\\Desktop\\6-semestar\\WEB\\WEB-App-za-rezervaciju-apartmana-\\Apartments\\WebContent");
+		this("C:\\Users\\Vaxi\\Desktop\\6-semestar\\WEB\\WEB-Projekat\\Apartments\\WebContent");
 	}
 	
 	

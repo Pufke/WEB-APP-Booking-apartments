@@ -23,9 +23,7 @@ Vue.component("reservation-cart", {
 		<p>
 		Total: {{total}} euros.
 		</p>
-	<p>
-		<a href="#/">Apartments</a>
-	</p>
+
 	
 </div>		  
 `

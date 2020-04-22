@@ -24,9 +24,7 @@ Vue.component("web-apartments", {
 		</td>
 	</tr>
 </table>
-	<p>
-		<a href="#/rc">Let's see reservation cart</a>
-	</p>
+
 </div>		  
 `
 	, 

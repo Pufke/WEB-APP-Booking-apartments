@@ -3,13 +3,18 @@
 
 <head>
 	<link href="css/toast.css" rel="stylesheet" />
+	<link href="css/styles.css" rel="stylesheet" />
+	
 	<meta charset="utf-8"/>
 </head> 
 
 <body>
 <div id="application">
-<h3>Primer WebShop aplikacije u Vue.js tehnologiji</h3>
-	  <router-view></router-view>
+	<h3>Welcome to the Candy shop, u u u u !</h3>
+	<application-header></application-header>
+	
+	<!-- Enable moving through our page  -->
+	<router-view></router-view>
 </div>
 
 <script src="js/vue.js"></script>
@@ -17,6 +22,8 @@
 <script src="js/axios.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/toast.js"></script>
+
+<script src="app/applicationHeader.js"></script>
 <script src="app/webApartments.js"></script>
 <script src="app/reservationCart.js"></script>
 <script src="app/app.js"></script>
