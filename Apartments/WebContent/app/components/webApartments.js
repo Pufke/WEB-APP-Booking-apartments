@@ -24,7 +24,7 @@ Vue.component("web-apartments", {
 		</td>
 	</tr>
 </table>
-	
+
 	
 </div>		  
 `

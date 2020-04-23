@@ -6,6 +6,7 @@ html {
   background-attachment: fixed;
 }
 
+/* Style for navbar & header */
 
 h1{
     color: white;
@@ -41,3 +42,39 @@ nav{
 table{
 	background-color: burlywood;
 }
+
+/* End of style for navbar & header */
+
+
+
+/* For registration form style*/
+.forica form {
+    margin:0 auto;
+    width:300px
+}
+.forica input {
+  margin-bottom:3px;
+  padding:10px;
+  width: 100%;
+  border:1px solid #CCC
+}
+.forica button {
+  padding:10px
+}
+.forica label {
+  cursor:pointer
+}
+#form-switch {
+  display:none
+}
+#register-form {
+  display:none
+}
+#form-switch:checked~#register-form {
+  display:block
+}
+#form-switch:checked~#login-form {
+  display:none
+}
+
+/* End of registration form style */
