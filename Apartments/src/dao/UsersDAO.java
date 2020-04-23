@@ -19,9 +19,11 @@ import beans.User;
 
 public class UsersDAO {
 
-	private HashMap<String, User> users = new HashMap<String, User>();
-	private ArrayList<User> userList = new ArrayList<User>();
+//	private HashMap<String, User> users = new HashMap<String, User>();
+//	private ArrayList<User> userList = new ArrayList<User>();
 
+	
+	private LinkedHashMap<String, User> users;
 	private String path;
 
 	public UsersDAO() {
@@ -30,7 +32,7 @@ public class UsersDAO {
 			podaciDir.mkdir();
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "users.txt";
-		this.UsersRead(path);
+		this.users = new LinkedHashMap<String, User>();
 	}
 
 	/**
@@ -38,13 +40,50 @@ public class UsersDAO {
 	 * 
 	 * @param path
 	 */
-	public void UsersRead(String path) {
+	public void readUsers() {
+		System.out.println("\n\n\n\t\t POZVANO READ USERS\n\n\n");
 		BufferedReader in = null;
 		try {
-			File file = new File(path);
-			System.out.println(file.getCanonicalPath());
-			in = new BufferedReader(new FileReader(file));
-			readUsers(in);
+			File file = new File(this.path);
+			if (!file.exists()) {
+				saveUsers();
+				file = new File(this.path);
+			}	
+			System.out.println("PUTANJA: "+ this.path);
+			in = Files.newBufferedReader(Paths.get(this.path), StandardCharsets.UTF_8);
+			StringTokenizer st;
+			String line;
+			
+			String userName="", password="", name="", surname="";
+			
+			try {
+				while ((line = in.readLine()) != null) {
+					
+					line = line.trim();
+					if (line.equals("") || line.indexOf('#') == 0)
+						continue;
+					st = new StringTokenizer(line, "|");
+					while (st.hasMoreTokens()) {
+						userName= st.nextToken().trim();
+						
+						byte[] decodedBytes = Base64.getDecoder().decode(st.nextToken().trim());
+						password = new String(decodedBytes);
+						
+						name = st.nextToken().trim();
+						surname = st.nextToken().trim();
+						
+						
+						
+						User user = new User(userName, password, name, surname);
+						users.put(user.getUserName(), user);
+					}
+					
+					
+				}
+			}catch (Exception ex) {
+				ex.printStackTrace();
+			}
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -55,30 +94,10 @@ public class UsersDAO {
 				}
 			}
 		}
+		
 	}
-
-	private void readUsers(BufferedReader in) {
-		String line, id = "", userName = "", password = "";
-		StringTokenizer st;
-		try {
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					id = st.nextToken().trim();
-					userName = st.nextToken().trim();
-					password = st.nextToken().trim();
-				}
-				User product = new User(id, userName, password);
-				users.put(id, product);
-				userList.add(product);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+	
+	
 
 	public void addUser(User user) {
 		if(!users.containsValue(user)) {
@@ -88,23 +107,6 @@ public class UsersDAO {
 		}
 	}
 	
-	
-	
-	public Collection<User> values() {
-		return users.values();
-	}
-
-	public Collection<User> getValues() {
-		return users.values();
-	}
-
-	public User getUser(String id) {
-		return users.get(id);
-	}
-
-	public ArrayList<User> getUserList() {
-		return userList;
-	}
 
 	public void saveUsers() {
 		BufferedWriter out = null;
@@ -130,15 +132,32 @@ public class UsersDAO {
 
 	private String writeUser(User user) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(user.getId()+"|");
-		
 		sb.append(user.getUserName() +"|");
 		
 		String encodedPassword = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
 		sb.append(encodedPassword + "|");
 		
+		sb.append(user.getName()+"|");
+		sb.append(user.getSurname()+"|");
 		
 		return sb.toString();
 	}
 
+	
+	
+	public LinkedHashMap<String, User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(LinkedHashMap<String, User> users) {
+		this.users = users;
+	}
+
+	public Collection<User> values() {
+		return users.values();
+	}
+
+	public Collection<User> getValues() {
+		return users.values();
+	}
 }

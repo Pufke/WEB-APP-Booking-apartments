@@ -1,7 +1,7 @@
 Vue.component("app-register",{
     data() {
         return {
-            users: null,
+            users: {},
             newUser: {}
         }
     },
@@ -10,7 +10,7 @@ Vue.component("app-register",{
         <h1> Cao iz registera! !!!</h1>
 
         <input type='checkbox' id='form-switch'>
-        <form id='login-form' action="" method='post'>
+        <form id='login-form' action="dashboard.html" method='post'>
 
             <input type="text" placeholder="Username" required>
             <input type="password" placeholder="Password" required>

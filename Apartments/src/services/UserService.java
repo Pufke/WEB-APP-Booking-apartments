@@ -44,7 +44,7 @@ public class UserService {
 		UsersDAO users = getUsers();
 		
 		
-		User newUser = new User("100", user.username, user.password);
+		User newUser = new User(user.username, user.password, user.name, user.surname);
 		users.addUser(newUser);
 		users.saveUsers();
 		
@@ -75,7 +75,9 @@ public class UserService {
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
 		if(users == null) {
 			users = new UsersDAO();
+			users.readUsers();
 			ctx.setAttribute("users", users);
+			
 		}
 		
 		return users;
