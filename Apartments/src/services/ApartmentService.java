@@ -38,7 +38,6 @@ public class ApartmentService {
 	@Path("/getJustApartments")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> getJustApartments() {
-		System.out.println("POZVAT GET JUST APARTMENTS");
 		return getApartments().getValues();
 	}
 	
@@ -50,8 +49,6 @@ public class ApartmentService {
 		getReservationCart().addItem(getApartments().getApartment(p.id), p.count);
 		System.out.println("Product " + getApartments().getApartment(p.id)
 				+ " added with count: " + p.count);
-		
-		System.out.println("POZVATO DODAVANJE");
 
 		return "OK";
 	}
@@ -60,7 +57,6 @@ public class ApartmentService {
 	@Path("/getJustRc")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Reservation> getJustRc() {
-		System.out.println("DOBIO SAM getJustRc");
 		return getReservationCart().getItems();
 	}
 
@@ -68,7 +64,6 @@ public class ApartmentService {
 	@Path("/getTotal")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getTotal() {
-		System.out.println("DOBIO SAM getTotal");
 		return "" + getReservationCart().getTotal();
 	}
 
