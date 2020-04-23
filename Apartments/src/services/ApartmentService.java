@@ -14,8 +14,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.Apartment;
-import beans.ApartmentToAdd;
-import beans.Apartments;
+import dao.ApartmentsDAO;
+import dto.ApartmentToAdd;
 import beans.Reservation;
 import beans.ReservationCart;
 
@@ -86,10 +86,10 @@ public class ApartmentService {
 	 * 
 	 * @return apartments
 	 */
-	private Apartments getApartments() {
-		Apartments apartments = (Apartments) ctx.getAttribute("apartments");
+	private ApartmentsDAO getApartments() {
+		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
 		if (apartments == null) {
-			apartments = new Apartments();
+			apartments = new ApartmentsDAO();
 			ctx.setAttribute("apartments", apartments);
 		}
 

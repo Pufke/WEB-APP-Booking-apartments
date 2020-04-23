@@ -1,4 +1,4 @@
-package beans;
+package dao;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,35 +6,36 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.StringTokenizer;
 
-/**
- * Class which represent list of all apartments.
- * 
- * @author Vaxi
- *
- */
-public class Apartments {
+import beans.Apartment;
+
+public class ApartmentsDAO {
 
 	private HashMap<String, Apartment> apartments = new HashMap<String, Apartment>();
 	private ArrayList<Apartment> apartmentList = new ArrayList<Apartment>();
+	private String putanja;
+	
 
-	public Apartments() {
-		this("C:\\Users\\Vaxi\\Desktop\\6-semestar\\WEB\\WEB-Projekat\\Apartments\\WebContent");
+	public ApartmentsDAO() {
+		File podaciDir = new File(System.getProperty("catalina.base") + File.separator + "podaci");
+		if(!podaciDir.exists()) {
+			podaciDir.mkdir();
+		}
+		this.putanja = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "apartments.txt";
+		this.ApartmentsRead(putanja);
 	}
 	
-	
-	//TODO: Mozda, ovo prebaciti u novi paket pod nacivamo DAO koji ce vrsiti samo interakciju sa skladistem podataka.
 	
 	/**
 	 * From path we read the data.
 	 * @param path
+	 * @return 
 	 */
-	public Apartments(String path) {
+	public void ApartmentsRead(String path) {
 		BufferedReader in = null;
 		try {
-			File file = new File(path + "/apartments.txt");
+			File file = new File(path);
 			System.out.println(file.getCanonicalPath());
 			in = new BufferedReader(new FileReader(file));
 			readApartments(in);
@@ -98,5 +99,4 @@ public class Apartments {
 	public ArrayList<Apartment> getApartmentList() {
 		return apartmentList;
 	}
-
 }
