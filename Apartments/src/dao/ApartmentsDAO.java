@@ -14,7 +14,7 @@ public class ApartmentsDAO {
 
 	private HashMap<String, Apartment> apartments = new HashMap<String, Apartment>();
 	private ArrayList<Apartment> apartmentList = new ArrayList<Apartment>();
-	private String putanja;
+	private String path;
 	
 
 	public ApartmentsDAO() {
@@ -22,8 +22,8 @@ public class ApartmentsDAO {
 		if(!podaciDir.exists()) {
 			podaciDir.mkdir();
 		}
-		this.putanja = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "apartments.txt";
-		this.ApartmentsRead(putanja);
+		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "apartments.txt";
+		this.ApartmentsRead(path);
 	}
 	
 	

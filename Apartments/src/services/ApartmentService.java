@@ -46,6 +46,7 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String add(ApartmentToAdd p) {
+		
 		getReservationCart().addItem(getApartments().getApartment(p.id), p.count);
 		System.out.println("Product " + getApartments().getApartment(p.id)
 				+ " added with count: " + p.count);
