@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import beans.User;
 import dao.UsersDAO;
 import dto.UserDTO;
+import dto.UserLoginDTO;
 
 
 @Path("/users")
@@ -35,8 +36,29 @@ public class UserService {
 	
 	
 	@POST
+	@Path("/login")
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response login(UserLoginDTO user) {
+		UsersDAO users = getUsers();
+		User compareUser = new User("", "", "");
+		compareUser = users.getUser(user.username);
+		if(compareUser == null) {
+			System.out.println("Nema takvog usera");
+			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again").build();
+		}else if(!compareUser.getPassword().equals(user.password)) {
+			System.out.println("SIFRE NISU JEDNAKE");
+			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again").build();
+		}
+		
+		
+		return Response.ok().build();
+	}
+	
+	
+	@POST
 	@Path("/registration")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response registration(UserDTO user) {
 		System.out.println("DODAJEM USERA"+user.username+"\nSa sifrom: "+ user.password +"OVDE ZAPRAVO");

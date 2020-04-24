@@ -24,18 +24,17 @@ Vue.component("app-login",{
         return {
             users: {},
             newUser: {},
-            errors: [],
-            message: 'poruka'
+            errors: []
         }
     },
     template:`
     <div class ="forica">
 
        
-        <form id='login-form' action="../../Apartments/dashboard.html" method='post'>
+        <form id='login-form' @submit="checkLogin" method='post'>
 
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
+            <input type="text" v-model="newUser.userName" placeholder="Username" required>
+            <input type="password" v-model="newUser.password" placeholder="Password" required>
             
             <button type='submit'>Login</button>
 
@@ -54,30 +53,15 @@ Vue.component("app-login",{
         <h1> {{newUser.password}} </h1>
         <h1> {{newUser.name}} </h1>
         <h1> {{newUser.surname}} </h1>
-        <h1> {{this.message}} </h1>
         
 
     </div>
     
     `,
     methods: {
-        addNewUser: function(_newUser){
-            axios
-            .post('rest/users/registration',{"username":''+ _newUser.userName, "password":''+_newUser.password, "name":''+_newUser.name, "surname":''+_newUser.surname})
-            .then((response)=>{
-                alert('ok');
-                toastr["error"]("Nesto nije okej", "FAIL");
-                this.newUser.userName = "NEMAAAAAAAAAAAAAAAAAAAAA";
-                alert('jos jedan');
-            })
-            .catch(err => (console.log(error)))
-        },//toast('Successfuly register dear '+ _newUser.userName)
-        chechRegistration: function(event){
-
-            if (this.newUser.userName && this.newUser.password && this.newUser.name && this.newUser.surname) {
-                return true;
-            }
-            
+        checkLogin: function(event){
+            /* Prevent submit if we have errors ! */
+            event.preventDefault();
 
             /**
              * Save errors, and make notification from him.
@@ -97,21 +81,34 @@ Vue.component("app-login",{
                 this.errors.push('Field password is required.');
             }
 
-            if (!this.newUser.name) {
-                this.errors.push('Field name is required.');
-            }
-
-            if (!this.newUser.surname) {
-                this.errors.push('Field surname is required.');
-            } 
-            
-            // TODO OVDE DODATI kod da probam odavde slat zahtev
 
             if (!this.errors.length) {
+                axios
+                .post('rest/users/login',{"username":''+ this.newUser.userName, "password":''+this.newUser.password})
+                .then(response=>{
+                    this.message = response.data;
+                    console.log("\n\n ------- PODACI -------\n");
+                    console.log(response.data);
+                    toastr["success"]("Let's go, travel around world !!", "Success log in!");
+                    console.log("\n\n ----------------------\n\n");
+                    //TODO 11: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na dashboard.
+                    /**
+                     * Isto kao i TODO 10 problem. 
+                     *
+                     * author: Vaxi
+                     */
+                    window.location.href = "http://localhost:8080/Apartments/dashboard.html";
+
+                    
+                })
+                .catch(err =>{ 
+                    console.log("\n\n ------- ERROR -------\n");
+                    console.log(err);
+                    toastr["error"]("Some error message", "Fail");
+                    console.log("\n\n ----------------------\n\n");
+                })
                 return true;
             }
-
-            
 
             /**
              * For each error, push notification to user, to inform him about it.
@@ -121,16 +118,13 @@ Vue.component("app-login",{
                 toastr["error"](element, "Fail")
             });
              
+
             
-             alert('pre preventa');
-            /* Prevent submit if we have errors ! */
-            event.preventDefault();
-            alert('posle preventa');
         }
         
     },
     mounted() {
+        axios.get('rest/users/getNewUser').then(response => (this.newUser = response.data));
         axios.get('rest/users/getJustUsers').then(response => (this.users = response.data));
     },
-
 });

@@ -31,7 +31,7 @@ Vue.component("app-register",{
     template:`
     <div class ="forica">
 
-        <form id='register-form' @submit="chechRegistration" method='post'>
+        <form id='register-form' @submit="checkRegistration" method='post'>
 
             <input type="text" v-model="newUser.userName" placeholder="Username" required>
             <input type="text" v-model="newUser.name" placeholder="Name" >
@@ -64,7 +64,7 @@ Vue.component("app-register",{
     
     `,
     methods: {
-        chechRegistration: function(event){
+        checkRegistration: function(event){
             /* Prevent submit if we have errors ! */
             event.preventDefault();
 
@@ -103,7 +103,7 @@ Vue.component("app-register",{
                     console.log(response.data);
                     toastr["success"]("Let's go, Log in !!", "Success registration!");
                     console.log("\n\n ----------------------\n\n");
-                    //TODO: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na login.
+                    //TODO 10: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na login.
                     /**
                      * Opis problema:
                      * Kada se aktivira ovaj zahtev ka bekendu,
