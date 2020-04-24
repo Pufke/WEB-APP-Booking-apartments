@@ -101,15 +101,35 @@ Vue.component("app-register",{
                     this.message = response.data;
                     console.log("\n\n ------- PODACI -------\n");
                     console.log(response.data);
-                    toastr["success"]("Well done !", "Success registration!");
+                    toastr["success"]("Let's go, Log in !!", "Success registration!");
                     console.log("\n\n ----------------------\n\n");
                     //TODO: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na login.
+                    /**
+                     * Opis problema:
+                     * Kada se aktivira ovaj zahtev ka bekendu,
+                     * pri povratku, bi trebao da nastavi dalje
+                     * jer je uspesan, ali zbog event.preventDefault();
+                     * koji nam je na ovoj formi, on ostaje na istoj stranici
+                     * sto je okej kada je u pitanju greska, ali kada
+                     * je uspesno registrovanje, trebalo bi da nekako
+                     * deaktiviramo taj prevend default.
+                     * 
+                     * Posto nisam nasao drugacije resenje od predloga na Stacku
+                     * no da simuliram klik misa, simuliram ga i vodim na stranicu
+                     * logina.
+                     * 
+                     * Drugo pitanje je, kako iscitati onu poruku sto smo
+                     * nakacili na Responsu[na bekendu kao povratnu vrednost].
+                     * Kako bi onda mogli da je ispisemo ovde.
+                     * 
+                     * author: Vaxi
+                     */
                     window.location.href = "http://localhost:8080/Apartments/#/login";
                 })
                 .catch(err =>{ 
                     console.log("\n\n ------- ERROR -------\n");
                     console.log(err);
-                    toastr["error"]("GRESKA", "Fail");
+                    toastr["error"]("We have alredy user with same username, try another one", "Fail");
                     console.log("\n\n ----------------------\n\n");
                 })
                 return true;
