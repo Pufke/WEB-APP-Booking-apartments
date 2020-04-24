@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.User;
 import dao.UsersDAO;
@@ -37,18 +38,23 @@ public class UserService {
 	@Path("/registration")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String add(UserDTO user) {
+	public Response registration(UserDTO user) {
 		System.out.println("DODAJEM USERA"+user.username+"\nSa sifrom: "+ user.password +"OVDE ZAPRAVO");
 		System.out.println("Imena: " + user.name +"\nPrezimena: " + user.surname);
 		
 		UsersDAO users = getUsers();
-		
+		String povratna = new String("nesto");
+		/* If we have already that user, we can't register him */
+		if(users.getUser(user.username) != null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("We have alredy user with same username, try another one").build();
+		}
 		
 		User newUser = new User(user.username, user.password, user.name, user.surname);
 		users.addUser(newUser);
 		users.saveUsers();
 		
-		return "OK";
+		System.out.println("\n\n\t\t USPESNO \n\n");
+		return Response.ok().build();
 	}
 	
 	@GET

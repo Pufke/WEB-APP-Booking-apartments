@@ -160,4 +160,12 @@ public class UsersDAO {
 	public Collection<User> getValues() {
 		return users.values();
 	}
+
+	public User getUser(String username) {
+		if(users.containsKey(username)) {
+			return users.get(username);
+		}
+		
+		return null;
+	}
 }

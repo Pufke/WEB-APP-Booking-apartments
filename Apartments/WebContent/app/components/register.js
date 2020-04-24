@@ -1,27 +1,37 @@
+/**
+ * Settings for toastr.
+ */
+toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
+
 Vue.component("app-register",{
     data() {
         return {
             users: {},
             newUser: {},
-            errors: []
+            errors: [],
+            message: null
         }
     },
     template:`
     <div class ="forica">
 
-        <input type='checkbox' id='form-switch'>
-        <form id='login-form' action="../../Apartments/dashboard.html" method='post'>
-
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
-            
-            <button type='submit'>Login</button>
-
-
-            <label for='form-switch'><span>Register</span></label>
-        </form>
-
-        <form id='register-form' @submit="addNewUser(newUser)" action="" method='post'>
+        <form id='register-form' @submit="chechRegistration" method='post'>
 
             <input type="text" v-model="newUser.userName" placeholder="Username" required>
             <input type="text" v-model="newUser.name" placeholder="Name" >
@@ -29,9 +39,9 @@ Vue.component("app-register",{
             <input type="password" v-model="newUser.password" placeholder="Password" required>
             <input type="password" placeholder="Re Password" required>
 
-            <button type='submit' v-on:click="chechRegistration" >Register</button>
+            <button type='submit'  >Register</button>
 
-            <label for='form-switch'>Already Member ? Sign In Now..</label>
+           
         </form>
 
         <table border="1">
@@ -47,24 +57,16 @@ Vue.component("app-register",{
         <h1> {{newUser.password}} </h1>
         <h1> {{newUser.name}} </h1>
         <h1> {{newUser.surname}} </h1>
-       
+
         
 
     </div>
     
     `,
     methods: {
-        addNewUser: function(_newUser){
-            axios
-            .post('rest/users/registration',{"username":''+ _newUser.userName, "password":''+_newUser.password, "name":''+_newUser.name, "surname":''+_newUser.surname})
-            .then(response=>(toast('Successfuly register dear '+ _newUser.userName)))
-        },
         chechRegistration: function(event){
-
-            if (this.newUser.userName && this.newUser.password && this.newUser.name && this.newUser.surname) {
-                return true;
-            }
-            
+            /* Prevent submit if we have errors ! */
+            event.preventDefault();
 
             /**
              * Save errors, and make notification from him.
@@ -93,28 +95,24 @@ Vue.component("app-register",{
             } 
 
             if (!this.errors.length) {
+                axios
+                .post('rest/users/registration',{"username":''+ this.newUser.userName, "password":''+this.newUser.password, "name":''+this.newUser.name, "surname":''+this.newUser.surname})
+                .then(response=>{
+                    this.message = response.data;
+                    console.log("\n\n ------- PODACI -------\n");
+                    console.log(response.data);
+                    toastr["success"]("Well done !", "Success registration!");
+                    console.log("\n\n ----------------------\n\n");
+                    //TODO: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na login.
+                    window.location.href = "http://localhost:8080/Apartments/#/login";
+                })
+                .catch(err =>{ 
+                    console.log("\n\n ------- ERROR -------\n");
+                    console.log(err);
+                    toastr["error"]("GRESKA", "Fail");
+                    console.log("\n\n ----------------------\n\n");
+                })
                 return true;
-            }
-
-            /**
-             * Settings for toastr.
-             */
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
             }
 
             /**
@@ -125,9 +123,8 @@ Vue.component("app-register",{
                 toastr["error"](element, "Fail")
             });
              
-             
-            /* Prevent submit if we have errors ! */
-            event.preventDefault();
+
+            
         }
         
     },

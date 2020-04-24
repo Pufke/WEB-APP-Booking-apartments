@@ -61,20 +61,6 @@ table{
 .forica button {
   padding:10px
 }
-.forica label {
-  cursor:pointer
-}
-#form-switch {
-  display:none
-}
-#register-form {
-  display:none
-}
-#form-switch:checked~#register-form {
-  display:block
-}
-#form-switch:checked~#login-form {
-  display:none
-}
+
 
 /* End of registration form style */
