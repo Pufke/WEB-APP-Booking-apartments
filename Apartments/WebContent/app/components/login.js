@@ -97,14 +97,14 @@ Vue.component("app-login",{
                      *
                      * author: Vaxi
                      */
-                    window.location.href = "http://localhost:8080/Apartments/dashboard.html";
+                    location.href = response.data; // we get from backend redirection to login with this
 
                     
                 })
                 .catch(err =>{ 
                     console.log("\n\n ------- ERROR -------\n");
                     console.log(err);
-                    toastr["error"]("Some error message", "Fail");
+                    toastr["error"]("Password or username are incorrect, try again!", "Fail");
                     console.log("\n\n ----------------------\n\n");
                 })
                 return true;

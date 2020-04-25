@@ -124,7 +124,8 @@ Vue.component("app-register",{
                      * 
                      * author: Vaxi
                      */
-                    window.location.href = "http://localhost:8080/Apartments/#/login";
+                    
+                    location.href = response.data; // we get from backend redirection to login with this
                 })
                 .catch(err =>{ 
                     console.log("\n\n ------- ERROR -------\n");

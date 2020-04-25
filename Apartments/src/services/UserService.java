@@ -51,8 +51,9 @@ public class UserService {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again").build();
 		}
 		
+		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/dashboard.html").build();		//redirect to dashboard when is login accepted
+		//return Response.ok().build();
 		
-		return Response.ok().build();
 	}
 	
 	
@@ -68,7 +69,7 @@ public class UserService {
 		String povratna = new String("nesto");
 		/* If we have already that user, we can't register him */
 		if(users.getUser(user.username) != null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("We have alredy user with same username, try another one").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("We have alredy user with same username. Please try another one").build();
 		}
 		
 		User newUser = new User(user.username, user.password, user.name, user.surname);
@@ -76,7 +77,7 @@ public class UserService {
 		users.saveUsers();
 		
 		System.out.println("\n\n\t\t USPESNO \n\n");
-		return Response.ok().build();
+		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/login").build();		//redirect to login when is registration accepted
 	}
 	
 	@GET
