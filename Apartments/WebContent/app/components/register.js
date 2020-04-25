@@ -38,7 +38,12 @@ Vue.component("app-register",{
             <input type="text" v-model="newUser.surname" placeholder="Surname">
             <input type="password" v-model="newUser.password" placeholder="Password" required>
             <input type="password" placeholder="Re Password" required>
-
+            <select v-model="newUser.role">
+                <option disabled value="">Select role</option>
+                <option>GUEST</option>
+                <option>HOST</option>
+                <option>ADMINISTRATOR</option>
+            </select>
             <button type='submit'  >Register</button>
 
            
@@ -96,7 +101,7 @@ Vue.component("app-register",{
 
             if (!this.errors.length) {
                 axios
-                .post('rest/users/registration',{"username":''+ this.newUser.userName, "password":''+this.newUser.password, "name":''+this.newUser.name, "surname":''+this.newUser.surname})
+                .post('rest/users/registration',{"username":''+ this.newUser.userName, "password":''+this.newUser.password, "name":''+this.newUser.name, "surname":''+this.newUser.surname, "role":''+this.newUser.role})
                 .then(response=>{
                     this.message = response.data;
                     console.log("\n\n ------- PODACI -------\n");

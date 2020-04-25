@@ -57,23 +57,23 @@ public class UserService {
 		
 		
 		// We know this, because in users we have 3 types of instances[Administrator, Guest, Host]
-		if(compareUser instanceof Administrator) {
-			Administrator admin = (Administrator) compareUser;
+		if(compareUser instanceof Administrator || compareUser.getRole().equals("ADMINISTRATOR")) {
+			Administrator admin = new Administrator(compareUser.getUserName(), compareUser.getPassword(), compareUser.getName(), compareUser.getSurname());
 			request.getSession().setAttribute("loginUser", admin);  							// we give him a session
 			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/administratorDashboard.html").build();
 			
-		}else if(compareUser instanceof Guest) {
-			Guest guest = (Guest) compareUser;
+		}else if(compareUser instanceof Guest || compareUser.getRole().equals("GUEST")) {
+			Guest guest = new Guest(compareUser.getUserName(), compareUser.getPassword(), compareUser.getName(), compareUser.getSurname());
 			request.getSession().setAttribute("loginUser", guest);  							// we give him a session
 			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/guestDashboard.html").build();
 			
-		}else if(compareUser instanceof Host) {
-			Host host = (Host) compareUser;
+		}else if(compareUser instanceof Host || compareUser.getRole().equals("HOST")) {
+			Host host = new Host(compareUser.getUserName(), compareUser.getPassword(), compareUser.getName(), compareUser.getSurname());
 			request.getSession().setAttribute("loginUser", host);  							// we give him a session
 			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/hostDashboard.html").build();
 		}
 		
-		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/login").build();		//redirect to login when is login accepted
+		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/loginaaa").build();		//redirect to login when is login accepted
 		//return Response.ok().build();
 		
 	}
@@ -92,9 +92,9 @@ public class UserService {
 		/* If we have already that user, we can't register him */
 		if(users.getUser(user.username) != null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("We have alredy user with same username. Please try another one").build();
-		}
+		}	
 		
-		User newUser = new User(user.username, user.password, user.name, user.surname);
+		User newUser = new User(user.username, user.password, user.name, user.surname, user.role);
 		users.addUser(newUser);
 		users.saveUsers();
 		

@@ -77,6 +77,8 @@ public class UsersDAO {
 						surname = st.nextToken().trim();
 						role = st.nextToken().trim();
 						
+						
+						/* Because of this, we will know after, which roles have user */
 						if(role.equals("ADMINISTRATOR")) {
 							
 							Administrator admin = new Administrator(userName,password,name,surname);
@@ -157,6 +159,7 @@ public class UsersDAO {
 		
 		sb.append(user.getName()+"|");
 		sb.append(user.getSurname()+"|");
+		sb.append(user.getRole()+"|");
 		
 		return sb.toString();
 	}

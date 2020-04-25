@@ -1,6 +1,5 @@
 package beans;
 
-import enums.TypeOfUser;
 
 public class User {
 
@@ -11,7 +10,7 @@ public class User {
 	private String name;
 	private String surname;
 
-	private TypeOfUser role;
+	private String role;
 
 	public User(String id, String userName, String password) {
 		this.id = id;
@@ -30,7 +29,7 @@ public class User {
 		this.surname = surname;
 	}
 
-	public User(String userName, String password, String name, String surname, TypeOfUser role) {
+	public User(String userName, String password, String name, String surname, String role) {
 		this.userName = userName;
 		this.password = password;
 		this.name = name;
@@ -38,11 +37,11 @@ public class User {
 		this.role = role;
 	}
 
-	public TypeOfUser getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(TypeOfUser role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 

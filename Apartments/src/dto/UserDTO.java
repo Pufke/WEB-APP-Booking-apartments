@@ -6,4 +6,7 @@ public class UserDTO {
 	
 	public String name;
 	public String surname;
+	
+	public String role;
+
 }
