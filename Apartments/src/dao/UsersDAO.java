@@ -15,6 +15,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
+
+import beans.Administrator;
+import beans.Guest;
+import beans.Host;
 import beans.User;
 
 public class UsersDAO {
@@ -54,7 +58,7 @@ public class UsersDAO {
 			StringTokenizer st;
 			String line;
 			
-			String userName="", password="", name="", surname="";
+			String userName="", password="", name="", surname="", role="";
 			
 			try {
 				while ((line = in.readLine()) != null) {
@@ -71,11 +75,25 @@ public class UsersDAO {
 						
 						name = st.nextToken().trim();
 						surname = st.nextToken().trim();
+						role = st.nextToken().trim();
 						
-						
-						
-						User user = new User(userName, password, name, surname);
-						users.put(user.getUserName(), user);
+						if(role.equals("ADMINISTRATOR")) {
+							
+							Administrator admin = new Administrator(userName,password,name,surname);
+							users.put(admin.getUserName(), admin);
+							
+						}else if(role.equals("GUEST")) {
+							
+							Guest guest = new Guest(userName, password, name, surname);
+							users.put(guest.getUserName(), guest);
+							
+						}else if(role.equals("HOST")) {
+							
+							Host host = new Host(userName, password, name, surname);
+							users.put(host.getUserName(), host);
+							
+						}
+
 					}
 					
 					

@@ -42,10 +42,11 @@ Vue.component("app-login",{
 
         <table border="1">
 		<tr bgcolor="lightgrey">
-			<th>user name </th><th>Password</th></tr>
+			<th>user name </th><th>Password</th><th>Role</th></tr>
 			<tr v-for="user in users">
                 <td> {{user.userName}}</td>
                 <td> {{user.password}}</td>
+                <td> {{user.role}}</td>
 			</tr>
         </table>
 

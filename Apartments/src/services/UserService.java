@@ -13,6 +13,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Administrator;
+import beans.Guest;
+import beans.Host;
 import beans.User;
 import dao.UsersDAO;
 import dto.UserDTO;
@@ -41,8 +44,9 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(UserLoginDTO user) {
 		UsersDAO users = getUsers();
-		User compareUser = new User("", "", "");
-		compareUser = users.getUser(user.username);
+		
+		User compareUser = users.getUser(user.username);
+		
 		if(compareUser == null) {
 			System.out.println("Nema takvog usera");
 			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again").build();
@@ -51,7 +55,25 @@ public class UserService {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again").build();
 		}
 		
-		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/dashboard.html").build();		//redirect to dashboard when is login accepted
+		
+		// We know this, because in users we have 3 types of instances[Administrator, Guest, Host]
+		if(compareUser instanceof Administrator) {
+			Administrator admin = (Administrator) compareUser;
+			request.getSession().setAttribute("loginUser", admin);  							// we give him a session
+			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/administratorDashboard.html").build();
+			
+		}else if(compareUser instanceof Guest) {
+			Guest guest = (Guest) compareUser;
+			request.getSession().setAttribute("loginUser", guest);  							// we give him a session
+			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/guestDashboard.html").build();
+			
+		}else if(compareUser instanceof Host) {
+			Host host = (Host) compareUser;
+			request.getSession().setAttribute("loginUser", host);  							// we give him a session
+			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/hostDashboard.html").build();
+		}
+		
+		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/login").build();		//redirect to login when is login accepted
 		//return Response.ok().build();
 		
 	}
@@ -66,7 +88,7 @@ public class UserService {
 		System.out.println("Imena: " + user.name +"\nPrezimena: " + user.surname);
 		
 		UsersDAO users = getUsers();
-		String povratna = new String("nesto");
+
 		/* If we have already that user, we can't register him */
 		if(users.getUser(user.username) != null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("We have alredy user with same username. Please try another one").build();
