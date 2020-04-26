@@ -6,7 +6,7 @@ Vue.component("guest-header",{
     }
     ,
     template: `
-    <div>
+    <div id="divHeaderGuest">
         <nav>
             <ul>
                 <li><router-link to="/home" exact>Home Page</router-link></li>
@@ -36,3 +36,4 @@ Vue.component("guest-header",{
         }
     },
 });
+

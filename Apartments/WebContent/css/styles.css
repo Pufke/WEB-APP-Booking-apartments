@@ -64,3 +64,15 @@ table{
 
 
 /* End of registration form style */
+
+
+/* Style for button at navbar in guest mode */
+#divHeaderGuest nav ul li button {
+    border: none;
+    cursor:pointer;
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 10px;
+}
+
+/* End of style for button at navbar in guest mode */
