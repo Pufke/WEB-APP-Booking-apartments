@@ -38,7 +38,7 @@ Vue.component("app-register",{
             <input type="text" v-model="newUser.surname" placeholder="Surname">
             <input type="password" v-model="newUser.password" placeholder="Password" required>
             <input type="password" placeholder="Re Password" required>
-            <select v-model="newUser.role">
+            <select v-model="newUser.role" required>
                 <option disabled value="">Select role</option>
                 <option>GUEST</option>
                 <option>HOST</option>

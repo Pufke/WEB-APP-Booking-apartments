@@ -20,6 +20,7 @@ import beans.Administrator;
 import beans.Guest;
 import beans.Host;
 import beans.User;
+import dto.UserDTO;
 
 public class UsersDAO {
 
@@ -127,6 +128,29 @@ public class UsersDAO {
 		}
 	}
 	
+	
+	public Boolean changeUser(UserDTO updatedUser) {
+		
+		// Find user with that name, and change his data.
+		for (User user : users.values()) {
+			if(user.getUserName().equals(updatedUser.username)) {
+				System.out.println("NASAO SAM " + user.getUserName() + " i sad cu mu izmeniti podatke");
+				System.out.println("NJEGOVA ROLA JE TRENUTNO: " + user.getRole());
+				System.out.println("A NOVA JE: " + updatedUser.role);
+				
+				user.setName(updatedUser.name);
+				user.setPassword(updatedUser.password);
+				user.setSurname(updatedUser.surname);
+				user.setRole(updatedUser.role);
+				
+				
+				saveUsers();
+				
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void saveUsers() {
 		BufferedWriter out = null;
@@ -189,4 +213,6 @@ public class UsersDAO {
 		
 		return null;
 	}
+
+	
 }
