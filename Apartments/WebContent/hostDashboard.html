@@ -7,6 +7,33 @@
     <title>Host dashboard</title>
 </head>
 <body>
-    <h1 align="center"> Welcome host! </h1>
+	<div id="hostID" align = "center"> 
+        <host-header></host-header>
+        <h1 align="center"> Welcome host! </h1>
+        <!-- Enable moving through our page  -->
+        <router-view></router-view>
+        
+    </div>
+      
+    
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/toastr.min.js"></script>
+
+    
+    <script src="app/host/components/hostHome.js"></script>
+    <script src="app/host/components/hostProfile.js"></script>
+    <script src="app/host/components/hostReservation.js"></script>
+    <script src="app/host/components/hostUsers.js"></script>
+    <script src="app/host/components/hostHeader.js"></script>
+    <script src="app/host/components/hostActiveApartments.js"></script>
+    <script src="app/host/components/hostInactiveApartments.js"></script>
+    <script src="app/host/components/hostCommentsAndReviews.js"></script>
+    <script src="app/host/app.js"></script>
+    
+    
 </body>
 </html>
