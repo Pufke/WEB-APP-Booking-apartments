@@ -26,7 +26,7 @@ public class PofileService {
 	
 	
 	@GET
-	@Path("/profileGuest")
+	@Path("/profileUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User getUserInformationForEdit() {
 		

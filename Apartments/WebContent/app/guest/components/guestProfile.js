@@ -72,7 +72,7 @@ Vue.component("guest-profile",{
     },
     mounted () {
         axios
-        .get('rest/edit/profileGuest')
+        .get('rest/edit/profileUser')
         .then( response => this.user = response.data)
     },
     
