@@ -6,7 +6,16 @@ Vue.component("view-apartments",{
     },
 
     template:`
-    <div>
+    <div id = "styleForApartmentsView">
+
+        <ul>
+            <li v-for="apartment in apartments">
+                <h2> {{ apartment.typeOfApartment }} </h2>
+                <h2> {{ apartment.pricePerNight}} </h2>
+            </li>
+        </ul>
+        
+        <br>
         <table border="1">
         <tr bgcolor="lightgrey">
             <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th></tr>
