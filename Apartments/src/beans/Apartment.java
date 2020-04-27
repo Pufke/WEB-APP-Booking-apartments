@@ -39,9 +39,18 @@ public class Apartment {
 	// TODO: Srediti SVE getere i setere kad konacno sredimo atribute, POSTO JE OVO SAMO NESTO
 	// sto mi je trebalo u tom trenutku
 	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	
 	public String getTypeOfApartment() {
 		return typeOfApartment;
 	}
+
 
 	public void setTypeOfApartment(String typeOfApartment) {
 		this.typeOfApartment = typeOfApartment;
