@@ -1,62 +1,76 @@
 package beans;
 
-/**
- * Test bean class for our project.
- * 
- * @author Vaxi
- *
- */
+import java.util.ArrayList;
 
-// TODO: Resolve this to the end.
 public class Apartment {
 
-	private String id;
-	private String name;
-	private int count;
+	private String typeOfApartment; // it can be STANDARD or ROOM
+	private Integer numberOfRooms;
+	private Integer numberOfGuests;
+	private String location; // TODO: Trenutno je string, ali kasnije treba prebaciti u klasu instancu klase
+								// Location, KOJU TREBA NAPRAVITI
 
-	private double price;
+	// TODO : ALOOOOOOOOOOOOOOOOOOOO, RESITI OVO, datumi za izdavanje i dostupnost
+	// po datumima.
+	private ArrayList<String> datesForHosting;// TODO: Trenutno je ovako, razmisliti oko tipa i hendlovanja oko datuma
+												// za izdavanje(koje zadaje domacin)
 
-	public Apartment() {
-		this.id = "";
-		this.name = "";
-		this.price = 0.0;
+	private Host host;
+	private ArrayList<String> comments; // TODO: Prebaciti u listu komentara kada napravimo klasu komentara
+	private String images; // TODO: Videti sta cemo za slike
+
+	private double pricePerNight;
+
+	private String timeForCheckIn; // TODO: Proveriti kako cemo i ovo cuvati
+	private String timeForCheckOut;
+	private String status; // ACTIVE ili INACTIVE
+
+	private ArrayList<String> amentities; // TODO: Srediti ovo kada napravimo klasu sadrzaja apartmana
+	private ArrayList<String> reservations; // TODO: a i ovo kad napravimo klasu rezervvacija.
+
+	public Apartment(String typeOfA, Integer numberOfRooms, double pricePerNight, String status) {
+
+		this.typeOfApartment = typeOfA;
+		this.numberOfRooms = numberOfRooms;
+		this.pricePerNight = pricePerNight;
+		this.status = status;
 	}
 
-	public Apartment(String id, String name, double price) {
-		this.id = id;
-		this.name = name;
-		this.price = price;
+	// TODO: Srediti SVE getere i setere kad konacno sredimo atribute, POSTO JE OVO SAMO NESTO
+	// sto mi je trebalo u tom trenutku
+	
+	public String getTypeOfApartment() {
+		return typeOfApartment;
 	}
 
-	public double getPrice() {
-		return price;
+	public void setTypeOfApartment(String typeOfApartment) {
+		this.typeOfApartment = typeOfApartment;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public Integer getNumberOfRooms() {
+		return numberOfRooms;
 	}
 
-	public String getId() {
-		return id;
+	public void setNumberOfRooms(Integer numberOfRooms) {
+		this.numberOfRooms = numberOfRooms;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public double getPricePerNight() {
+		return pricePerNight;
 	}
 
-	public String getName() {
-		return name;
+	public void setPricePerNight(double pricePerNight) {
+		this.pricePerNight = pricePerNight;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getStatus() {
+		return status;
 	}
 
-	public int getCount() {
-		return count;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+	
+
 }

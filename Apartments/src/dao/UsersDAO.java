@@ -3,16 +3,11 @@ package dao;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
@@ -24,10 +19,6 @@ import dto.UserDTO;
 
 public class UsersDAO {
 
-//	private HashMap<String, User> users = new HashMap<String, User>();
-//	private ArrayList<User> userList = new ArrayList<User>();
-
-	
 	private LinkedHashMap<String, User> users;
 	private String path;
 
