@@ -57,10 +57,58 @@ Vue.component("view-apartments",{
             </tr>
         </table>
 
+        <button type="button" @click="sort">SORT APARTMENTS</button>
+
     </div>
     
     `,
     methods: {
+        sort: function(){
+        	this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['ASC','DESC']);
+        },
+        multisort: function(arr, columns, order_by) {
+            if(typeof columns == 'undefined') {
+                columns = []
+                for(x=0;x<arr[0].length;x++) {
+                    columns.push(x);
+                }
+            }
+
+            if(typeof order_by == 'undefined') {
+                order_by = []
+                for(x=0;x<arr[0].length;x++) {
+                    order_by.push('ASC');
+                }
+            }
+
+            function multisort_recursive(a,b,columns,order_by,index) {  
+                var direction = order_by[index] == 'DESC' ? 1 : 0;
+
+                var is_numeric = !isNaN(a[columns[index]]-b[columns[index]]);
+
+                var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
+                var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
+
+                if(!is_numeric) {
+                    x = helper.string.to_ascii(a[columns[index]].toLowerCase(),-1),
+                    y = helper.string.to_ascii(b[columns[index]].toLowerCase(),-1);
+                }
+
+                if(x < y) {
+                        return direction == 0 ? -1 : 1;
+                }
+
+                if(x == y)  {
+                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
+                }
+
+                return direction == 0 ? 1 : -1;
+            }
+
+            return arr.sort(function (a,b) {
+                return multisort_recursive(a,b,columns,order_by,0);
+            });
+        },
       searchParam: function(event){
         event.preventDefault();
         
