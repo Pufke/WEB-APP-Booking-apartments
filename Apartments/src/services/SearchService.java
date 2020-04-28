@@ -36,49 +36,41 @@ public class SearchService {
 		
 		ArrayList<Apartment> searchedApartments = getApartments().getValues();
 		ArrayList<Apartment> goodApartments = new ArrayList<Apartment>();		// apartments which appropriate search
+
+		
+	
 		
 		
+		/**
+		 * If if paramater default value, then it's true and we do not look for that param in search
+		 * but if he is not default value, then apartman with which we are checking must have same value.
+		 * 
+		 * And if have same value, then it's true.
+		 * 
+		 * If apartment have all true value he is appropriate one for search.
+		 * 
+		 * author: Vaxi
+		 */
 		// TODO: Mozda videti da ubacimo neki regex, da ne bude bas ovaj HC equals
-		if(!searchParam.location.equals("")) {
-			for (Apartment apartment : searchedApartments) {
-				if(apartment.getLocation().equals(searchParam.location)) {
-					goodApartments.add(apartment);
-				}
+		for (Apartment apartment : searchedApartments) {
+			if(
+					(searchParam.location.equals("") ? true : apartment.getLocation().equals(searchParam.location)) &&
+					(searchParam.checkIn.equals("") ? true : apartment.getTimeForCheckIn().equals(searchParam.checkIn)) &&
+					(searchParam.checkOut.equals("") ? true : apartment.getTimeForCheckOut().equals(searchParam.checkOut)) &&
+					((searchParam.price == 0.0) ? true : (apartment.getPricePerNight() == searchParam.price)) &&
+					((searchParam.rooms == 0) ? true : (apartment.getNumberOfRooms() == searchParam.rooms)) &&
+					((searchParam.maxGuests == 0) ? true : (apartment.getNumberOfGuests() == searchParam.maxGuests))
+							
+					) {
+				System.out.println("DODAJEM");
+				goodApartments.add(apartment);
+			}else {
+				System.out.println("NISAM DODAO");
 			}
+			
 		}
 		
-		if(!searchParam.checkIn.equals("")) {
-			for (Apartment apartment : searchedApartments) {
-				
-			}
-		}
-		
-		if(!searchParam.checkOut.equals("")) {
-			for (Apartment apartment : searchedApartments) {
-				
-			}
-		}
-		
-		if(searchParam.price != 0.0) {
-			for (Apartment apartment : searchedApartments) {
-				if(apartment.getPricePerNight() == searchParam.price) {
-					goodApartments.add(apartment);
-				}
-			}
-		}
-		
-		if(searchParam.rooms != 0) {
-			for (Apartment apartment : searchedApartments) {
-				
-			}
-		}
-		
-		if(searchParam.maxGuests != 0) {
-			for (Apartment apartment : searchedApartments) {
-				
-			}
-		}
-		
+	
 		return goodApartments;
 	}
 	

@@ -52,7 +52,7 @@ public class ApartmentsDAO {
 			StringTokenizer st;
 			String line;
 			
-			String status="", typeOfApartment="", pricePerNight="", numberOfRooms="";
+			String status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",location="" ;
 			
 			try {
 				while ((line = in.readLine()) != null) {
@@ -68,8 +68,12 @@ public class ApartmentsDAO {
 						typeOfApartment = st.nextToken().trim();
 						pricePerNight = st.nextToken().trim();
 						numberOfRooms = st.nextToken().trim();
+						numberOfGuests = st.nextToken().trim();
+						timeForCheckIn= st.nextToken().trim();
+						timeForCheckOut = st.nextToken().trim();
+						location = st.nextToken().trim();
 						
-						Apartment apartment = new Apartment(typeOfApartment, Integer.parseInt(numberOfRooms), Double.parseDouble(pricePerNight), status);
+						Apartment apartment = new Apartment(typeOfApartment,Integer.parseInt(numberOfRooms), Integer.parseInt(numberOfGuests), location, Double.parseDouble(pricePerNight), timeForCheckIn, timeForCheckOut, status);	
 						apartments.add(apartment);
 						
 					}
@@ -115,6 +119,7 @@ public class ApartmentsDAO {
 		
 	}
 
+	//			String status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",location="" ;
 
 	private String writeApartment(Apartment apartment) {
 		StringBuilder sb = new StringBuilder();
@@ -123,7 +128,10 @@ public class ApartmentsDAO {
 		sb.append(apartment.getTypeOfApartment() + "|");
 		sb.append(apartment.getPricePerNight() + "|");
 		sb.append(apartment.getNumberOfRooms() + "|");
-		
+		sb.append(apartment.getNumberOfGuests() + "|");
+		sb.append(apartment.getTimeForCheckIn() + "|");
+		sb.append(apartment.getTimeForCheckOut() + "|");
+		sb.append(apartment.getLocation() + "|");
 		
 		return sb.toString();
 	}

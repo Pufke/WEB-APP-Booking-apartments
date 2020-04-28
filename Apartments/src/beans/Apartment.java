@@ -36,21 +36,62 @@ public class Apartment {
 		this.status = status;
 	}
 
-	// TODO: Srediti SVE getere i setere kad konacno sredimo atribute, POSTO JE OVO SAMO NESTO
+	public Apartment(String typeOfA,Integer numberOfRooms, Integer numberOfGuests, String location, double pricePerNight,
+			String timeForCheckIn, String timeForCheckOut, String status) {
+
+		this.typeOfApartment = typeOfA;
+		this.numberOfRooms = numberOfRooms;
+		this.numberOfGuests = numberOfGuests;
+		this.location = location;
+		this.pricePerNight = pricePerNight;
+		this.timeForCheckIn = timeForCheckIn;
+		this.timeForCheckOut = timeForCheckOut;
+		this.status = status;
+	}
+
+	// TODO: Srediti SVE getere i setere kad konacno sredimo atribute, POSTO JE OVO
+	// SAMO NESTO
 	// sto mi je trebalo u tom trenutku
+
 	
+	
+
+
+	public Integer getNumberOfGuests() {
+		return numberOfGuests;
+	}
+
+	public void setNumberOfGuests(Integer numberOfGuests) {
+		this.numberOfGuests = numberOfGuests;
+	}
+
+	public String getTimeForCheckIn() {
+		return timeForCheckIn;
+	}
+
+	public void setTimeForCheckIn(String timeForCheckIn) {
+		this.timeForCheckIn = timeForCheckIn;
+	}
+
+	public String getTimeForCheckOut() {
+		return timeForCheckOut;
+	}
+
+	public void setTimeForCheckOut(String timeForCheckOut) {
+		this.timeForCheckOut = timeForCheckOut;
+	}
+
 	public String getLocation() {
 		return location;
 	}
-
+	
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+
 	public String getTypeOfApartment() {
 		return typeOfApartment;
 	}
-
 
 	public void setTypeOfApartment(String typeOfApartment) {
 		this.typeOfApartment = typeOfApartment;
@@ -79,7 +120,5 @@ public class Apartment {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	
 
 }

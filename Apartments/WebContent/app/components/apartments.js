@@ -43,12 +43,17 @@ Vue.component("view-apartments",{
         <br>
         <table border="1">
         <tr bgcolor="lightgrey">
-            <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th></tr>
+            <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th> </tr>
             <tr v-for="apartment in apartments">
                 <td> {{ apartment.status }} </td>
                 <td> {{ apartment.typeOfApartment }} </td>
                 <td> {{ apartment.pricePerNight}} </td>
                 <td> {{ apartment.numberOfRooms}} </td>
+                <td> {{ apartment.numberOfGuests}} </td>
+                <td> {{ apartment.timeForCheckIn}} </td>
+                <td> {{ apartment.timeForCheckOut}} </td>
+                <td> {{ apartment.location}} </td>
+
             </tr>
         </table>
 
