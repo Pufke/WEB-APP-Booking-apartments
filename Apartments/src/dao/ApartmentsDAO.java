@@ -63,8 +63,9 @@ public class ApartmentsDAO {
 					st = new StringTokenizer(line, "|");
 					while (st.hasMoreTokens()) {
 						status = st.nextToken().trim();
-						if(!status.equals("ACTIVE"))	// Do not read inactive apartments
-							continue;			
+						/*
+						 * if(!status.equals("ACTIVE")) // Do not read inactive apartments continue;
+						 */		
 						typeOfApartment = st.nextToken().trim();
 						pricePerNight = st.nextToken().trim();
 						numberOfRooms = st.nextToken().trim();

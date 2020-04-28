@@ -56,4 +56,7 @@ public class ApartmentService {
 		return apartments;
 		
 	}
+
+
+	
 }

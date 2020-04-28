@@ -1,7 +1,7 @@
 Vue.component("view-apartments",{
     data() {
         return {
-            apartments: {},
+            apartments: [],
             searchData: {
                 location: "",
                 checkIn: "",
@@ -74,7 +74,12 @@ Vue.component("view-apartments",{
             "maxGuests":this.searchData.maxGuests 
         })
         .then(response =>{
-            this.apartments = response.data;
+        	this.apartments = [];
+        	response.data.forEach(el => {
+        		if(el.status == "ACTIVE")
+        			this.apartments.push(el);
+        		});
+        	return this.apartments;
         })
       },
       cancelSearch: function(){
@@ -88,7 +93,12 @@ Vue.component("view-apartments",{
         axios
         .get('rest/apartments/getApartments')
         .then( response => {
-            this.apartments = response.data;
+        	this.apartments = [];
+        	response.data.forEach(el => {
+        		if(el.status == "ACTIVE")
+        			this.apartments.push(el);
+        		});
+        	return this.apartments;
         });
 
       }
@@ -97,7 +107,11 @@ Vue.component("view-apartments",{
         axios
         .get('rest/apartments/getApartments')
         .then( response => {
-            this.apartments = response.data;
+        	response.data.forEach(el => {
+        		if(el.status == "ACTIVE")
+        			this.apartments.push(el);
+        		});
+        	return this.apartments;
         });
     },
 })

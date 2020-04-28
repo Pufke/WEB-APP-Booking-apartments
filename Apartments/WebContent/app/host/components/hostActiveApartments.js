@@ -1,7 +1,7 @@
 Vue.component("host-ActiveApartments",{
     data(){
         return { 
-            apartments: {}
+            apartments: []
         }
     },
     
@@ -34,8 +34,11 @@ Vue.component("host-ActiveApartments",{
         axios
         .get('rest/apartments/getApartments')
         .then( response=> {
-            this.apartments = response.data;	
-            console.log(response.data);
+        	response.data.forEach(el => {
+        		if(el.status == "ACTIVE")
+        			this.apartments.push(el);
+        		});
+        	return this.apartments;
         })
     }
 
