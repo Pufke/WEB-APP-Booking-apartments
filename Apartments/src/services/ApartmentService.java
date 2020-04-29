@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import beans.Apartment;
 import beans.User;
 import dao.ApartmentsDAO;
+import dto.ApartmentsDTO;
 
 //apartments/getApartments
 @Path("/apartments")
@@ -55,6 +56,36 @@ public class ApartmentService {
 		
 		return apartments;
 		
+	}
+
+	@POST
+	@Path("/makeReseervation")
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveApartment(ApartmentsDTO updateApartment) {
+		ApartmentsDAO apartments = getApartmentsCTX();
+		if(apartments.changeApartment(updateApartment)) {
+			System.out.println(updateApartment.identificator);
+			return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+					
+		}else {
+			return Response.status(Response.Status.BAD_REQUEST).entity("ERROR DURING CHANGES").build();
+		}
+
+	}
+	
+	
+	
+	private ApartmentsDAO getApartmentsCTX() {
+		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
+	 	if(apartments == null) {
+	 		apartments = new ApartmentsDAO();
+	 		apartments.readApartments();
+	 		ctx.setAttribute("apartments", apartments);
+			
+	 	}
+		
+ 	return apartments;
 	}
 
 

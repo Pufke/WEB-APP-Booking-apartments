@@ -17,6 +17,7 @@ import beans.Apartment;
 import beans.Guest;
 import beans.Host;
 import beans.User;
+import dto.ApartmentsDTO;
 
 public class ApartmentsDAO {
 	
@@ -141,6 +142,20 @@ public class ApartmentsDAO {
 		sb.append(apartment.getIdentificator() + "|");
 		
 		return sb.toString();
+	}
+	
+	public Boolean changeApartment(ApartmentsDTO updateApartment) {
+		
+		for (Apartment apartment : apartments) {
+			if(apartment.getIdentificator() == updateApartment.identificator) {
+				System.out.println("NASAO SAM APARTMAN " + updateApartment.identificator + " i sad cu mu izmeniti podatke");
+				apartment.setReservedStatus("Rezervisano");
+				saveApartments();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 

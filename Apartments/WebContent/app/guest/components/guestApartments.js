@@ -39,7 +39,7 @@ Vue.component("guest-apartments",{
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
                 <h2> {{ apartment.reservedStatus }} </h2>
-                <button type="submit" @click="makeReservation">MAKE RESERVATION</button>
+                <button @click="makeReservation(apartment.identificator)">MAKE RESERVATION</button>
             </li>
         </ul>
         
@@ -118,8 +118,20 @@ Vue.component("guest-apartments",{
                 return multisort_recursive(a,b,columns,order_by,0);
             });
         },
-    makeReservation: function(){
+    makeReservation: function(identificator){
+        console.log(identificator);
+        axios
+        .post('rest/apartments/makeReseervation',{
+           "reservedStatus": "Rezervisan",
+           "identificator": identificator
         
+        })
+        .then(response =>{
+            toastr["success"]("Success changes!!", "Success!");
+        })
+        .catch(err => {
+            toastr["error"]("Failed during changes :(", "Fail");
+        })
     },
       searchParam: function(event){
         event.preventDefault();
