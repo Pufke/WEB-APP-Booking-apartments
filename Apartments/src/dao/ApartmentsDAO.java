@@ -52,7 +52,7 @@ public class ApartmentsDAO {
 			StringTokenizer st;
 			String line;
 			
-			String status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",location="" ;
+			String identificator="",status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",location="", reservedStatus="" ;
 			
 			try {
 				while ((line = in.readLine()) != null) {
@@ -62,6 +62,7 @@ public class ApartmentsDAO {
 						continue;
 					st = new StringTokenizer(line, "|");
 					while (st.hasMoreTokens()) {
+						
 						status = st.nextToken().trim();
 						/*
 						 * if(!status.equals("ACTIVE")) // Do not read inactive apartments continue;
@@ -73,8 +74,10 @@ public class ApartmentsDAO {
 						timeForCheckIn= st.nextToken().trim();
 						timeForCheckOut = st.nextToken().trim();
 						location = st.nextToken().trim();
-						
-						Apartment apartment = new Apartment(typeOfApartment,Integer.parseInt(numberOfRooms), Integer.parseInt(numberOfGuests), location, Double.parseDouble(pricePerNight), timeForCheckIn, timeForCheckOut, status);	
+						reservedStatus = st.nextToken().trim();
+						identificator = st.nextToken().trim();
+
+						Apartment apartment = new Apartment(Integer.parseInt(identificator) ,typeOfApartment, Integer.parseInt(numberOfRooms), Integer.parseInt(numberOfGuests), location, Double.parseDouble(pricePerNight), timeForCheckIn, timeForCheckOut, status, reservedStatus);	
 						apartments.add(apartment);
 						
 					}
@@ -125,6 +128,7 @@ public class ApartmentsDAO {
 	private String writeApartment(Apartment apartment) {
 		StringBuilder sb = new StringBuilder();
 		
+		
 		sb.append(apartment.getStatus() + "|");
 		sb.append(apartment.getTypeOfApartment() + "|");
 		sb.append(apartment.getPricePerNight() + "|");
@@ -133,6 +137,8 @@ public class ApartmentsDAO {
 		sb.append(apartment.getTimeForCheckIn() + "|");
 		sb.append(apartment.getTimeForCheckOut() + "|");
 		sb.append(apartment.getLocation() + "|");
+		sb.append(apartment.getReservedStatus() + "|");
+		sb.append(apartment.getIdentificator() + "|");
 		
 		return sb.toString();
 	}

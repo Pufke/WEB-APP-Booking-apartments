@@ -28,6 +28,9 @@ public class Apartment {
 	private ArrayList<String> amentities; // TODO: Srediti ovo kada napravimo klasu sadrzaja apartmana
 	private ArrayList<String> reservations; // TODO: a i ovo kad napravimo klasu rezervvacija.
 
+	private Integer identificator;
+	private String reservedStatus;
+	
 	public Apartment(String typeOfA, Integer numberOfRooms, double pricePerNight, String status) {
 
 		this.typeOfApartment = typeOfA;
@@ -36,8 +39,8 @@ public class Apartment {
 		this.status = status;
 	}
 
-	public Apartment(String typeOfA,Integer numberOfRooms, Integer numberOfGuests, String location, double pricePerNight,
-			String timeForCheckIn, String timeForCheckOut, String status) {
+	public Apartment(Integer identificator, String typeOfA,Integer numberOfRooms, Integer numberOfGuests, String location, double pricePerNight,
+			String timeForCheckIn, String timeForCheckOut, String status,String reservedStatus) {
 
 		this.typeOfApartment = typeOfA;
 		this.numberOfRooms = numberOfRooms;
@@ -47,6 +50,8 @@ public class Apartment {
 		this.timeForCheckIn = timeForCheckIn;
 		this.timeForCheckOut = timeForCheckOut;
 		this.status = status;
+		this.identificator = identificator;
+		this.reservedStatus = reservedStatus;
 	}
 
 	// TODO: Srediti SVE getere i setere kad konacno sredimo atribute, POSTO JE OVO
@@ -59,6 +64,22 @@ public class Apartment {
 
 	public Integer getNumberOfGuests() {
 		return numberOfGuests;
+	}
+
+	public Integer getIdentificator() {
+		return identificator;
+	}
+
+	public void setIdentificator(Integer identificator) {
+		this.identificator = identificator;
+	}
+
+	public String getReservedStatus() {
+		return reservedStatus;
+	}
+
+	public void setReservedStatus(String reservedStatus) {
+		this.reservedStatus = reservedStatus;
 	}
 
 	public void setNumberOfGuests(Integer numberOfGuests) {
