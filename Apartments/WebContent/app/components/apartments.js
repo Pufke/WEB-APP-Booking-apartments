@@ -57,14 +57,18 @@ Vue.component("view-apartments",{
             </tr>
         </table>
 
-        <button type="button" @click="sort">SORT APARTMENTS</button>
+        <button type="button" @click="sortAsc">SORT ASC</button>
+        <button type="button" @click="sortDesc">SORT ASC</button>
 
     </div>
     
     `,
     methods: {
-        sort: function(){
+        sortAsc: function(){
         	this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['ASC','DESC']);
+        },
+        sortDesc: function(){
+        	this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['DESC','ASC']);
         },
         multisort: function(arr, columns, order_by) {
             if(typeof columns == 'undefined') {
