@@ -17,7 +17,7 @@ Vue.component("view-apartments",{
     <div id = "styleForApartmentsView">
 
 
-        <form @submit="searchParam" method='post'>
+        <form method='post'>
 
             <input type="text" v-model="searchData.location" placeholder="Location..." >
             <input type="date" v-model="searchData.checkIn" placeholder="Check in...">
@@ -26,8 +26,10 @@ Vue.component("view-apartments",{
             <input type="number" v-model="searchData.rooms" placeholder="Number of rooms ..." >
             <input type="number" v-model="searchData.maxGuests" placeholder="Max guests in room..." >
 
-            <button type="submit" >Search</button>
-            <button type="submit" @click="cancelSearch">Cancel search</button>
+            <button type="button" @click="searchParam" >Search</button>
+            <button type="button" @click="cancelSearch">Cancel search</button>
+            <button type="button" @click="sortAsc">SORT ASC</button>
+            <button type="button" @click="sortDesc">SORT DESC</button>
 
         </form>
         <br>
@@ -57,8 +59,7 @@ Vue.component("view-apartments",{
             </tr>
         </table>
 
-        <button type="button" @click="sortAsc">SORT ASC</button>
-        <button type="button" @click="sortDesc">SORT ASC</button>
+       
 
     </div>
     
