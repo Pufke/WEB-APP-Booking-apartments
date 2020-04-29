@@ -40,7 +40,7 @@ Vue.component("guest-reservation",{
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
                 <h2> {{ apartment.reservedStatus }} </h2>
-                <button type="submit" @click="makeReservation">MAKE RESERVATION</button>
+                <button @click="deleteReservation">DELETE RESERVATION</button>
             </li>
         </ul>
         
@@ -119,7 +119,7 @@ Vue.component("guest-reservation",{
                 return multisort_recursive(a,b,columns,order_by,0);
             });
         },
-    makeReservation: function(){
+        deleteReservation: function(){
         
     },
       searchParam: function(event){
