@@ -157,6 +157,20 @@ public class ApartmentsDAO {
 		
 		return false;
 	}
+	
+	public Boolean deleteReservation(ApartmentsDTO updateApartment) {
+		
+		for (Apartment apartment : apartments) {
+			if(apartment.getIdentificator() == updateApartment.identificator) {
+				System.out.println("NASAO SAM APARTMAN " + updateApartment.identificator + " i sad cu mu izmeniti podatke");
+				apartment.setReservedStatus("Nije rezervisano");
+				saveApartments();
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 
 	public ArrayList<Apartment> getValues() {

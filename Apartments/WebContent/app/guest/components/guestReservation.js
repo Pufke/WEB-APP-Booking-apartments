@@ -40,7 +40,7 @@ Vue.component("guest-reservation",{
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
                 <h2> {{ apartment.reservedStatus }} </h2>
-                <button @click="deleteReservation">DELETE RESERVATION</button>
+                <button type="button" @click="deleteReservation(apartment.identificator)">DELETE RESERVATION</button>
             </li>
         </ul>
         
@@ -119,12 +119,23 @@ Vue.component("guest-reservation",{
                 return multisort_recursive(a,b,columns,order_by,0);
             });
         },
-        deleteReservation: function(){
+        deleteReservation: function(identificator){
+            axios
+            .post('rest/apartments/deleteReservation',{
+                "reservedStatus": "Nije rezervisano",
+                "identificator": identificator
         
+        })
+        .then(response =>{
+            toastr["success"]("Success changes!!", "Success!");         
+        })
+        .catch(err => {
+            toastr["error"]("Failed during changes :(", "Fail");
+        })
     },
       searchParam: function(event){
         event.preventDefault();
-        
+
         axios
         .post('rest/search/apartments',{
             "location":''+ this.searchData.location,

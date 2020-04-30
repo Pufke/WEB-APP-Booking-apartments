@@ -63,7 +63,7 @@ public class ApartmentService {
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveApartment(ApartmentsDTO updateApartment) {
-		ApartmentsDAO apartments = getApartmentsCTX();
+		ApartmentsDAO apartments = getApartments();
 		if(apartments.changeApartment(updateApartment)) {
 			System.out.println(updateApartment.identificator);
 			return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
@@ -74,20 +74,20 @@ public class ApartmentService {
 
 	}
 	
-	
-	
-	private ApartmentsDAO getApartmentsCTX() {
-		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
-	 	if(apartments == null) {
-	 		apartments = new ApartmentsDAO();
-	 		apartments.readApartments();
-	 		ctx.setAttribute("apartments", apartments);
-			
-	 	}
-		
- 	return apartments;
+	@POST
+	@Path("/deleteReservation")
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteReservation(ApartmentsDTO updateApartment) {
+		ApartmentsDAO apartments = getApartments();
+		if(apartments.deleteReservation(updateApartment)) {
+			System.out.println(updateApartment.identificator);
+			return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+					
+		}else {
+			return Response.status(Response.Status.BAD_REQUEST).entity("ERROR DURING CHANGES").build();
+		}
+
 	}
-
-
 	
 }
