@@ -12,10 +12,12 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
+import beans.Address;
 import beans.Administrator;
 import beans.Apartment;
 import beans.Guest;
 import beans.Host;
+import beans.Location;
 import beans.User;
 import dto.ApartmentsDTO;
 
@@ -53,7 +55,11 @@ public class ApartmentsDAO {
 			StringTokenizer st;
 			String line;
 			
-			String identificator="",status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",location="", reservedStatus="" ;
+			String identificator="",status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",locationID="", reservedStatus="" ;
+			
+			LocationDAO location = new LocationDAO();
+			location.readLocations();
+			ArrayList<Location> locationes = location.getLocations();
 			
 			try {
 				while ((line = in.readLine()) != null) {
@@ -74,12 +80,18 @@ public class ApartmentsDAO {
 						numberOfGuests = st.nextToken().trim();
 						timeForCheckIn= st.nextToken().trim();
 						timeForCheckOut = st.nextToken().trim();
-						location = st.nextToken().trim();
 						reservedStatus = st.nextToken().trim();
 						identificator = st.nextToken().trim();
+						locationID = st.nextToken().trim();
+						
 
-						Apartment apartment = new Apartment(Integer.parseInt(identificator) ,typeOfApartment, Integer.parseInt(numberOfRooms), Integer.parseInt(numberOfGuests), location, Double.parseDouble(pricePerNight), timeForCheckIn, timeForCheckOut, status, reservedStatus);	
-						apartments.add(apartment);
+						for (Location l : locationes) {
+							if(l.getLocationID() == Integer.parseInt(locationID)) {
+								Apartment apartment = new Apartment(Integer.parseInt(identificator) ,typeOfApartment, Integer.parseInt(numberOfRooms), Integer.parseInt(numberOfGuests), l, Double.parseDouble(pricePerNight), timeForCheckIn, timeForCheckOut, status, reservedStatus, Integer.parseInt(locationID));	
+								apartments.add(apartment);
+							}
+						}
+							
 						
 					}
 					
@@ -137,9 +149,9 @@ public class ApartmentsDAO {
 		sb.append(apartment.getNumberOfGuests() + "|");
 		sb.append(apartment.getTimeForCheckIn() + "|");
 		sb.append(apartment.getTimeForCheckOut() + "|");
-		sb.append(apartment.getLocation() + "|");
 		sb.append(apartment.getReservedStatus() + "|");
 		sb.append(apartment.getIdentificator() + "|");
+		sb.append(apartment.getLocationID() + "|");
 		
 		return sb.toString();
 	}

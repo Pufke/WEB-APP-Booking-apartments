@@ -35,10 +35,19 @@ Vue.component("guest-apartments",{
 
         <ul>
             <li v-for="apartment in apartments">
-                <h2> {{ apartment.identificator }} </h2>
+                <h2> ID : {{ apartment.identificator }} </h2>
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
                 <h2> {{ apartment.reservedStatus }} </h2>
+                <h2> ADRESA: </h2> 
+                <h3> Mesto: {{ apartment.location.address.populatedPlace }} </h3>
+                <h3> Ulica: {{ apartment.location.address.street }} </h3>
+                <h3> Broj: {{ apartment.location.address.number }} </h3>
+                <h3> ZIP code: {{ apartment.location.address.zipCode }} </h3>
+                
+                <h2> Lokacija: </h2> 
+                <h3> Geografska duzina: {{ apartment.location.longitude }} </h3>
+                 <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
                 <button @click="makeReservation(apartment.identificator)">MAKE RESERVATION</button>
             </li>
         </ul>

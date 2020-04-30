@@ -7,9 +7,15 @@ public class Apartment {
 	private String typeOfApartment; // it can be STANDARD or ROOM
 	private Integer numberOfRooms;
 	private Integer numberOfGuests;
-	private String location; // TODO: Trenutno je string, ali kasnije treba prebaciti u klasu instancu klase
+	
+	private Integer locationID;
+	private Location location; //Pocetna ideja je da lokacija ima svoj idnetifikator,
+	
+	//private String location; // TODO: Trenutno je string, ali kasnije treba prebaciti u klasu instancu klase
 								// Location, KOJU TREBA NAPRAVITI
 
+	
+	
 	// TODO : ALOOOOOOOOOOOOOOOOOOOO, RESITI OVO, datumi za izdavanje i dostupnost
 	// po datumima.
 	private ArrayList<String> datesForHosting;// TODO: Trenutno je ovako, razmisliti oko tipa i hendlovanja oko datuma
@@ -39,8 +45,8 @@ public class Apartment {
 		this.status = status;
 	}
 
-	public Apartment(Integer identificator, String typeOfA,Integer numberOfRooms, Integer numberOfGuests, String location, double pricePerNight,
-			String timeForCheckIn, String timeForCheckOut, String status,String reservedStatus) {
+	public Apartment(Integer identificator, String typeOfA,Integer numberOfRooms, Integer numberOfGuests, Location location, double pricePerNight,
+			String timeForCheckIn, String timeForCheckOut, String status,String reservedStatus, Integer locationID) {
 
 		this.typeOfApartment = typeOfA;
 		this.numberOfRooms = numberOfRooms;
@@ -52,6 +58,8 @@ public class Apartment {
 		this.status = status;
 		this.identificator = identificator;
 		this.reservedStatus = reservedStatus;
+		this.locationID = locationID;
+		this.location = location;
 	}
 
 	// TODO: Srediti SVE getere i setere kad konacno sredimo atribute, POSTO JE OVO
@@ -61,6 +69,62 @@ public class Apartment {
 	
 	
 
+
+	public Integer getLocationID() {
+		return locationID;
+	}
+
+	public void setLocationID(Integer locationID) {
+		this.locationID = locationID;
+	}
+
+	public ArrayList<String> getDatesForHosting() {
+		return datesForHosting;
+	}
+
+	public void setDatesForHosting(ArrayList<String> datesForHosting) {
+		this.datesForHosting = datesForHosting;
+	}
+
+	public Host getHost() {
+		return host;
+	}
+
+	public void setHost(Host host) {
+		this.host = host;
+	}
+
+	public ArrayList<String> getComments() {
+		return comments;
+	}
+
+	public void setComments(ArrayList<String> comments) {
+		this.comments = comments;
+	}
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
+	public ArrayList<String> getAmentities() {
+		return amentities;
+	}
+
+	public void setAmentities(ArrayList<String> amentities) {
+		this.amentities = amentities;
+	}
+
+	public ArrayList<String> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(ArrayList<String> reservations) {
+		this.reservations = reservations;
+	}
 
 	public Integer getNumberOfGuests() {
 		return numberOfGuests;
@@ -102,11 +166,11 @@ public class Apartment {
 		this.timeForCheckOut = timeForCheckOut;
 	}
 
-	public String getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 	
-	public void setLocation(String location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 
