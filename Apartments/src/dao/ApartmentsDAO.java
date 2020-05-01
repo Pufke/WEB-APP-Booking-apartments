@@ -1,24 +1,17 @@
 package dao;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.StringTokenizer;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import beans.Address;
-import beans.Administrator;
 import beans.Apartment;
-import beans.Guest;
-import beans.Host;
 import beans.Location;
-import beans.User;
 import dto.ApartmentsDTO;
 
 public class ApartmentsDAO {
@@ -32,77 +25,34 @@ public class ApartmentsDAO {
 		if (!podaciDir.exists()) {
 			podaciDir.mkdir();
 		}
-		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "apartments.txt";
-		this.apartments = new ArrayList<Apartment>();
-		
+		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "apartments.json";
+		this.apartments = new ArrayList<Apartment>();	
 	}
-	
 	
 	/**
 	 * Read the apartments from the file.
 	 */
+	@SuppressWarnings("unchecked")
 	public void readApartments() {
-		System.out.println("\n\n\n\t\t POZVANO READ APARTMENTS\n\n\n");
 		BufferedReader in = null;
 		try {
 			File file = new File(this.path);
 			if (!file.exists()) {
-				saveApartments();
 				file = new File(this.path);
 			}	
-			System.out.println("PUTANJA: "+ this.path);
-			in = Files.newBufferedReader(Paths.get(this.path), StandardCharsets.UTF_8);
-			StringTokenizer st;
-			String line;
-			
-			String identificator="",status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",locationID="", reservedStatus="" ;
-			
-			LocationDAO location = new LocationDAO();
-			location.readLocations();
-			ArrayList<Location> locationes = location.getLocations();
-			
-			try {
-				while ((line = in.readLine()) != null) {
-					
-					line = line.trim();
-					if (line.equals("") || line.indexOf('#') == 0)
-						continue;
-					st = new StringTokenizer(line, "|");
-					while (st.hasMoreTokens()) {
-						
-						status = st.nextToken().trim();
-						/*
-						 * if(!status.equals("ACTIVE")) // Do not read inactive apartments continue;
-						 */		
-						typeOfApartment = st.nextToken().trim();
-						pricePerNight = st.nextToken().trim();
-						numberOfRooms = st.nextToken().trim();
-						numberOfGuests = st.nextToken().trim();
-						timeForCheckIn= st.nextToken().trim();
-						timeForCheckOut = st.nextToken().trim();
-						reservedStatus = st.nextToken().trim();
-						identificator = st.nextToken().trim();
-						locationID = st.nextToken().trim();
-						
 
-						for (Location l : locationes) {
-							if(l.getLocationID() == Integer.parseInt(locationID)) {
-								Apartment apartment = new Apartment(Integer.parseInt(identificator) ,typeOfApartment, Integer.parseInt(numberOfRooms), Integer.parseInt(numberOfGuests), l, Double.parseDouble(pricePerNight), timeForCheckIn, timeForCheckOut, status, reservedStatus, Integer.parseInt(locationID));	
-								apartments.add(apartment);
-							}
-						}
-							
-						
-					}
-					
-					
-				}
-			}catch (Exception ex) {
-				ex.printStackTrace();
+			JSONParser jsonParser = new JSONParser();
+	         
+	        try (FileReader reader = new FileReader(path))
+	        {
+	        	Object obj = jsonParser.parse(reader);
+	        	JSONArray apartments = (JSONArray) obj;
+				System.out.println(apartments);
+				apartments.forEach( apar -> parseApartmentObject( (JSONObject) apar ) );
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-				
-		} catch (Exception e) {
-			e.printStackTrace();
+			
 		} finally {
 			if (in != null) {
 				try {
@@ -113,47 +63,80 @@ public class ApartmentsDAO {
 		}
 	}
 
+	 private void parseApartmentObject(JSONObject apartment) 
+	    {
+	        JSONObject apartmentObject = (JSONObject) apartment.get("apartment");
+	         
+	        String status = (String) apartmentObject.get("status");    
+	        String TypeOfApartment = (String) apartmentObject.get("TypeOfApartment"); 
+	        Long PricePerNight = (Long) apartmentObject.get("PricePerNight"); 
+	        Long NumberOfRooms = (Long) apartmentObject.get("NumberOfRooms"); 
+	        Long NumberOfGuests = (Long) apartmentObject.get("NumberOfGuests"); 
+	        String TimeForCheckIn = (String) apartmentObject.get("TimeForCheckIn"); 
+	        String TimeForCheckOut = (String) apartmentObject.get("TimeForCheckOut"); 
+	        String ReservedStatus = (String) apartmentObject.get("ReservedStatus"); 
+	        Long Identificator = (Long) apartmentObject.get("Identificator"); 
+	        
+	        JSONObject locationJSONObject = (JSONObject) apartmentObject.get("location"); 
+	        String latitude = (String) locationJSONObject.get("latitude");
+	        String longitude = (String) locationJSONObject.get("longitude");
+	        
+	        JSONObject addressObject = (JSONObject) locationJSONObject.get("address"); 
+	        String street = (String) addressObject.get("street");
+	        String number = (String) addressObject.get("number");
+	        String populatedPlace = (String) addressObject.get("populatedPlace");
+	        String zipCode = (String) addressObject.get("zipCode");
+	      
+	        Address address = new Address(street, number,populatedPlace, zipCode);
+	        Location location  = new Location(latitude, longitude, address);
+	        Apartment a = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
+			apartments.add(a);
+	    }
 
-	private void saveApartments() {
-		BufferedWriter out = null;
-		try {
-			out = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8);
-			for (Apartment a : apartments) {
-				out.write(writeApartment(a));
-				out.newLine();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (out != null) {
-				try {
-					out.flush();
-					out.close();
-				} catch (Exception e) {
-				}
-			}
+	
+	 @SuppressWarnings("unchecked")
+	private void saveApartmentsJSON() {
+		
+		JSONArray apartmentList = new JSONArray();
+		
+		for (Apartment a : apartments) {
+			
+			JSONObject apartment = new JSONObject();
+			apartment.put("status", a.getStatus());
+			apartment.put("TypeOfApartment", a.getTypeOfApartment());
+			apartment.put("PricePerNight", a.getPricePerNight());
+			apartment.put("NumberOfRooms", a.getNumberOfRooms());
+			apartment.put("NumberOfGuests", a.getNumberOfGuests());
+			apartment.put("TimeForCheckIn", a.getTimeForCheckIn());
+			apartment.put("TimeForCheckOut", a.getTimeForCheckOut());
+			apartment.put("Identificator", a.getIdentificator());
+			
+			Location l = a.getLocation();
+			JSONObject location = new JSONObject();
+			location.put("latitude", l.getLatitude());
+			location.put("longitude", l.getLongitude());
+			
+			Address adres = l.getAddress();
+			JSONObject address = new JSONObject();
+			address.put("street", adres.getStreet());
+			address.put("number", adres.getNumber());
+			address.put("populatedPlace", adres.getPopulatedPlace());
+			address.put("zipCode", adres.getZipCode());
+			
+			//Add apartments to list
+			apartmentList.add(apartment);
+			apartmentList.add(apartment);
 		}
+		//Write JSON file
+        try (FileWriter file = new FileWriter("path2")) {
+ 
+            file.write(apartmentList.toJSONString());
+            file.flush();
+ 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		
-	}
-
-	//			String status="", typeOfApartment="", pricePerNight="", numberOfRooms="", numberOfGuests="",timeForCheckIn="",timeForCheckOut="",location="" ;
-
-	private String writeApartment(Apartment apartment) {
-		StringBuilder sb = new StringBuilder();
-		
-		
-		sb.append(apartment.getStatus() + "|");
-		sb.append(apartment.getTypeOfApartment() + "|");
-		sb.append(apartment.getPricePerNight() + "|");
-		sb.append(apartment.getNumberOfRooms() + "|");
-		sb.append(apartment.getNumberOfGuests() + "|");
-		sb.append(apartment.getTimeForCheckIn() + "|");
-		sb.append(apartment.getTimeForCheckOut() + "|");
-		sb.append(apartment.getReservedStatus() + "|");
-		sb.append(apartment.getIdentificator() + "|");
-		sb.append(apartment.getLocationID() + "|");
-		
-		return sb.toString();
 	}
 	
 	public Boolean changeApartment(ApartmentsDTO updateApartment) {
@@ -162,7 +145,7 @@ public class ApartmentsDAO {
 			if(apartment.getIdentificator() == updateApartment.identificator) {
 				System.out.println("NASAO SAM APARTMAN " + updateApartment.identificator + " i sad cu mu izmeniti podatke");
 				apartment.setReservedStatus("Rezervisano");
-				saveApartments();
+				saveApartmentsJSON();
 				return true;
 			}
 		}
@@ -176,7 +159,7 @@ public class ApartmentsDAO {
 			if(apartment.getIdentificator() == updateApartment.identificator) {
 				System.out.println("NASAO SAM APARTMAN " + updateApartment.identificator + " i sad cu mu izmeniti podatke");
 				apartment.setReservedStatus("Nije rezervisano");
-				saveApartments();
+				saveApartmentsJSON();
 				return true;
 			}
 		}

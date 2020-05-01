@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class Apartment {
 
 	private String typeOfApartment; // it can be STANDARD or ROOM
-	private Integer numberOfRooms;
-	private Integer numberOfGuests;
+	private Long numberOfRooms;
+	private Long numberOfGuests;
 	
-	private Integer locationID;
+
 	private Location location; //Pocetna ideja je da lokacija ima svoj idnetifikator,
 	
 	//private String location; // TODO: Trenutno je string, ali kasnije treba prebaciti u klasu instancu klase
@@ -25,7 +25,7 @@ public class Apartment {
 	private ArrayList<String> comments; // TODO: Prebaciti u listu komentara kada napravimo klasu komentara
 	private String images; // TODO: Videti sta cemo za slike
 
-	private double pricePerNight;
+	private Long pricePerNight;
 
 	private String timeForCheckIn; // TODO: Proveriti kako cemo i ovo cuvati
 	private String timeForCheckOut;
@@ -34,10 +34,10 @@ public class Apartment {
 	private ArrayList<String> amentities; // TODO: Srediti ovo kada napravimo klasu sadrzaja apartmana
 	private ArrayList<String> reservations; // TODO: a i ovo kad napravimo klasu rezervvacija.
 
-	private Integer identificator;
+	private Long identificator;
 	private String reservedStatus;
 	
-	public Apartment(String typeOfA, Integer numberOfRooms, double pricePerNight, String status) {
+	public Apartment(String typeOfA, Long numberOfRooms, Long pricePerNight, String status) {
 
 		this.typeOfApartment = typeOfA;
 		this.numberOfRooms = numberOfRooms;
@@ -45,20 +45,18 @@ public class Apartment {
 		this.status = status;
 	}
 
-	public Apartment(Integer identificator, String typeOfA,Integer numberOfRooms, Integer numberOfGuests, Location location, double pricePerNight,
-			String timeForCheckIn, String timeForCheckOut, String status,String reservedStatus, Integer locationID) {
+	public Apartment(Long identificator2, String typeOfA,Long numberOfRooms2, Long numberOfGuests2, Location location, Long pricePerNight2,
+			String timeForCheckIn, String timeForCheckOut, String status, String reservedStatus) {
 
 		this.typeOfApartment = typeOfA;
-		this.numberOfRooms = numberOfRooms;
-		this.numberOfGuests = numberOfGuests;
-		this.location = location;
-		this.pricePerNight = pricePerNight;
+		this.numberOfRooms = numberOfRooms2;
+		this.numberOfGuests = numberOfGuests2;
+		this.pricePerNight = pricePerNight2;
 		this.timeForCheckIn = timeForCheckIn;
 		this.timeForCheckOut = timeForCheckOut;
 		this.status = status;
-		this.identificator = identificator;
+		this.identificator = identificator2;
 		this.reservedStatus = reservedStatus;
-		this.locationID = locationID;
 		this.location = location;
 	}
 
@@ -66,17 +64,7 @@ public class Apartment {
 	// SAMO NESTO
 	// sto mi je trebalo u tom trenutku
 
-	
-	
 
-
-	public Integer getLocationID() {
-		return locationID;
-	}
-
-	public void setLocationID(Integer locationID) {
-		this.locationID = locationID;
-	}
 
 	public ArrayList<String> getDatesForHosting() {
 		return datesForHosting;
@@ -126,15 +114,15 @@ public class Apartment {
 		this.reservations = reservations;
 	}
 
-	public Integer getNumberOfGuests() {
+	public Long getNumberOfGuests() {
 		return numberOfGuests;
 	}
 
-	public Integer getIdentificator() {
+	public Long getIdentificator() {
 		return identificator;
 	}
 
-	public void setIdentificator(Integer identificator) {
+	public void setIdentificator(Long identificator) {
 		this.identificator = identificator;
 	}
 
@@ -146,7 +134,7 @@ public class Apartment {
 		this.reservedStatus = reservedStatus;
 	}
 
-	public void setNumberOfGuests(Integer numberOfGuests) {
+	public void setNumberOfGuests(Long numberOfGuests) {
 		this.numberOfGuests = numberOfGuests;
 	}
 
@@ -182,19 +170,19 @@ public class Apartment {
 		this.typeOfApartment = typeOfApartment;
 	}
 
-	public Integer getNumberOfRooms() {
+	public Long getNumberOfRooms() {
 		return numberOfRooms;
 	}
 
-	public void setNumberOfRooms(Integer numberOfRooms) {
+	public void setNumberOfRooms(Long numberOfRooms) {
 		this.numberOfRooms = numberOfRooms;
 	}
 
-	public double getPricePerNight() {
+	public Long getPricePerNight() {
 		return pricePerNight;
 	}
 
-	public void setPricePerNight(double pricePerNight) {
+	public void setPricePerNight(Long pricePerNight) {
 		this.pricePerNight = pricePerNight;
 	}
 

@@ -175,7 +175,7 @@ Vue.component("guest-reservation",{
         .then( response => {
         	this.apartments = [];
         	response.data.forEach(el => {
-        		iif(el.status == "ACTIVE" && el.reservedStatus == "Rezervisano")
+        		if(el.status == "ACTIVE" && el.reservedStatus == "Rezervisano")
         			this.apartments.push(el);
         		});
         	return this.apartments;

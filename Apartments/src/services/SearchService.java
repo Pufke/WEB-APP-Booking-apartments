@@ -57,14 +57,17 @@ public class SearchService {
 					(searchParam.location.equals("") ? true : apartment.getLocation().equals(searchParam.location)) &&
 					(searchParam.checkIn.equals("") ? true : apartment.getTimeForCheckIn().equals(searchParam.checkIn)) &&
 					(searchParam.checkOut.equals("") ? true : apartment.getTimeForCheckOut().equals(searchParam.checkOut)) &&
-					((searchParam.price == 0.0) ? true : (apartment.getPricePerNight() == searchParam.price)) &&
-					((searchParam.rooms == 0) ? true : (apartment.getNumberOfRooms() == searchParam.rooms)) &&
-					((searchParam.maxGuests == 0) ? true : (apartment.getNumberOfGuests() == searchParam.maxGuests))
+					((searchParam.price == 0.0) ? true : ((double) apartment.getPricePerNight() == searchParam.price)) &&
+					((searchParam.rooms == 0) ? true : ((double) apartment.getNumberOfRooms() == searchParam.rooms)) &&
+					((searchParam.maxGuests == 0) ? true : ((double) apartment.getNumberOfGuests() == searchParam.maxGuests))
 							
 					) {
 				System.out.println("DODAJEM");
 				goodApartments.add(apartment);
 			}else {
+				System.out.println(searchParam.price);
+				System.out.println(apartment.getPricePerNight());
+				
 				System.out.println("NISAM DODAO");
 			}
 			
