@@ -127,7 +127,15 @@ Vue.component("guest-reservation",{
         
         })
         .then(response =>{
-            toastr["success"]("Success changes!!", "Success!");         
+        	 toastr["success"]("Success changes!!", "Success!");
+        	 filteredApartments = [];
+    
+             this.apartments.forEach(el => {           
+        		 	if(el.identificator != identificator){
+        		 		filteredApartments.push(el);
+        		 	}
+        	});
+             this.apartments = filteredApartments;
         })
         .catch(err => {
             toastr["error"]("Failed during changes :(", "Fail");

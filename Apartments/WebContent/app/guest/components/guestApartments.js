@@ -136,7 +136,16 @@ Vue.component("guest-apartments",{
         
         })
         .then(response =>{
-            toastr["success"]("Success changes!!", "Success!");
+        	 toastr["success"]("Success changes!!", "Success!");
+        	 filteredApartments = [];
+        	 
+             this.apartments.forEach(el => {           
+        		 	if(el.identificator != identificator){
+        		 		filteredApartments.push(el);
+        		 	}
+             });
+             this.apartments = filteredApartments;
+           
         })
         .catch(err => {
             toastr["error"]("Failed during changes :(", "Fail");
@@ -176,7 +185,7 @@ Vue.component("guest-apartments",{
         .then( response => {
         	this.apartments = [];
         	response.data.forEach(el => {
-        		iif(el.status == "ACTIVE" && el.reservedStatus == "Nije rezervisano")
+        		if(el.status == "ACTIVE" && el.reservedStatus == "Nije rezervisano")
         			this.apartments.push(el);
         		});
         	return this.apartments;
