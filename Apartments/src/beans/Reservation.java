@@ -4,11 +4,22 @@ public class Reservation {
 	private Apartment reservedApartment;
 	private String dateOfReservation;
 	private String numberOfNights; // Broj nocenja
-	private Integer totalPrice;
+	private Long totalPrice;
 	private String messageForHost; //Poruka pri rezervaciji;
-	private Guest guest;
+	private Guest guest; //Guest koji je napravio rezervaciju
 	private String statusOfReservation;//(Kreirana, Odbijena, Odustanak, Prihvacena, Zavrsena)
 	
+	public Reservation(Apartment reservedApartment, String dateOfReservation, String numberOfNights, Long totalPrice,
+			String messageForHost, Guest guest, String statusOfReservation) {
+		super();
+		this.reservedApartment = reservedApartment;
+		this.dateOfReservation = dateOfReservation;
+		this.numberOfNights = numberOfNights;
+		this.totalPrice = totalPrice;
+		this.messageForHost = messageForHost;
+		this.guest = guest;
+		this.statusOfReservation = statusOfReservation;
+	}
 	public Apartment getReservedApartment() {
 		return reservedApartment;
 	}
@@ -27,10 +38,10 @@ public class Reservation {
 	public void setNumberOfNights(String numberOfNights) {
 		this.numberOfNights = numberOfNights;
 	}
-	public Integer getTotalPrice() {
+	public Long getTotalPrice() {
 		return totalPrice;
 	}
-	public void setTotalPrice(Integer totalPrice) {
+	public void setTotalPrice(Long totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 	public String getMessageForHost() {

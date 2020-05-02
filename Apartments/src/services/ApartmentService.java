@@ -49,7 +49,6 @@ public class ApartmentService {
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
 		
 		if(apartments == null) {
-			System.out.println("NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEeeee");
 			apartments = new ApartmentsDAO();
 			apartments.readApartments();
 			ctx.setAttribute("apartments", apartments);

@@ -63,9 +63,7 @@ public class ApartmentsDAO {
 		}
 	}
 
-	 private void parseApartmentObject(JSONObject apartment) 
-	    {
-	     
+	 private void parseApartmentObject(JSONObject apartment)  {
 	         
 	        String status = (String) apartment.get("status");    
 	        String TypeOfApartment = (String) apartment.get("TypeOfApartment"); 
@@ -76,13 +74,11 @@ public class ApartmentsDAO {
 	        String TimeForCheckOut = (String) apartment.get("TimeForCheckOut"); 
 	        String ReservedStatus = (String) apartment.get("ReservedStatus"); 
 	        Long Identificator = (Long) apartment.get("Identificator"); 
-	        
-	        System.out.println(status);
-	        System.out.println(ReservedStatus);
+	   
 	        
 	        String latitude = (String) apartment.get("latitude");
 	        String longitude = (String) apartment.get("longitude");
-	        
+	        System.out.println(latitude);
 	    
 	        String street = (String) apartment.get("street");
 	        String number = (String) apartment.get("number");
@@ -114,18 +110,15 @@ public class ApartmentsDAO {
 			apartment.put("Identificator", a.getIdentificator());
 			apartment.put("ReservedStatus", a.getReservedStatus());
 			
-			
 			Location l = a.getLocation();
-			JSONObject location = new JSONObject();
-			location.put("latitude", l.getLatitude());
-			location.put("longitude", l.getLongitude());
+			apartment.put("latitude", l.getLatitude());
+			apartment.put("longitude", l.getLongitude());
 			
 			Address adres = l.getAddress();
-			JSONObject address = new JSONObject();
-			address.put("street", adres.getStreet());
-			address.put("number", adres.getNumber());
-			address.put("populatedPlace", adres.getPopulatedPlace());
-			address.put("zipCode", adres.getZipCode());
+			apartment.put("street", adres.getStreet());
+			apartment.put("number", adres.getNumber());
+			apartment.put("populatedPlace", adres.getPopulatedPlace());
+			apartment.put("zipCode", adres.getZipCode());
 			
 			//Add apartments to list
 			apartmentList.add(apartment);

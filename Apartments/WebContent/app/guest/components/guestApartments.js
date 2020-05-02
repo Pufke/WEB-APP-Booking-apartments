@@ -128,28 +128,30 @@ Vue.component("guest-apartments",{
             });
         },
     makeReservation: function(identificator){
-        console.log(identificator);
-        axios
-        .post('rest/apartments/makeReseervation',{
-           "reservedStatus": "Rezervisan",
-           "identificator": identificator
-        
-        })
-        .then(response =>{
-        	 toastr["success"]("Success changes!!", "Success!");
-        	 filteredApartments = [];
-        	 
-             this.apartments.forEach(el => {           
-        		 	if(el.identificator != identificator){
-        		 		filteredApartments.push(el);
-        		 	}
-             });
-             this.apartments = filteredApartments;
-           
-        })
-        .catch(err => {
-            toastr["error"]("Failed during changes :(", "Fail");
-        })
+//        axios
+//        .post('rest/apartments/makeReseervation',{
+//           "reservedStatus": "Rezervisan",
+//           "identificator": identificator
+//        
+//        })
+//        .then(response =>{
+//        	 toastr["success"]("Success changes!!", "Success!");
+//        	 filteredApartments = [];
+//        	 
+//             this.apartments.forEach(el => {           
+//        		 	if(el.identificator != identificator){
+//        		 		filteredApartments.push(el);
+//        		 	}
+//             });
+//             this.apartments = filteredApartments;
+//           
+//        })
+//        .catch(err => {
+//            toastr["error"]("Failed during changes :(", "Fail");
+//        })
+    },
+    makeReseervation2: function(identificator){
+
     },
       searchParam: function(event){
         event.preventDefault();

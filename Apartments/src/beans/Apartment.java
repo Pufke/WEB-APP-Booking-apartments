@@ -7,21 +7,14 @@ public class Apartment {
 	private String typeOfApartment; // it can be STANDARD or ROOM
 	private Long numberOfRooms;
 	private Long numberOfGuests;
-	
-
-	private Location location; //Pocetna ideja je da lokacija ima svoj idnetifikator,
-	
-	//private String location; // TODO: Trenutno je string, ali kasnije treba prebaciti u klasu instancu klase
-								// Location, KOJU TREBA NAPRAVITI
-
-	
+	private Location location;
 	
 	// TODO : ALOOOOOOOOOOOOOOOOOOOO, RESITI OVO, datumi za izdavanje i dostupnost
 	// po datumima.
 	private ArrayList<String> datesForHosting;// TODO: Trenutno je ovako, razmisliti oko tipa i hendlovanja oko datuma
 												// za izdavanje(koje zadaje domacin)
 
-	private Host host;
+	private Host host; //Host koji izdajes
 	private ArrayList<String> comments; // TODO: Prebaciti u listu komentara kada napravimo klasu komentara
 	private String images; // TODO: Videti sta cemo za slike
 
