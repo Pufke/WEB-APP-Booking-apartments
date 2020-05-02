@@ -65,28 +65,30 @@ public class ApartmentsDAO {
 
 	 private void parseApartmentObject(JSONObject apartment) 
 	    {
-	        JSONObject apartmentObject = (JSONObject) apartment.get("apartment");
+	     
 	         
-	        String status = (String) apartmentObject.get("status");    
-	        String TypeOfApartment = (String) apartmentObject.get("TypeOfApartment"); 
-	        Long PricePerNight = (Long) apartmentObject.get("PricePerNight"); 
-	        Long NumberOfRooms = (Long) apartmentObject.get("NumberOfRooms"); 
-	        Long NumberOfGuests = (Long) apartmentObject.get("NumberOfGuests"); 
-	        String TimeForCheckIn = (String) apartmentObject.get("TimeForCheckIn"); 
-	        String TimeForCheckOut = (String) apartmentObject.get("TimeForCheckOut"); 
-	        String ReservedStatus = (String) apartmentObject.get("ReservedStatus"); 
-	        Long Identificator = (Long) apartmentObject.get("Identificator"); 
+	        String status = (String) apartment.get("status");    
+	        String TypeOfApartment = (String) apartment.get("TypeOfApartment"); 
+	        Long PricePerNight = (Long) apartment.get("PricePerNight"); 
+	        Long NumberOfRooms = (Long) apartment.get("NumberOfRooms"); 
+	        Long NumberOfGuests = (Long) apartment.get("NumberOfGuests"); 
+	        String TimeForCheckIn = (String) apartment.get("TimeForCheckIn"); 
+	        String TimeForCheckOut = (String) apartment.get("TimeForCheckOut"); 
+	        String ReservedStatus = (String) apartment.get("ReservedStatus"); 
+	        Long Identificator = (Long) apartment.get("Identificator"); 
 	        
-	        JSONObject locationJSONObject = (JSONObject) apartmentObject.get("location"); 
-	        String latitude = (String) locationJSONObject.get("latitude");
-	        String longitude = (String) locationJSONObject.get("longitude");
+	        System.out.println(status);
+	        System.out.println(ReservedStatus);
 	        
-	        JSONObject addressObject = (JSONObject) locationJSONObject.get("address"); 
-	        String street = (String) addressObject.get("street");
-	        String number = (String) addressObject.get("number");
-	        String populatedPlace = (String) addressObject.get("populatedPlace");
-	        String zipCode = (String) addressObject.get("zipCode");
-	      
+	        String latitude = (String) apartment.get("latitude");
+	        String longitude = (String) apartment.get("longitude");
+	        
+	    
+	        String street = (String) apartment.get("street");
+	        String number = (String) apartment.get("number");
+	        String populatedPlace = (String) apartment.get("populatedPlace");
+	        String zipCode = (String) apartment.get("zipCode");
+	        System.out.println(zipCode);
 	        Address address = new Address(street, number,populatedPlace, zipCode);
 	        Location location  = new Location(latitude, longitude, address);
 	        Apartment a = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
@@ -110,6 +112,8 @@ public class ApartmentsDAO {
 			apartment.put("TimeForCheckIn", a.getTimeForCheckIn());
 			apartment.put("TimeForCheckOut", a.getTimeForCheckOut());
 			apartment.put("Identificator", a.getIdentificator());
+			apartment.put("ReservedStatus", a.getReservedStatus());
+			
 			
 			Location l = a.getLocation();
 			JSONObject location = new JSONObject();
@@ -125,10 +129,9 @@ public class ApartmentsDAO {
 			
 			//Add apartments to list
 			apartmentList.add(apartment);
-			apartmentList.add(apartment);
 		}
 		//Write JSON file
-        try (FileWriter file = new FileWriter("path2")) {
+        try (FileWriter file = new FileWriter(path)) {
  
             file.write(apartmentList.toJSONString());
             file.flush();

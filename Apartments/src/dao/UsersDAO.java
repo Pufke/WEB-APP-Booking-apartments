@@ -1,16 +1,16 @@
 package dao;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.StringTokenizer;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import beans.Administrator;
 import beans.Guest;
 import beans.Host;
@@ -27,7 +27,7 @@ public class UsersDAO {
 		if (!podaciDir.exists()) {
 			podaciDir.mkdir();
 		}
-		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "users.txt";
+		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "users.json";
 		this.users = new LinkedHashMap<String, User>();
 	}
 
@@ -36,68 +36,26 @@ public class UsersDAO {
 	 * 
 	 * @param path
 	 */
+	@SuppressWarnings("unchecked")
 	public void readUsers() {
-		System.out.println("\n\n\n\t\t POZVANO READ USERS\n\n\n");
 		BufferedReader in = null;
 		try {
 			File file = new File(this.path);
 			if (!file.exists()) {
-				saveUsers();
 				file = new File(this.path);
 			}	
-			System.out.println("PUTANJA: "+ this.path);
-			in = Files.newBufferedReader(Paths.get(this.path), StandardCharsets.UTF_8);
-			StringTokenizer st;
-			String line;
-			
-			String userName="", password="", name="", surname="", role="";
-			
-			try {
-				while ((line = in.readLine()) != null) {
-					
-					line = line.trim();
-					if (line.equals("") || line.indexOf('#') == 0)
-						continue;
-					st = new StringTokenizer(line, "|");
-					while (st.hasMoreTokens()) {
-						userName= st.nextToken().trim();
-						
-						byte[] decodedBytes = Base64.getDecoder().decode(st.nextToken().trim());
-						password = new String(decodedBytes);
-						
-						name = st.nextToken().trim();
-						surname = st.nextToken().trim();
-						role = st.nextToken().trim();
-						
-						
-						/* Because of this, we will know after, which roles have user */
-						if(role.equals("ADMINISTRATOR")) {
-							
-							Administrator admin = new Administrator(userName,password,name,surname);
-							users.put(admin.getUserName(), admin);
-							
-						}else if(role.equals("GUEST")) {
-							
-							Guest guest = new Guest(userName, password, name, surname);
-							users.put(guest.getUserName(), guest);
-							
-						}else if(role.equals("HOST")) {
-							
-							Host host = new Host(userName, password, name, surname);
-							users.put(host.getUserName(), host);
-							
-						}
-
-					}
-					
-					
-				}
-			}catch (Exception ex) {
-				ex.printStackTrace();
+			JSONParser jsonParser = new JSONParser();
+	         
+	        try (FileReader reader = new FileReader(path))
+	        {
+	        	Object obj = jsonParser.parse(reader);
+	        	JSONArray users = (JSONArray) obj;
+				System.out.println(users);
+				users.forEach( u -> parseUsersObject( (JSONObject) u ) );
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-				
-		} catch (Exception e) {
-			e.printStackTrace();
+			
 		} finally {
 			if (in != null) {
 				try {
@@ -106,9 +64,40 @@ public class UsersDAO {
 				}
 			}
 		}
-		
 	}
 	
+	 private void parseUsersObject(JSONObject user) 
+	    {
+	      
+	         
+	        String userName = (String) user.get("userName");    
+	        String password = (String) user.get("password");
+	        
+			/* byte[] decodedBytes = Base64.getDecoder().decode(password); */
+			/* password = new String(decodedBytes); */
+			
+			String name = (String) user.get("name");
+			String surname = (String) user.get("surname");
+			String role = (String) user.get("role");
+	        
+			
+			if(role.equals("ADMINISTRATOR")) {
+				
+				Administrator admin = new Administrator(userName,password,name,surname);
+				users.put(admin.getUserName(), admin);
+				
+			}else if(role.equals("GUEST")) {
+				
+				Guest guest = new Guest(userName, password, name, surname);
+				users.put(guest.getUserName(), guest);
+				
+			}else if(role.equals("HOST")) {
+				
+				Host host = new Host(userName, password, name, surname);
+				users.put(host.getUserName(), host);
+			}
+	
+	    }
 	
 
 	public void addUser(User user) {
@@ -135,7 +124,7 @@ public class UsersDAO {
 				user.setRole(updatedUser.role);
 				
 				
-				saveUsers();
+				saveUsersJSON();
 				
 				return true;
 			}
@@ -143,44 +132,35 @@ public class UsersDAO {
 		return false;
 	}
 
-	public void saveUsers() {
-		BufferedWriter out = null;
-		try {
-			out = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8);
-			for (User u : users.values()) {
-				out.write(writeUser(u));
-				out.newLine();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (out != null) {
-				try {
-					out.flush();
-					out.close();
-				} catch (Exception e) {
-				}
-			}
+
+	@SuppressWarnings("unchecked")
+	public void saveUsersJSON() {
+		
+		JSONArray usersList = new JSONArray();
+		
+		for (User u : users.values()) {
+			JSONObject user = new JSONObject();
+			user.put("userName", u.getUserName());
+			user.put("password", u.getPassword());
+			user.put("name", u.getName());
+			user.put("surname", u.getSurname());
+			user.put("role", u.getRole());
+			
+			//Add User to list
+			usersList.add(user);
 		}
+		//Write JSON file
+       try (FileWriter file = new FileWriter(path)) {
+           file.write(usersList.toJSONString());
+           file.flush();
+
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
 		
 	}
 
-	private String writeUser(User user) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(user.getUserName() +"|");
-		
-		String encodedPassword = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
-		sb.append(encodedPassword + "|");
-		
-		sb.append(user.getName()+"|");
-		sb.append(user.getSurname()+"|");
-		sb.append(user.getRole()+"|");
-		
-		return sb.toString();
-	}
 
-	
-	
 	public LinkedHashMap<String, User> getUsers() {
 		return users;
 	}

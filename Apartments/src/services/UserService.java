@@ -96,7 +96,7 @@ public class UserService {
 		
 		User newUser = new User(user.username, user.password, user.name, user.surname, user.role);
 		users.addUser(newUser);
-		users.saveUsers();
+		users.saveUsersJSON();
 		
 		System.out.println("\n\n\t\t USPESNO \n\n");
 		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/login").build();		//redirect to login when is registration accepted
