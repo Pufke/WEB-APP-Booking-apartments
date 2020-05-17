@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -15,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Apartment;
-import beans.User;
 import dao.ApartmentsDAO;
 import dto.ApartmentsDTO;
 

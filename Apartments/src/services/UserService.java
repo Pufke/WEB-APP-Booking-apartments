@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -121,6 +122,32 @@ public class UserService {
 	}
 	
 	
+	@POST
+	@Path("/getSearchedUsers")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getSearchedUsers(UserDTO userSearchParam){
+		System.out.println("\n\n\t\t PRETRAGA KORISNIKA \n\n");
+		
+		Collection<User> allUsers = getUsers().getValues();
+		ArrayList<User> searchedUsers = new ArrayList<User>();
+		
+		for (User user : allUsers) {
+			if(
+					(userSearchParam.username.equals("") ? true : user.getUserName().equals(userSearchParam.username)) &&
+					(userSearchParam.surname.equals("") ? true : user.getSurname().equals(userSearchParam.surname)) &&
+					(userSearchParam.name.equals("") ? true : user.getName().equals(userSearchParam.name)) &&
+					(userSearchParam.role.equals("") ? true : user.getRole().equals(userSearchParam.role)) 
+					) {
+				System.out.println("DODAJEM");
+				searchedUsers.add(user);
+			}else {
+				System.out.println("NISAM DODAO: " + user.getName() +"\n");
+			}
+		}
+		
+		return searchedUsers;
+	}
 	
 	private UsersDAO getUsers() {
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");

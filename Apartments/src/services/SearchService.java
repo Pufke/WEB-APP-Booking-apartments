@@ -34,8 +34,8 @@ public class SearchService {
 	public Collection<Apartment> getSearchedApartments(SearchDTO searchParam){
 		System.out.println("\n\n SEARCH APARTMENTS\n\n");
 		
-		ArrayList<Apartment> searchedApartments = getApartments().getValues();
-		ArrayList<Apartment> goodApartments = new ArrayList<Apartment>();		// apartments which appropriate search
+		ArrayList<Apartment> allApartments = getApartments().getValues();
+		ArrayList<Apartment> searchedApartments = new ArrayList<Apartment>();		// apartments which appropriate search
 
 		
 	
@@ -52,7 +52,7 @@ public class SearchService {
 		 * author: Vaxi
 		 */
 		// TODO: Mozda videti da ubacimo neki regex, da ne bude bas ovaj HC equals
-		for (Apartment apartment : searchedApartments) {
+		for (Apartment apartment : allApartments) {
 			if(
 					(searchParam.location.equals("") ? true : apartment.getLocation().equals(searchParam.location)) &&
 					(searchParam.checkIn.equals("") ? true : apartment.getTimeForCheckIn().equals(searchParam.checkIn)) &&
@@ -63,7 +63,7 @@ public class SearchService {
 							
 					) {
 				System.out.println("DODAJEM");
-				goodApartments.add(apartment);
+				searchedApartments.add(apartment);
 			}else {
 				System.out.println(searchParam.price);
 				System.out.println(apartment.getPricePerNight());
@@ -74,7 +74,7 @@ public class SearchService {
 		}
 		
 	
-		return goodApartments;
+		return searchedApartments;
 	}
 	
 	
