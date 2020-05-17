@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/toast.css" rel="stylesheet" />
+	<link href="css/styles.css" rel="stylesheet" />
+    <link href="css/toastr.min.css" rel="stylesheet"/>
     
     <title>Admin dashboard</title>
 </head>
 <body>
-    <h1 align="center"> Welcome admin! </h1>
+    
+    <div id="administratorID" align = "center">
+        <administrator-header></administrator-header>
+        <h1> Welcome administrator !</h1>
+        <!-- Enable moving through our page  -->
+        <router-view></router-view>
+
+    </div>
+
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/toastr.min.js"></script>
+
+
+    <script src="app/administrator/components/administratorHeader.js"></script>
+    <script src="app/administrator/components/administratorHome.js"></script>
+    <script src="app/administrator/components/administratorApartments.js"></script>
+    <script src="app/administrator/components/administratorProfile.js"></script>
+    <script src="app/administrator/components/administratorUsers.js"></script>
+    <script src="app/administrator/components/administratorContents.js"></script>
+    <script src="app/administrator/components/administratorReservations.js"></script>
+    <script src="app/administrator/components/administratorComments.js"></script>
+    <script src="app/administrator/app.js"></script>
+   
 </body>
 </html>

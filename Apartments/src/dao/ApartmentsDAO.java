@@ -39,7 +39,8 @@ public class ApartmentsDAO {
 			File file = new File(this.path);
 			if (!file.exists()) {
 				file = new File(this.path);
-			}	
+			}
+			System.out.println(file);
 
 			JSONParser jsonParser = new JSONParser();
 	         
