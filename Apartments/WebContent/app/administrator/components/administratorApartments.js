@@ -199,8 +199,24 @@ Vue.component("administrator-apartments",{
                 var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
 
                 if(!is_numeric) {
-                    x = helper.string.to_ascii(a[columns[index]].toLowerCase(),-1),
-                    y = helper.string.to_ascii(b[columns[index]].toLowerCase(),-1);
+                    /*
+                        If we have string, then convert it to
+                        array of charachter with .split("")
+                        then go through every ellement and 
+                        get ascii value from it and add that to sum
+                        of that word, with that, we have uniq value for every
+                        word.
+
+                        author: vaxi
+                    */
+                   let sum_x=0;
+                   let sum_y=0;
+                   
+                   x.split("").forEach(element => sum_x += element.charCodeAt())
+                   y.split("").forEach(element => sum_y += element.charCodeAt())
+
+                   x= sum_x;
+                   y=sum_y;
                 }
 
                 if(x < y) {
