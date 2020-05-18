@@ -5,13 +5,14 @@ Vue.component("administrator-reservations",{
             user: {},
             searchData: {
                 usernameOfGuest : ""
-            }
+            },
+            statusOfReservation: ""
         }
     },
     
     template:`
     <div id = "styleForApartmentsView">
-        <h1> Guten tag {{ user.userName }}, wie geht's </h1>
+        <h1> Guten tag {{ user.userName }}, wie geht's ?</h1>
         
         <form method='post'>
 
@@ -22,6 +23,17 @@ Vue.component("administrator-reservations",{
             <button type="button" @click="cancelSearch">Cancel search</button>
             <button type="button" @click="sortAsc">SORT ASC</button>
             <button type="button" @click="sortDesc">SORT DESC</button>
+
+            <!-- If user don't want use filter, check just option: Reservation status -->
+            <select v-model="statusOfReservation" @change="onchange()">
+                <option value="">Without filter for status</option>
+                <option>Kreirana</option>
+                <option>Odbijena</option>
+                <option>Odustanak</option>
+                <option>Prihvacena</option>
+                <option>Zavrsena</option>
+            </select>
+            
 
         </form>
         <br>
@@ -56,6 +68,24 @@ Vue.component("administrator-reservations",{
     </div>
     `,
     methods: {
+        onchange: function() {
+            if(this.statusOfReservation == ""){
+                // Reset for filter to all apartments
+                axios
+                .get('rest/reservation/getReservations')
+                .then( response => {
+                    this.reservations = [];
+                    response.data.forEach(el => {
+                        this.reservations.push(el);
+                        });
+                    return this.reservations;
+                });
+
+            }else{  // show reservation with only this status of reservation
+                let tempReservations = (this.reservations).filter( reservation => reservation.statusOfReservation == this.statusOfReservation);
+                this.reservations = tempReservations;
+            }
+        },
         searchParam: function(event){
             event.preventDefault();
             alert("pozvano")
