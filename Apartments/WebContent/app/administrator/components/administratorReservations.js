@@ -24,7 +24,7 @@ Vue.component("administrator-reservations",{
             <button type="button" @click="sortAsc">SORT ASC</button>
             <button type="button" @click="sortDesc">SORT DESC</button>
 
-            <!-- If user don't want use filter, check just option: Reservation status -->
+            <!-- If user don't want use filter, check just option: Without filter for status -->
             <select v-model="statusOfReservation" @change="onchange()">
                 <option value="">Without filter for status</option>
                 <option>Kreirana</option>
@@ -70,7 +70,10 @@ Vue.component("administrator-reservations",{
     methods: {
         onchange: function() {
             if(this.statusOfReservation == ""){
-                // Reset for filter to all apartments
+                // Reset for filter to all reservations
+
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
                 axios
                 .get('rest/reservation/getReservations')
                 .then( response => {

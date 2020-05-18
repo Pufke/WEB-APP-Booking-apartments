@@ -32,7 +32,11 @@ Vue.component("administrator-apartments",{
                 maxGuests:0
             },
             apartmentForChange: {},
-            hideDialog: true
+            hideDialog: true,
+            filterDataForApartment: {
+                typeOfApartment : "",
+                status: ""
+            }
         }
     },
 
@@ -51,6 +55,23 @@ Vue.component("administrator-apartments",{
 
             <button type="button" @click="searchParam" >Search</button>
             <button type="button" @click="cancelSearch">Cancel search</button>
+            <br><br>
+
+            <!-- If user don't want use filter, check just option: Without filter for type -->
+            <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
+                <option value="">Without filter for type </option>
+                <option>ROOM</option>
+                <option>STANDARD</option>
+            </select>
+
+            <!-- If user don't want use filter, check just option: Without filter for status -->
+            <select v-model="filterDataForApartment.status" @change="onchangeStatus()">
+                <option value="">Without filter for status </option>
+                <option>ACTIVE</option>
+                <option>INACTIVE</option>
+            </select>
+
+            <br><br>
             <button type="button" @click="sortAsc">SORT ASC</button>
             <button type="button" @click="sortDesc">SORT DESC</button>
 
@@ -115,6 +136,48 @@ Vue.component("administrator-apartments",{
 
     `,
     methods: {
+        onchangeTypeOfApartment: function(){
+            if(this.filterDataForApartment.typeOfApartment == ""){
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                .get('rest/apartments/getApartments')
+                .then( response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if(el.status == "ACTIVE" || el.status == "INACTIVE")
+                            this.apartments.push(el);
+                        });
+                    return this.apartments;
+                });
+
+            }else{
+                let tempApartments = (this.apartments).filter( apartment => apartment.typeOfApartment == this.filterDataForApartment.typeOfApartment);
+                this.apartments = tempApartments;
+            }
+        },
+        onchangeStatus: function(){
+            if(this.filterDataForApartment.status == ""){
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                .get('rest/apartments/getApartments')
+                .then( response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if(el.status == "ACTIVE" || el.status == "INACTIVE")
+                            this.apartments.push(el);
+                        });
+                    return this.apartments;
+                });
+
+            }else{
+                let tempApartments = (this.apartments).filter( apartment => apartment.status == this.filterDataForApartment.status);
+                this.apartments = tempApartments;
+            }
+        },
         changeApartment: function(apartment){
             this.hideDialog = !this.hideDialog;
 
