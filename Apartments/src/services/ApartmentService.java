@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -53,6 +54,20 @@ public class ApartmentService {
 		ApartmentsDAO apartments = getApartments();
 		
 		apartments.changeApartment(updatedApartment);
+		
+		return getApartments().getValues();
+	}
+	
+	@DELETE
+	@Path("/deleteApartment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> deleteApartment(ApartmentsDTO updatedApartment){
+		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + updatedApartment.identificator + "\n\n");
+		
+		ApartmentsDAO apartments = getApartments();
+		
+		apartments.deleteApartment(updatedApartment.identificator);
 		
 		return getApartments().getValues();
 	}

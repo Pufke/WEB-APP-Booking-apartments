@@ -63,9 +63,9 @@ Vue.component("administrator-apartments",{
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
 
-                <button type="button"  @click="changeApartment(apartment)"> Change </button>
+                <button type="button" @click="changeApartment(apartment)"> Change </button>
                 <button type="button" v-if="apartment.status == 'INACTIVE' "> Activate </button>
-                <button type="button"> Delete </button>
+                <button type="button" @click="deleteApartment(apartment)"> Delete </button>
             </li>
         </ul>
         
@@ -138,6 +138,33 @@ Vue.component("administrator-apartments",{
                         this.apartments.push(el);
                     });
                 toastr["success"]("You make success change !!", "Success changes!");
+
+                return this.apartments;
+            });
+        },
+        deleteApartment: function(apartment){
+            this.apartmentForChange = apartment;
+            this.requestForDeleteApartment();
+        },
+        requestForDeleteApartment: function(){
+            alert("identificator " + this.apartmentForChange.identificator);
+            
+            axios
+            .delete('rest/apartments/deleteApartment',{
+                data:{
+                    "reservedStatus": this.apartmentForChange.reservedStatus,
+                    "identificator": this.apartmentForChange.identificator
+                }
+                
+
+            })
+            .then( response =>{
+                this.apartments = [];
+                response.data.forEach(el => {
+                    if(el.status == "ACTIVE" || el.status == "INACTIVE")
+                        this.apartments.push(el);
+                    });
+                toastr["success"]("You make success delete !!", "Success delete!");
 
                 return this.apartments;
             });

@@ -192,5 +192,19 @@ public class ApartmentsDAO {
 	public ArrayList<Apartment> getValues() {
 		return apartments;
 	}
+
+	public void deleteApartment(int identificator ) {
+		
+		
+		for (Apartment apartment : apartments) {
+			if(apartment.getIdentificator() == identificator) {
+				apartments.remove(apartment);
+				saveApartmentsJSON();
+				return;
+			}
+		}
+		return;
+		
+	}
 	
 }
