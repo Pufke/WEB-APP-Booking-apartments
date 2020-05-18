@@ -12,6 +12,7 @@ import org.json.simple.parser.JSONParser;
 import beans.Address;
 import beans.Apartment;
 import beans.Location;
+import dto.ApartmentChangeDTO;
 import dto.ApartmentsDTO;
 
 public class ApartmentsDAO {
@@ -142,6 +143,29 @@ public class ApartmentsDAO {
 			if(apartment.getIdentificator() == updateApartment.identificator) {
 				System.out.println("NASAO SAM APARTMAN " + updateApartment.identificator + " i sad cu mu izmeniti podatke");
 				apartment.setReservedStatus("Rezervisano");
+				saveApartmentsJSON();
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	//TODO: proveriti da li je potreban gornji changeAPartment
+	/*
+	 * Izmena podataka prosledjenog apartmana.
+	 */
+	public Boolean changeApartment(ApartmentChangeDTO updatedApartment) {
+		
+		for (Apartment apartment : apartments) {
+			if(apartment.getIdentificator() == updatedApartment.identificator) {
+				System.out.println("NASAO SAM APARTMAN " + updatedApartment.identificator + " i sad cu mu izmeniti podatke");
+				apartment.setPricePerNight(updatedApartment.pricePerNight);
+				apartment.setTimeForCheckIn(updatedApartment.timeForCheckIn);
+				apartment.setTimeForCheckOut(updatedApartment.timeForCheckOut);
+				apartment.setNumberOfRooms(updatedApartment.numberOfRooms);
+				apartment.setNumberOfGuests(updatedApartment.numberOfGuests);
 				saveApartmentsJSON();
 				return true;
 			}

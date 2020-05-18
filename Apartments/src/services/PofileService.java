@@ -50,9 +50,6 @@ public class PofileService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveProileChanges(UserDTO updatedUser) {
 		UsersDAO users = getUsers();
-		User changeUser = users.getUser(updatedUser.username);
-		
-		
 		
 		if(users.changeUser(updatedUser)) {
 

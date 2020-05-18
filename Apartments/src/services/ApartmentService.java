@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 import beans.Apartment;
 import dao.ApartmentsDAO;
+import dto.ApartmentChangeDTO;
 import dto.ApartmentsDTO;
 
 //apartments/getApartments
@@ -42,6 +43,19 @@ public class ApartmentService {
 		return getApartments().getValues();
 	}
 	
+	@POST
+	@Path("/changeApartment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> changeApartment(ApartmentChangeDTO updatedApartment){
+		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + updatedApartment.identificator + " i cenom" + updatedApartment.pricePerNight + "\n\n");
+		
+		ApartmentsDAO apartments = getApartments();
+		
+		apartments.changeApartment(updatedApartment);
+		
+		return getApartments().getValues();
+	}
 	
 	private ApartmentsDAO getApartments() {
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");

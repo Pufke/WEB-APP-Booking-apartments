@@ -3,7 +3,8 @@ package beans;
 import java.util.ArrayList;
 
 public class Apartment {
-
+	
+	
 	private String typeOfApartment; // it can be STANDARD or ROOM
 	private Long numberOfRooms;
 	private Long numberOfGuests;
@@ -29,6 +30,10 @@ public class Apartment {
 
 	private Long identificator;
 	private String reservedStatus;
+	
+	public Apartment() {
+		
+	}
 	
 	public Apartment(String typeOfA, Long numberOfRooms, Long pricePerNight, String status) {
 
