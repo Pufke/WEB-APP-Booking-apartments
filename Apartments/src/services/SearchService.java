@@ -15,7 +15,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Apartment;
+import beans.Reservation;
 import dao.ApartmentsDAO;
+import dao.ReservationDAO;
+import dto.ReservationAdminSearchDTO;
 import dto.SearchDTO;
 
 
@@ -26,6 +29,32 @@ public class SearchService {
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
+	
+	
+	@POST
+	@Path("/reservations")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> getSearchedReservations(ReservationAdminSearchDTO searchData){
+		System.out.println("\n\n\t\ttrazi se: " + searchData.usernameOfGuest);
+		
+		ArrayList<Reservation> allReservations = getReservations().getValues();
+		ArrayList<Reservation> searchedReservations = new ArrayList<Reservation>();
+		
+		for (Reservation reservation : allReservations) {
+			if(
+					(searchData.usernameOfGuest.equals("") ? true : searchData.usernameOfGuest.equals(reservation.getGuest().getUserName()))
+					) {
+				System.out.println("DODAJEM");
+				searchedReservations.add(reservation);
+			}{
+				System.out.println("nisam dodao jer je username ovog korisnika: "+ reservation.getGuest().getUserName());
+			}
+				
+		}
+		
+		return searchedReservations;
+	}
 	
 	@POST
 	@Path("/apartments")
@@ -77,6 +106,17 @@ public class SearchService {
 		return searchedApartments;
 	}
 	
+	private ReservationDAO getReservations() {
+		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
+		
+		if(reservations == null) {
+			reservations = new ReservationDAO();
+			reservations.readReservations();
+			ctx.setAttribute("reservations", reservations);
+		}
+		
+		return reservations;
+	}
 	
 	private ApartmentsDAO getApartments() {
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
@@ -90,5 +130,6 @@ public class SearchService {
 		return apartments;
 		
 	}
+	
 	
 }
