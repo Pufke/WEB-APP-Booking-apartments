@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import beans.AmenitiesItem;
 import dao.AmenitiesDAO;
 import dao.ReservationDAO;
+import dto.AmenitiesItemAddDTO;
 import dto.AmenitiesItemDTO;
 
 @Path("/amenities")
@@ -44,6 +45,20 @@ public class AmenitiesService {
 		}
 
 		return amenities;
+	}
+	
+	@POST
+	@Path("/addItem")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<AmenitiesItem> addItem(AmenitiesItemAddDTO newItem){
+		System.out.println("\n stigao je item " + newItem.newItemName );
+		
+		AmenitiesDAO amenties = getAmenities();
+		
+		amenties.addItem(newItem);
+		
+		return getAmenities().getValues();
 	}
 	
 	@POST

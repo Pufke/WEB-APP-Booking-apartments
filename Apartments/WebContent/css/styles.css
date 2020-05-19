@@ -186,3 +186,35 @@ table{
 	cursor: pointer;
 }
 /* End of style for dialog of change amenities */
+
+
+/* Style for dialog of adding amenities */
+
+#addDialogForAmenities .modal-contents {
+	height: 250px;
+	width: 500px;
+	background-color: white;
+	text-align: center;
+	padding: 20px;
+	position: relative;
+	border-radius: 4px;
+}
+
+#addDialogForAmenities input {
+	margin: 15px auto;
+	display: block;
+	width: 50%;
+	padding: 8px;
+	border: 1px solid gray;
+}
+
+#addDialogForAmenities .close {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	font-size: 42px;
+	color: #333;
+	transform: rotate(45deg);
+	cursor: pointer;
+}
+/* End of style for dialog of adding amenities */

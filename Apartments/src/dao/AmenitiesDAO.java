@@ -11,6 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import beans.AmenitiesItem;
+import dto.AmenitiesItemAddDTO;
 import dto.AmenitiesItemDTO;
 
 public class AmenitiesDAO {
@@ -124,6 +125,15 @@ public class AmenitiesDAO {
 			}
 		}
 		return;
+		
+	}
+
+	public Boolean addItem(AmenitiesItemAddDTO newItem) {
+		
+		amenities.add(new AmenitiesItem((long) (amenities.size()+1),newItem.newItemName));
+		saveAmenitiesJSON();
+		
+		return true;
 		
 	}
 

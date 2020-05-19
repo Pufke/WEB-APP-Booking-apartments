@@ -27,12 +27,37 @@ Vue.component("administrator-contents",{
             itemForChange: {
                 amenitiesID: 999,
                 name : ""
-            }
+            },
+            hideAddDialog: true,
+            newItemName: ""
         }
     },
     template:`
     <div id = "styleForApartmentsView" >
         <h1> List of content in apartments </h1>
+
+        <br>
+        <button type="button" @click="addItem()"> Add new item </button>
+
+
+        <!-- Modal dialog section for adding -->
+        <div id = "addDialogForAmenities" v-bind:class="{bgModal: hideAddDialog, bgModalShow: !hideAddDialog}">
+            <div class="modal-contents">
+        
+                <div class="close" @click="hideAddDialog = !hideAddDialog">+</div>
+                <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt="">
+
+
+                <form method='post'>
+                    <input type="text" v-model="newItemName" placeholder="Name of amenities...">
+                    
+                    <button type="button" @click="confirmAdding">Confirm</button>
+                    <button type="button" @click="hideAddDialog = !hideAddDialog">Cancel</button>
+
+                </form>
+
+            </div>
+        </div> <!-- End of modal adding dialog section -->
 
 
         <ul>
@@ -84,6 +109,25 @@ Vue.component("administrator-contents",{
 
     `,
     methods: {
+        addItem: function(){
+            this.hideAddDialog = !this.hideAddDialog;
+        },
+        confirmAdding: function(){
+            
+            axios
+            .post('rest/amenities/addItem',{
+                "newItemName": this.newItemName
+            })
+            .then( response =>{
+                this.amenities = [];
+                response.data.forEach(el => {
+                    this.amenities.push(el);
+            });
+            toastr["success"]("You make success adding !!", "Success adding!");
+            return this.amenities;
+            });
+
+        },
         changeItem: function(item){
             this.hideDialog = !this.hideDialog;
 
