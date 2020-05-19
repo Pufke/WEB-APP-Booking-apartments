@@ -11,6 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import beans.AmenitiesItem;
+import dto.AmenitiesItemDTO;
 
 public class AmenitiesDAO {
 	private ArrayList<AmenitiesItem> amenities;
@@ -95,6 +96,22 @@ public class AmenitiesDAO {
 
 	public ArrayList<AmenitiesItem> getValues() {
 		return amenities;
+	}
+
+	public Boolean changeItem(AmenitiesItemDTO updatedItem) {
+		
+		for(AmenitiesItem item : amenities) {
+			if(item.getAmenitiesID().equals(updatedItem.amenitiesID)) {
+				System.out.println(" nasao sam item sa id-om: " + updatedItem.amenitiesID);
+				
+				item.setName(updatedItem.name);
+				saveAmenitiesJSON();
+				return true;
+			}
+		}
+		
+		return false;
+		
 	}
 
 }

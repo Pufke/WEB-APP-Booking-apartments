@@ -87,6 +87,7 @@ Vue.component("administrator-apartments",{
                 <button type="button" @click="changeApartment(apartment)"> Change </button>
                 <button type="button" v-if="apartment.status == 'INACTIVE' "> Activate </button>
                 <button type="button" @click="deleteApartment(apartment)"> Delete </button>
+            
             </li>
         </ul>
         
@@ -107,7 +108,7 @@ Vue.component("administrator-apartments",{
             </tr>
         </table>
 
-        <!-- Modal section -->
+        <!-- Modal dialog section for changing -->
         <div id = "dijalogDeo" v-bind:class="{bgModal: hideDialog, bgModalShow: !hideDialog}">
             <div class="modal-contents">
         

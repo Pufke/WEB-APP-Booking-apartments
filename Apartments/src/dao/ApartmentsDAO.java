@@ -159,7 +159,7 @@ public class ApartmentsDAO {
 	public Boolean changeApartment(ApartmentChangeDTO updatedApartment) {
 		
 		for (Apartment apartment : apartments) {
-			if(apartment.getIdentificator() == updatedApartment.identificator) {
+			if(apartment.getIdentificator().equals(updatedApartment.identificator)) {
 				System.out.println("NASAO SAM APARTMAN " + updatedApartment.identificator + " i sad cu mu izmeniti podatke");
 				apartment.setPricePerNight(updatedApartment.pricePerNight);
 				apartment.setTimeForCheckIn(updatedApartment.timeForCheckIn);

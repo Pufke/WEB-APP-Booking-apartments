@@ -155,3 +155,34 @@ table{
 	cursor: pointer;
 }
 /* End of style for dialog part*/
+
+/* Style for dialog of change amenities */
+
+#dialogForAmenities .modal-contents {
+	height: 250px;
+	width: 500px;
+	background-color: white;
+	text-align: center;
+	padding: 20px;
+	position: relative;
+	border-radius: 4px;
+}
+
+#dialogForAmenities input {
+	margin: 15px auto;
+	display: block;
+	width: 50%;
+	padding: 8px;
+	border: 1px solid gray;
+}
+
+#dialogForAmenities .close {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	font-size: 42px;
+	color: #333;
+	transform: rotate(45deg);
+	cursor: pointer;
+}
+/* End of style for dialog of change amenities */
