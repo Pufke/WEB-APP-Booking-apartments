@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -55,6 +56,18 @@ public class AmenitiesService {
 		AmenitiesDAO amenties = getAmenities();
 		
 		amenties.changeItem(updatedItem);
+		
+		return getAmenities().getValues();
+	}
+	
+	@DELETE
+	@Path("/deleteItem")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<AmenitiesItem> deleteItem(AmenitiesItemDTO deletedItem){
+		AmenitiesDAO amenitiesDAO = getAmenities();
+		
+		amenitiesDAO.deleteItem(deletedItem.amenitiesID);
 		
 		return getAmenities().getValues();
 	}

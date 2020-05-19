@@ -114,4 +114,17 @@ public class AmenitiesDAO {
 		
 	}
 
+	public void deleteItem(Long amenitiesID) {
+		
+		for (AmenitiesItem amenitiesItem : amenities) {
+			if(amenitiesItem.getAmenitiesID().equals(amenitiesID)) {
+				amenities.remove(amenitiesItem);
+				saveAmenitiesJSON();
+				return;
+			}
+		}
+		return;
+		
+	}
+
 }

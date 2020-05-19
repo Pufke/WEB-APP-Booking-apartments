@@ -131,7 +131,7 @@ Vue.component("administrator-apartments",{
                 </form>
 
             </div>
-        </div> <!-- End of modal section -->
+        </div> <!-- End of modal dialog section -->
 
     </div>
 
@@ -210,9 +210,7 @@ Vue.component("administrator-apartments",{
             this.apartmentForChange = apartment;
             this.requestForDeleteApartment();
         },
-        requestForDeleteApartment: function(){
-            alert("identificator " + this.apartmentForChange.identificator);
-            
+        requestForDeleteApartment: function(){            
             axios
             .delete('rest/apartments/deleteApartment',{
                 data:{

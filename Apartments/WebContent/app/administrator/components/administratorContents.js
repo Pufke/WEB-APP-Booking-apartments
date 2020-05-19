@@ -90,9 +90,6 @@ Vue.component("administrator-contents",{
             this.itemForChange = item;
 
         },
-        deleteItem: function(item){
-            this.itemForChange = item;
-        },
         confirmChanging: function(){
             
             axios
@@ -104,10 +101,35 @@ Vue.component("administrator-contents",{
                 this.amenities = [];
                 response.data.forEach(el => {
                     this.amenities.push(el);
-                });
-                toastr["success"]("You make success change !!", "Success changes!");
-                return this.amenities;
             });
+            toastr["success"]("You make success change !!", "Success changes!");
+            return this.amenities;
+            });
+
+        },
+        deleteItem: function(item){
+            this.itemForChange = item;
+            this.requestForDeleteItem();
+        },
+        requestForDeleteItem: function(){
+
+            axios
+            .delete('rest/amenities/deleteItem',{
+                data:{
+                    "amenitiesID": this.itemForChange.amenitiesID,
+                    "name": this.itemForChange.name
+                }
+                
+            })
+            .then( response =>{
+                this.amenities = [];
+                response.data.forEach(el => {
+                    this.amenities.push(el);
+            });
+            toastr["success"]("You make success delete !!", "Success delete!");
+            return this.amenities;
+            });
+
         }
     },
     mounted() {

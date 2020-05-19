@@ -197,7 +197,7 @@ public class ApartmentsDAO {
 		
 		
 		for (Apartment apartment : apartments) {
-			if(apartment.getIdentificator() == identificator) {
+			if(apartment.getIdentificator().equals(identificator)) {
 				apartments.remove(apartment);
 				saveApartmentsJSON();
 				return;
