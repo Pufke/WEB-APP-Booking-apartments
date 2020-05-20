@@ -103,7 +103,10 @@ public class ReservationDAO {
 	        System.out.println(reservations);
 	        
 	  }
-	
+	 
+	 
+	 //TODO: Ovo nije koriscena metoda, treba je proveriti, msm da fali
+	 // cuvanje info o samoj rezervaciji
 	 @SuppressWarnings("unchecked")
 		private void saveReservationsJSON() {
 			

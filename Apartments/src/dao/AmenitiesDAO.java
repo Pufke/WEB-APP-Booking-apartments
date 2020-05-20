@@ -69,7 +69,7 @@ public class AmenitiesDAO {
 
 	}
 
-	@SuppressWarnings({ "unused", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	private void saveAmenitiesJSON() {
 
 		JSONArray amenitiesList = new JSONArray();
