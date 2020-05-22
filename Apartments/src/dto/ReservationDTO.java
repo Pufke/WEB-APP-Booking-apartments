@@ -1,7 +1,5 @@
 package dto;
 
-import beans.Apartment;
-import beans.Guest;
 
 public class ReservationDTO {
 	

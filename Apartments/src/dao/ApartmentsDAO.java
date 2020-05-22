@@ -17,7 +17,7 @@ import dto.ApartmentsDTO;
 
 public class ApartmentsDAO {
 	
-	private static ArrayList<Apartment> apartments;
+	private ArrayList<Apartment> apartments;
 	private String path;
 	
 	
@@ -27,7 +27,7 @@ public class ApartmentsDAO {
 			podaciDir.mkdir();
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "apartments.json";
-		ApartmentsDAO.apartments = new ArrayList<Apartment>();	
+		this.apartments = new ArrayList<Apartment>();	
 	}
 	
 	/**
@@ -42,7 +42,6 @@ public class ApartmentsDAO {
 				file = new File(this.path);
 			}
 			System.out.println(file);
-
 			JSONParser jsonParser = new JSONParser();
 	         
 	        try (FileReader reader = new FileReader(path))
@@ -95,7 +94,7 @@ public class ApartmentsDAO {
 
 	
 	 @SuppressWarnings("unchecked")
-	private void saveApartmentsJSON() {
+	public void saveApartmentsJSON() {
 		
 		JSONArray apartmentList = new JSONArray();
 		
@@ -189,7 +188,7 @@ public class ApartmentsDAO {
 	}
 
 
-	public static ArrayList<Apartment> getValues() {
+	public ArrayList<Apartment> getValues() {
 		return apartments;
 	}
 

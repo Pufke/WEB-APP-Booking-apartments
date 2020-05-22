@@ -1,6 +1,8 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -12,6 +14,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Apartment;
+import beans.Guest;
 import beans.Reservation;
 import beans.User;
 import dao.ApartmentsDAO;
@@ -46,18 +50,6 @@ public class ReservationService {
 		return reservations;
 	}
 	
-	private ApartmentsDAO getApartments() {
-		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
-		
-		if(apartments == null) {
-			apartments = new ApartmentsDAO();
-			apartments.readApartments();
-			
-			ctx.setAttribute("apartments", apartments);
-		}
-		
-		return apartments;
-	}
 	
 	private UsersDAO getUsers() {
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
@@ -70,6 +62,20 @@ public class ReservationService {
 		
 		return users;
 	}
+
+	private ApartmentsDAO getApartments() {
+		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
+		
+		if(apartments == null) {
+			apartments = new ApartmentsDAO();
+			apartments.readApartments();
+			
+			ctx.setAttribute("apartments", apartments);
+		}
+		
+		return apartments;
+		
+	}
 	
 	
 	@POST
@@ -77,17 +83,38 @@ public class ReservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response makeReservations(ReservationDTO reservationData) {
-		ReservationDAO reservations = getReservations();
+		ReservationDAO reservationsCTX = getReservations();
+		UsersDAO usersCTX = getUsers();
+		ApartmentsDAO apartmentsCTX = getApartments();
 		
-		if(reservations.makeReservation(reservationData)) {
-			return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
-					
-		}else {
-			return Response.status(Response.Status.BAD_REQUEST).entity("ERROR DURING CHANGES").build();
+		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
+		Collection<User> users = usersCTX.getValues();
+		ArrayList<Reservation> reservations = reservationsCTX.getValues();
+		
+		Apartment apartment = new Apartment();
+		User user = new User();
+		
+		for (Apartment a : apartments) {
+			if(a.getIdentificator() == reservationData.apartmentIdentificator) {
+				a.setReservedStatus("Rezervisano");
+				apartment = a;
+				break;
+			}
+		}
+		for (User u: users) {
+			if(u.getUserName().equals(reservationData.guestUserName)) {
+				user = u;
+				break;
+			}
 		}
 		
+		Reservation reservation = new Reservation(apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
+		reservations.add(reservation);
 		
-		
+		reservationsCTX.saveReservationsJSON();
+		apartmentsCTX.saveApartmentsJSON();
+		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+
 	}
 	
 	

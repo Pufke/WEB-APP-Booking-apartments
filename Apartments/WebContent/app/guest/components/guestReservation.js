@@ -32,7 +32,7 @@ Vue.component("guest-reservation",{
         <th> ID apartmana</th> <th> Status rezervacije </th><th> Tip apartmana </th><th> dateOfReservation </th><th> Guests</th> </tr>
             <tr v-for="reservation in reservations">
                 <td> {{ reservation.reservedApartment.identificator }} </td>
-                <td> {{ reservation.statusOfReservation }} </td>
+                <td> {{ reservation.reservedApartment.statusOfReservation }} </td>
                 <td> {{ reservation.reservedApartment.typeOfApartment }} </td>
                 <td>  {{ reservation.dateOfReservation }} </td>
                 <td> {{ reservation.guest.userName }}  </td>
@@ -52,8 +52,7 @@ Vue.component("guest-reservation",{
         let requestOne = axios.get(one);
         let requestTwo = axios.get(two);
 
-        axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
-        	
+        axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {    
         	responses[0].data.forEach(el => {
         		if(el.guest.userName == responses[1].data.userName){
         			this.reservations.push(el);

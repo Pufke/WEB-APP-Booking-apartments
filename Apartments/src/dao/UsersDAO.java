@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import org.json.simple.JSONArray;
@@ -20,7 +18,7 @@ import dto.UserDTO;
 
 public class UsersDAO {
 
-	private static LinkedHashMap<String, User> users;
+	private LinkedHashMap<String, User> users;
 	private String path;
 
 	public UsersDAO() {
@@ -29,7 +27,7 @@ public class UsersDAO {
 			podaciDir.mkdir();
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "users.json";
-		UsersDAO.users = new LinkedHashMap<String, User>();
+		this.users = new LinkedHashMap<String, User>();
 	}
 
 	/**
@@ -174,7 +172,7 @@ public class UsersDAO {
 		return users.values();
 	}
 
-	public static Collection<User> getValues() {
+	public Collection<User> getValues() {
 		return users.values();
 	}
 

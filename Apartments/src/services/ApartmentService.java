@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Apartment;
-import dao.AmenitiesDAO;
 import dao.ApartmentsDAO;
 import dto.ApartmentChangeDTO;
 import dto.ApartmentsDTO;

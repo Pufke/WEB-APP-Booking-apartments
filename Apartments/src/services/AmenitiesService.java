@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import beans.AmenitiesItem;
 import dao.AmenitiesDAO;
-import dao.ReservationDAO;
 import dto.AmenitiesItemAddDTO;
 import dto.AmenitiesItemDTO;
 

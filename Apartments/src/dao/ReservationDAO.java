@@ -6,22 +6,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import beans.Address;
 import beans.Apartment;
 import beans.Guest;
 import beans.Location;
 import beans.Reservation;
-import beans.User;
-import dto.ReservationDTO;
+
 
 public class ReservationDAO {
-	private static ArrayList<Reservation> reservations;
+	private ArrayList<Reservation> reservations;
 	private String path;
 	
 	public ReservationDAO() {
@@ -30,7 +26,7 @@ public class ReservationDAO {
 			podaciDir.mkdir();
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "reservations.json";
-		ReservationDAO.reservations = new ArrayList<Reservation>();
+		this.reservations = new ArrayList<Reservation>();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -103,7 +99,6 @@ public class ReservationDAO {
 	        Reservation r = new Reservation(apartment, dateOfReservation, numberOfNights, totalPrice, messageForHost, guest, statusOfReservation);
 	        
 	        reservations.add(r);	 
-	        System.out.println(reservations);
 	        
 	  }
 	 
@@ -111,7 +106,7 @@ public class ReservationDAO {
 	 //TODO: Ovo nije koriscena metoda, treba je proveriti, msm da fali
 	 // cuvanje info o samoj rezervaciji
 	 @SuppressWarnings("unchecked")
-		private void saveReservationsJSON() {
+		public void saveReservationsJSON() {
 			
 			JSONArray reservationList = new JSONArray();
 			
@@ -147,7 +142,13 @@ public class ReservationDAO {
 				reservation.put("name", guest.getName());
 				reservation.put("surname", guest.getSurname());
 				reservation.put("role", guest.getRole());
-				
+		
+				reservation.put("messageForHost", r.getMessageForHost());
+				reservation.put("statusOfReservation", r.getStatusOfReservation());
+				reservation.put("dateOfReservation", r.getDateOfReservation());
+				reservation.put("numberOfNights", r.getNumberOfNights());
+				reservation.put("totalPrice", r.getTotalPrice());
+			
 				reservationList.add(reservation);
 			}
 			//Write JSON file
@@ -162,38 +163,8 @@ public class ReservationDAO {
 		}
 	 
 	 
-		public static ArrayList<Reservation> getValues() {
+		public ArrayList<Reservation> getValues() {
 			return reservations;
 		}
-		
-		
-		public Boolean makeReservation(ReservationDTO reservationData) {
-			ArrayList<Apartment> apartments = ApartmentsDAO.getValues();
-			Collection<User> users = UsersDAO.getValues();
-			ArrayList<Reservation> reservations = ReservationDAO.getValues();
-			Apartment apartment = new Apartment();
-			User user = new User();
-			
-			for (Apartment a : apartments) {
-				if(a.getIdentificator() == reservationData.apartmentIdentificator) {
-					a.setReservedStatus("Rezervisano");
-					apartment = a;
-					break;
-				}
-			}
-			for (User u: users) {
-				if(u.getUserName().equals(reservationData.guestUserName)) {
-					user = u;
-					break;
-				}
-			}
-			
-     		Reservation reservation = new Reservation(apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
-			reservations.add(reservation);
-			saveReservationsJSON();
-			return true;
-	
-		}
-		
 		
 }
