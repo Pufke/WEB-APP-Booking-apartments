@@ -20,7 +20,7 @@ import dto.UserDTO;
 
 public class UsersDAO {
 
-	private LinkedHashMap<String, User> users;
+	private static LinkedHashMap<String, User> users;
 	private String path;
 
 	public UsersDAO() {
@@ -29,7 +29,7 @@ public class UsersDAO {
 			podaciDir.mkdir();
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "users.json";
-		this.users = new LinkedHashMap<String, User>();
+		UsersDAO.users = new LinkedHashMap<String, User>();
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class UsersDAO {
 		return users.values();
 	}
 
-	public Collection<User> getValues() {
+	public static Collection<User> getValues() {
 		return users.values();
 	}
 

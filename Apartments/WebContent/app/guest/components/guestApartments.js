@@ -2,6 +2,7 @@ Vue.component("guest-apartments",{
     data() {
         return {
             apartments: [],
+            user: {},
             searchData: {
                 location: "",
                 checkIn: "",
@@ -48,7 +49,7 @@ Vue.component("guest-apartments",{
                 <h2> Lokacija: </h2> 
                 <h3> Geografska duzina: {{ apartment.location.longitude }} </h3>
                  <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
-                <button @click="makeReservation(apartment.identificator)">MAKE RESERVATION</button>
+                <button @click="makeReseervation2(apartment.identificator)">MAKE RESERVATION</button>
             </li>
         </ul>
         
@@ -127,32 +128,30 @@ Vue.component("guest-apartments",{
                 return multisort_recursive(a,b,columns,order_by,0);
             });
         },
-    makeReservation: function(identificator){
-//        axios
-//        .post('rest/apartments/makeReseervation',{
-//           "reservedStatus": "Rezervisan",
-//           "identificator": identificator
-//        
-//        })
-//        .then(response =>{
-//        	 toastr["success"]("Success changes!!", "Success!");
-//        	 filteredApartments = [];
-//        	 
-//             this.apartments.forEach(el => {           
-//        		 	if(el.identificator != identificator){
-//        		 		filteredApartments.push(el);
-//        		 	}
-//             });
-//             this.apartments = filteredApartments;
-//           
-//        })
-//        .catch(err => {
-//            toastr["error"]("Failed during changes :(", "Fail");
-//        })
-    },
     makeReseervation2: function(identificator){
-
-    },
+    	  axios
+          .post('rest/reservation/makeReservations',{
+               "apartmentIdentificator": identificator,
+               "dateOfReservation": "22.05.2020",
+     		   "numberOfNights": "3",
+     		   "messageForHost": "Pooz za HOSTA kiss cmok",
+     		   "guestUserName": this.user.userName,
+    		   "statusOfReservation": "CEKANJE NA REZERVACIJU",
+         })
+         .then(response =>{
+        	 filteredApartments = [];
+        	 this.apartments.forEach(el => {           
+     		 	if(el.identificator != identificator){
+     		 		filteredApartments.push(el);
+      		 	}
+            });
+            this.apartments = filteredApartments;
+            toastr["success"]("Success changes!!", "Success!");
+         })
+         .catch(err => {
+           toastr["error"]("Failed during changes :(", "Fail");
+         })     
+      },
       searchParam: function(event){
         event.preventDefault();
         
@@ -196,14 +195,22 @@ Vue.component("guest-apartments",{
       }
     },
     mounted() {
-        axios
-        .get('rest/apartments/getApartments')
-        .then( response => {
-        	response.data.forEach(el => {
-        		if(el.status == "ACTIVE" && el.reservedStatus == "Nije rezervisano")
-        			this.apartments.push(el);
+    	let one = 'rest/apartments/getApartments';
+    	let two = 'rest/edit/profileUser';
+    	
+    	let requestOne = axios.get(one);
+        let requestTwo = axios.get(two);
+    	
+        axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+           //  this.apartments = responses[0].data;
+             responses[0].data.forEach(el => {
+         		if(el.status == "ACTIVE" && el.reservedStatus == "Nije rezervisano"){
+         			this.apartments.push(el);
+         		}
                 });
-        	return this.apartments;
-        });
+             this.user = responses[1].data;
+        })).catch(errors => {
+            console.log("Greska brt");
+        })
     },
 })

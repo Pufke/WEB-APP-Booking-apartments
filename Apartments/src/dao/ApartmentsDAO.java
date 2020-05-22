@@ -17,7 +17,7 @@ import dto.ApartmentsDTO;
 
 public class ApartmentsDAO {
 	
-	private ArrayList<Apartment> apartments;
+	private static ArrayList<Apartment> apartments;
 	private String path;
 	
 	
@@ -27,7 +27,7 @@ public class ApartmentsDAO {
 			podaciDir.mkdir();
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "apartments.json";
-		this.apartments = new ArrayList<Apartment>();	
+		ApartmentsDAO.apartments = new ArrayList<Apartment>();	
 	}
 	
 	/**
@@ -189,7 +189,7 @@ public class ApartmentsDAO {
 	}
 
 
-	public ArrayList<Apartment> getValues() {
+	public static ArrayList<Apartment> getValues() {
 		return apartments;
 	}
 

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,9 +17,11 @@ import beans.Apartment;
 import beans.Guest;
 import beans.Location;
 import beans.Reservation;
+import beans.User;
+import dto.ReservationDTO;
 
 public class ReservationDAO {
-	private ArrayList<Reservation> reservations;
+	private static ArrayList<Reservation> reservations;
 	private String path;
 	
 	public ReservationDAO() {
@@ -27,7 +30,7 @@ public class ReservationDAO {
 			podaciDir.mkdir();
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "reservations.json";
-		this.reservations = new ArrayList<Reservation>();
+		ReservationDAO.reservations = new ArrayList<Reservation>();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -159,7 +162,38 @@ public class ReservationDAO {
 		}
 	 
 	 
-		public ArrayList<Reservation> getValues() {
+		public static ArrayList<Reservation> getValues() {
 			return reservations;
 		}
+		
+		
+		public Boolean makeReservation(ReservationDTO reservationData) {
+			ArrayList<Apartment> apartments = ApartmentsDAO.getValues();
+			Collection<User> users = UsersDAO.getValues();
+			ArrayList<Reservation> reservations = ReservationDAO.getValues();
+			Apartment apartment = new Apartment();
+			User user = new User();
+			
+			for (Apartment a : apartments) {
+				if(a.getIdentificator() == reservationData.apartmentIdentificator) {
+					a.setReservedStatus("Rezervisano");
+					apartment = a;
+					break;
+				}
+			}
+			for (User u: users) {
+				if(u.getUserName().equals(reservationData.guestUserName)) {
+					user = u;
+					break;
+				}
+			}
+			
+     		Reservation reservation = new Reservation(apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
+			reservations.add(reservation);
+			saveReservationsJSON();
+			return true;
+	
+		}
+		
+		
 }
