@@ -15,7 +15,8 @@ Vue.component("guest-reservation",{
     	<h1> Trenutno ulogovani korisnik je {{ user.userName }} i ovo su rezervacije samo za tog korisnika!! :) </h1>
         <ul>
             <li v-for="reservation in reservations">
-                <h2> ID: {{ reservation.reservedApartment.identificator }} </h2>
+            	<h2> ID rezervacije: {{ reservation.reservationID }} </h2>
+                <h2> ID apartmana: {{ reservation.reservedApartment.identificator }} </h2>
                 <h2> Tip apartmana: {{ reservation.reservedApartment.typeOfApartment }} </h2>
                 <h2> Status rezervacije: {{ reservation.statusOfReservation }} </h2>
                 <h2> Datum rezervacije: {{ reservation.dateOfReservation }} </h2>

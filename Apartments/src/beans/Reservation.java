@@ -12,7 +12,8 @@ public class Reservation {
 	private Guest guest; //Guest koji je napravio rezervaciju
 	private String statusOfReservation;//(Kreirana, Odbijena, Odustanak, Prihvacena, Zavrsena)
 	
-	public Reservation(String reservationID, Apartment reservedApartment, String dateOfReservation, String numberOfNights, Long totalPrice,
+	public Reservation(String reservationID, Apartment reservedApartment, String dateOfReservation,
+			String numberOfNights, Long totalPrice,
 			String messageForHost, Guest guest, String statusOfReservation) {
 		super();
 		this.reservationID = reservationID;

@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -108,7 +109,8 @@ public class ReservationService {
 			}
 		}
 		
-		Reservation reservation = new Reservation(null, apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
+		String uniqueID = UUID.randomUUID().toString();
+		Reservation reservation = new Reservation(uniqueID, apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
 		reservations.add(reservation);
 		
 		reservationsCTX.saveReservationsJSON();

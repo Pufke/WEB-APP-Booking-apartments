@@ -61,6 +61,7 @@ public class ReservationDAO {
 	
 	 private void parseReservationObject(JSONObject reservation)  {
          
+		    String reservationID = (String) reservation.get("reservationID");
 		 	String dateOfReservation = (String) reservation.get("dateOfReservation");
 			String numberOfNights = (String) reservation.get("numberOfNights");
 			Long totalPrice = (Long) reservation.get("totalPrice");
@@ -98,7 +99,8 @@ public class ReservationDAO {
 	        Address addressObject = new Address(street, number,populatedPlace, zipCode);
 	        Location locationObject  = new Location(latitude, longitude, addressObject);
 	        Apartment apartmentObject = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, locationObject, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
-	        Reservation r = new Reservation(statusOfReservation, apartmentObject, dateOfReservation, numberOfNights, totalPrice, messageForHost, guestObject, statusOfReservation);
+	        Reservation r = new Reservation(reservationID, apartmentObject, dateOfReservation, 
+	        		numberOfNights, totalPrice, messageForHost, guestObject, statusOfReservation);
 	        
 	        reservations.add(r);	         
 	  }
@@ -114,7 +116,8 @@ public class ReservationDAO {
 			for (Reservation r : reservations) {
 				
 				JSONObject reservation = new JSONObject();
-				
+						
+				reservation.put("reservationID", r.getReservationID());
 				reservation.put("messageForHost", r.getMessageForHost());
 				reservation.put("statusOfReservation", r.getStatusOfReservation());
 				reservation.put("dateOfReservation", r.getDateOfReservation());
