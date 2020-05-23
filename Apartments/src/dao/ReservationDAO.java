@@ -61,45 +61,46 @@ public class ReservationDAO {
 	
 	 private void parseReservationObject(JSONObject reservation)  {
          
-	        String status = (String) reservation.get("status");    
-	        String TypeOfApartment = (String) reservation.get("TypeOfApartment"); 
-	        Long PricePerNight = (Long) reservation.get("PricePerNight"); 
-	        Long NumberOfRooms = (Long) reservation.get("NumberOfRooms"); 
-	        Long NumberOfGuests = (Long) reservation.get("NumberOfGuests"); 
-	        String TimeForCheckIn = (String) reservation.get("TimeForCheckIn"); 
-	        String TimeForCheckOut = (String) reservation.get("TimeForCheckOut"); 
-	        String ReservedStatus = (String) reservation.get("ReservedStatus"); 
-	        Long Identificator = (Long) reservation.get("Identificator"); 
-	        
-	        String latitude = (String) reservation.get("latitude");
-	        String longitude = (String) reservation.get("longitude");
-	    
-	        String street = (String) reservation.get("street");
-	        String number = (String) reservation.get("number");
-	        String populatedPlace = (String) reservation.get("populatedPlace");
-	        String zipCode = (String) reservation.get("zipCode");
-
-	        
-	        String userName = (String) reservation.get("userName");    
-	        String password = (String) reservation.get("password");
-			String name = (String) reservation.get("name");
-			String surname = (String) reservation.get("surname");
-			//String role = (String) reservation.get("role");
-			
-			String dateOfReservation = (String) reservation.get("dateOfReservation");
+		 	String dateOfReservation = (String) reservation.get("dateOfReservation");
 			String numberOfNights = (String) reservation.get("numberOfNights");
 			Long totalPrice = (Long) reservation.get("totalPrice");
 	        String messageForHost = (String) reservation.get("messageForHost");
 	        String statusOfReservation = (String) reservation.get("statusOfReservation");
-			
-			Guest guest = new Guest(userName, password, name, surname);
-	        Address address = new Address(street, number,populatedPlace, zipCode);
-	        Location location  = new Location(latitude, longitude, address);
-	        Apartment apartment = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
-	        Reservation r = new Reservation(apartment, dateOfReservation, numberOfNights, totalPrice, messageForHost, guest, statusOfReservation);
 	        
-	        reservations.add(r);	 
+	        JSONObject guest =  (JSONObject) reservation.get("Guest");
+	        String userName = (String) guest.get("userName");    
+	        String password = (String) guest.get("password");
+			String name = (String) guest.get("name");
+			String surname = (String) guest.get("surname");
 	        
+			JSONObject apartment =  (JSONObject) reservation.get("Apartment");
+	        String status = (String) apartment.get("status");    
+	        String TypeOfApartment = (String) apartment.get("TypeOfApartment"); 
+	        Long PricePerNight = (Long) apartment.get("PricePerNight"); 
+	        Long NumberOfRooms = (Long) apartment.get("NumberOfRooms"); 
+	        Long NumberOfGuests = (Long) apartment.get("NumberOfGuests"); 
+	        String TimeForCheckIn = (String) apartment.get("TimeForCheckIn"); 
+	        String TimeForCheckOut = (String) apartment.get("TimeForCheckOut"); 
+	        String ReservedStatus = (String) apartment.get("ReservedStatus"); 
+	        Long Identificator = (Long) apartment.get("Identificator"); 
+	        
+	        JSONObject location =  (JSONObject) apartment.get("Location");
+	        String latitude = (String) location.get("latitude");
+	        String longitude = (String) location.get("longitude");
+	    
+	        JSONObject address =  (JSONObject) location.get("Address");
+	        String street = (String) address.get("street");
+	        String number = (String) address.get("number");
+	        String populatedPlace = (String) address.get("populatedPlace");
+	        String zipCode = (String) address.get("zipCode");
+
+			Guest guestObject = new Guest(userName, password, name, surname);
+	        Address addressObject = new Address(street, number,populatedPlace, zipCode);
+	        Location locationObject  = new Location(latitude, longitude, addressObject);
+	        Apartment apartmentObject = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, locationObject, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
+	        Reservation r = new Reservation(statusOfReservation, apartmentObject, dateOfReservation, numberOfNights, totalPrice, messageForHost, guestObject, statusOfReservation);
+	        
+	        reservations.add(r);	         
 	  }
 	 
 	 
@@ -114,41 +115,51 @@ public class ReservationDAO {
 				
 				JSONObject reservation = new JSONObject();
 				
-				Apartment a = r.getReservedApartment();
-				
-				reservation.put("status", a.getStatus());
-				reservation.put("TypeOfApartment", a.getTypeOfApartment());
-				reservation.put("PricePerNight", a.getPricePerNight());
-				reservation.put("NumberOfRooms", a.getNumberOfRooms());
-				reservation.put("NumberOfGuests", a.getNumberOfGuests());
-				reservation.put("TimeForCheckIn", a.getTimeForCheckIn());
-				reservation.put("TimeForCheckOut", a.getTimeForCheckOut());
-				reservation.put("Identificator", a.getIdentificator());
-				reservation.put("ReservedStatus", a.getReservedStatus());
-					
-				Location l = a.getLocation();
-				reservation.put("latitude", l.getLatitude());
-				reservation.put("longitude", l.getLongitude());
-				
-				Address adres = l.getAddress();
-				reservation.put("street", adres.getStreet());
-				reservation.put("number", adres.getNumber());
-				reservation.put("populatedPlace", adres.getPopulatedPlace());
-				reservation.put("zipCode", adres.getZipCode());
-				
-				Guest guest = r.getGuest();
-				reservation.put("userName", guest.getUserName());
-				reservation.put("password", guest.getPassword());
-				reservation.put("name", guest.getName());
-				reservation.put("surname", guest.getSurname());
-				reservation.put("role", guest.getRole());
-		
 				reservation.put("messageForHost", r.getMessageForHost());
 				reservation.put("statusOfReservation", r.getStatusOfReservation());
 				reservation.put("dateOfReservation", r.getDateOfReservation());
 				reservation.put("numberOfNights", r.getNumberOfNights());
 				reservation.put("totalPrice", r.getTotalPrice());
-			
+				
+				JSONObject apartment = new JSONObject();
+				Apartment a = r.getReservedApartment();
+				
+				apartment.put("status", a.getStatus());
+				apartment.put("TypeOfApartment", a.getTypeOfApartment());
+				apartment.put("PricePerNight", a.getPricePerNight());
+				apartment.put("NumberOfRooms", a.getNumberOfRooms());
+				apartment.put("NumberOfGuests", a.getNumberOfGuests());
+				apartment.put("TimeForCheckIn", a.getTimeForCheckIn());
+				apartment.put("TimeForCheckOut", a.getTimeForCheckOut());
+				apartment.put("Identificator", a.getIdentificator());
+				apartment.put("ReservedStatus", a.getReservedStatus());
+					
+				JSONObject location = new JSONObject();
+				Location l = a.getLocation();
+				location.put("latitude", l.getLatitude());
+				location.put("longitude", l.getLongitude());
+				
+				JSONObject address = new JSONObject();
+				Address adres = l.getAddress();
+				address.put("street", adres.getStreet());
+				address.put("number", adres.getNumber());
+				address.put("populatedPlace", adres.getPopulatedPlace());
+				address.put("zipCode", adres.getZipCode());
+				
+				location.put("Address", address);
+				apartment.put("Location", location);
+				
+				JSONObject guest = new JSONObject();
+				Guest g = r.getGuest();
+				guest.put("userName", g.getUserName());
+				guest.put("password", g.getPassword());
+				guest.put("name", g.getName());
+				guest.put("surname", g.getSurname());
+				guest.put("role", g.getRole());
+		
+				reservation.put("Apartment", apartment);
+				reservation.put("Guest", guest);
+				
 				reservationList.add(reservation);
 			}
 			//Write JSON file

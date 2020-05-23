@@ -1,6 +1,9 @@
 package beans;
 
+
 public class Reservation {
+	
+	private String reservationID;
 	private Apartment reservedApartment;
 	private String dateOfReservation;
 	private String numberOfNights; // Broj nocenja
@@ -9,9 +12,10 @@ public class Reservation {
 	private Guest guest; //Guest koji je napravio rezervaciju
 	private String statusOfReservation;//(Kreirana, Odbijena, Odustanak, Prihvacena, Zavrsena)
 	
-	public Reservation(Apartment reservedApartment, String dateOfReservation, String numberOfNights, Long totalPrice,
+	public Reservation(String reservationID, Apartment reservedApartment, String dateOfReservation, String numberOfNights, Long totalPrice,
 			String messageForHost, Guest guest, String statusOfReservation) {
 		super();
+		this.reservationID = reservationID;
 		this.reservedApartment = reservedApartment;
 		this.dateOfReservation = dateOfReservation;
 		this.numberOfNights = numberOfNights;
@@ -61,6 +65,12 @@ public class Reservation {
 	}
 	public void setStatusOfReservation(String statusOfReservation) {
 		this.statusOfReservation = statusOfReservation;
+	}
+	public String getReservationID() {
+		return reservationID;
+	}
+	public void setReservationID(String reservationID) {
+		this.reservationID = reservationID;
 	}
 	
 	

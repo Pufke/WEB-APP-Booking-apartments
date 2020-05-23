@@ -64,8 +64,7 @@ public class ApartmentsDAO {
 		}
 	}
 
-	 private void parseApartmentObject(JSONObject apartment)  {
-	         
+	 private void parseApartmentObject(JSONObject apartment)  {	 	
 	        String status = (String) apartment.get("status");    
 	        String TypeOfApartment = (String) apartment.get("TypeOfApartment"); 
 	        Long PricePerNight = (Long) apartment.get("PricePerNight"); 
@@ -75,21 +74,22 @@ public class ApartmentsDAO {
 	        String TimeForCheckOut = (String) apartment.get("TimeForCheckOut"); 
 	        String ReservedStatus = (String) apartment.get("ReservedStatus"); 
 	        Long Identificator = (Long) apartment.get("Identificator"); 
-	   
 	        
-	        String latitude = (String) apartment.get("latitude");
-	        String longitude = (String) apartment.get("longitude");
-	        System.out.println(latitude);
+	        JSONObject l = (JSONObject) apartment.get("Location");
+	        JSONObject a = (JSONObject) l.get("Address");
+
+	        String latitude = (String) l.get("latitude");
+	        String longitude = (String) l.get("longitude");
 	    
-	        String street = (String) apartment.get("street");
-	        String number = (String) apartment.get("number");
-	        String populatedPlace = (String) apartment.get("populatedPlace");
-	        String zipCode = (String) apartment.get("zipCode");
-	        System.out.println(zipCode);
+	        String street = (String) a.get("street");
+	        String number = (String) a.get("number");
+	        String populatedPlace = (String) a.get("populatedPlace");
+	        String zipCode = (String) a.get("zipCode");
+
 	        Address address = new Address(street, number,populatedPlace, zipCode);
 	        Location location  = new Location(latitude, longitude, address);
-	        Apartment a = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
-			apartments.add(a);
+	        Apartment ap = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
+			apartments.add(ap);
 	    }
 
 	
@@ -111,16 +111,20 @@ public class ApartmentsDAO {
 			apartment.put("Identificator", a.getIdentificator());
 			apartment.put("ReservedStatus", a.getReservedStatus());
 			
+			JSONObject location = new JSONObject();
 			Location l = a.getLocation();
-			apartment.put("latitude", l.getLatitude());
-			apartment.put("longitude", l.getLongitude());
+			location.put("latitude", l.getLatitude());
+			location.put("longitude", l.getLongitude());
 			
+			JSONObject address = new JSONObject();
 			Address adres = l.getAddress();
-			apartment.put("street", adres.getStreet());
-			apartment.put("number", adres.getNumber());
-			apartment.put("populatedPlace", adres.getPopulatedPlace());
-			apartment.put("zipCode", adres.getZipCode());
+			address.put("street", adres.getStreet());
+			address.put("number", adres.getNumber());
+			address.put("populatedPlace", adres.getPopulatedPlace());
+			address.put("zipCode", adres.getZipCode());
 			
+			location.put("Address", address);
+			apartment.put("Location", location);
 			//Add apartments to list
 			apartmentList.add(apartment);
 		}

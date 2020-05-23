@@ -108,7 +108,7 @@ public class ReservationService {
 			}
 		}
 		
-		Reservation reservation = new Reservation(apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
+		Reservation reservation = new Reservation(null, apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
 		reservations.add(reservation);
 		
 		reservationsCTX.saveReservationsJSON();
