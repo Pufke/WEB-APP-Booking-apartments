@@ -22,7 +22,7 @@ Vue.component("guest-reservation",{
                 <h2> Datum rezervacije: {{ reservation.dateOfReservation }} </h2>
                 <h2> Guest username: {{ reservation.guest.userName }} </h2>
                 <h2> Poruka za Host-a: {{ reservation.messageForHost }} </h2>
-                
+                <button @click="deleteReservation(reservation.reservationID, reservation.reservedApartment.identificator)">DELETE RESERVATION</button>
                
             </li>
         </ul>
@@ -44,7 +44,27 @@ Vue.component("guest-reservation",{
     
     `,
     methods: {
+    	deleteReservation: function(identificator, apartmentID){
+      	  axios
+            .post('rest/reservation/deleteReservations',{
+                 "reservationID": identificator,
+                 "apartmentIdentificator": apartmentID,
+           })
+           .then(response =>{
+          	 filteredReservations = [];
+          	 this.reservations.forEach(el => {     
         
+       		 	if(el.reservationID != identificator){
+       		 	   filteredReservations.push(el);
+        		}
+              });
+              this.reservations = filteredReservations;
+              toastr["success"]("Success changes!!", "Success!");
+           })
+           .catch(err => {
+             toastr["error"]("Failed during changes :(", "Fail");
+           })     
+        }
     },
     mounted() {
         let one = 'rest/reservation/getReservations';

@@ -22,6 +22,7 @@ import beans.User;
 import dao.ApartmentsDAO;
 import dao.ReservationDAO;
 import dao.UsersDAO;
+import dto.DeleteReservationDTO;
 import dto.ReservationDTO;
 
 @Path("/reservation")
@@ -97,7 +98,7 @@ public class ReservationService {
 		
 		for (Apartment a : apartments) {
 			if(a.getIdentificator() == reservationData.apartmentIdentificator) {
-				a.setReservedStatus("Rezervisano");
+				//a.setReservedStatus("Rezervisano");
 				apartment = a;
 				break;
 			}
@@ -123,6 +124,49 @@ public class ReservationService {
 
 	}
 	
+	@POST
+	@Path("/deleteReservations")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteReservations(DeleteReservationDTO reservationData) {
+		ReservationDAO reservationsCTX = getReservations();
+		ApartmentsDAO apartmentsCTX = getApartments();
+		
+		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
+		ArrayList<Reservation> reservations = reservationsCTX.getValues();
+		
+		Reservation reservation = new Reservation();
+		
+		System.out.println(reservationData.reservationID);
+		for (Reservation r : reservations) {
+			if(r.getReservationID().equals(reservationData.reservationID)) {
+				reservation = r;
+				break;
+			}
+		}
+		
+		for(Apartment a : apartments ) {
+			if(a.getIdentificator() == reservationData.apartmentIdentificator) {
+				ArrayList<String> rezervacije = a.getReservedApartmentList();
+				for (String s : rezervacije) {
+					if(s.equals(reservationData.reservationID)) {
+						rezervacije.remove(s);
+						break;
+					}
+					
+				}
+				a.setReservedApartmentList(rezervacije);
+				break;
+			}
+		}
+
+		reservations.remove(reservation);
+		
+		reservationsCTX.saveReservationsJSON();
+		apartmentsCTX.saveApartmentsJSON();
+		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+
+	}
 	
 }
 //reservation/makeReservations

@@ -25,6 +25,9 @@ public class Reservation {
 		this.guest = guest;
 		this.statusOfReservation = statusOfReservation;
 	}
+	public Reservation() {
+		// TODO Auto-generated constructor stub
+	}
 	public Apartment getReservedApartment() {
 		return reservedApartment;
 	}
