@@ -146,10 +146,10 @@ Vue.component("guest-apartments",{
       		 	}
             });
             this.apartments = filteredApartments;
-            toastr["success"]("Success changes!!", "Success!");
+            toastr["success"]("Uspesno rezervisan apartman! Mozete pogledati sve rezervacije u Reservations sekciji ", "Success!");
          })
          .catch(err => {
-           toastr["error"]("Failed during changes :(", "Fail");
+           toastr["error"]("Ovaj apartman je vec rezervisan!!", "Fail");
          })     
       },
       searchParam: function(event){

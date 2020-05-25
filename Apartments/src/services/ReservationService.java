@@ -116,6 +116,14 @@ public class ReservationService {
 	    
 		apartment.setReservedApartmentList(reservedApartmentList);
 		Reservation reservation = new Reservation(uniqueID, apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
+		
+		for (Reservation r : reservations) {
+			if (r.getGuest().getUserName().equals(reservation.getGuest().getUserName()) && r.getReservedApartment().getIdentificator() == reservation.getReservedApartment().getIdentificator() ) {
+				
+				return Response.status(Response.Status.EXPECTATION_FAILED).entity("Ovaj apartman je vec rezervisan").build();
+				
+			}
+		}
 		reservations.add(reservation);
 		
 		reservationsCTX.saveReservationsJSON();

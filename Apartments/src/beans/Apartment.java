@@ -27,6 +27,7 @@ public class Apartment {
 
 	private ArrayList<String> amentities; // TODO: Srediti ovo kada napravimo klasu sadrzaja apartmana
 	private ArrayList<String> reservedApartmentList; 
+	private ArrayList<String> usersWhoHaveReservations; 
 
 	private Long identificator;
 	private String reservedStatus;
