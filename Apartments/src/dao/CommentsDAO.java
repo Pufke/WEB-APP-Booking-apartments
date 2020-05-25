@@ -89,8 +89,8 @@ public class CommentsDAO {
 		Guest guest = new Guest(userName, password, name, surname);
 		Address address = new Address(street, number,populatedPlace, zipCode);
         Location location  = new Location(latitude, longitude, address);
-		Apartment apartment = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);
-		
+		Apartment apartment = new Apartment(null, Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);
+		//TODO PREPRAVITI NULL U Listu apartmana
 		String txtOfComment = (String) comment.get("txtOfComment");
 		Long ratingForApartment = (Long) comment.get("ratingForApartment");
 		

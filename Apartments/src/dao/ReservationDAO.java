@@ -85,6 +85,15 @@ public class ReservationDAO {
 	        String ReservedStatus = (String) apartment.get("ReservedStatus"); 
 	        Long Identificator = (Long) apartment.get("Identificator"); 
 	        
+	        JSONArray reservedApartmentListJSON = (JSONArray) apartment.get("reservedApartmentList");
+	        ArrayList<String> reservedApartmentList = new ArrayList<String>();
+	        
+	        if(reservedApartmentListJSON != null) {
+	        	for(int i = 0; i< reservedApartmentListJSON.size(); i++) {
+	        		reservedApartmentList.add((String) reservedApartmentListJSON.get(i));
+	        	}
+	        }
+	        
 	        JSONObject location =  (JSONObject) apartment.get("Location");
 	        String latitude = (String) location.get("latitude");
 	        String longitude = (String) location.get("longitude");
@@ -98,7 +107,7 @@ public class ReservationDAO {
 			Guest guestObject = new Guest(userName, password, name, surname);
 	        Address addressObject = new Address(street, number,populatedPlace, zipCode);
 	        Location locationObject  = new Location(latitude, longitude, addressObject);
-	        Apartment apartmentObject = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, locationObject, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
+	        Apartment apartmentObject = new Apartment(reservedApartmentList,Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, locationObject, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
 	        Reservation r = new Reservation(reservationID, apartmentObject, dateOfReservation, 
 	        		numberOfNights, totalPrice, messageForHost, guestObject, statusOfReservation);
 	        

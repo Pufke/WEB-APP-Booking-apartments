@@ -110,6 +110,10 @@ public class ReservationService {
 		}
 		
 		String uniqueID = UUID.randomUUID().toString();
+		ArrayList<String> reservedApartmentList = apartment.getReservedApartmentList();
+	    reservedApartmentList.add(uniqueID);
+	    
+		apartment.setReservedApartmentList(reservedApartmentList);
 		Reservation reservation = new Reservation(uniqueID, apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
 		reservations.add(reservation);
 		

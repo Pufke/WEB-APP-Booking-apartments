@@ -75,6 +75,15 @@ public class ApartmentsDAO {
 	        String ReservedStatus = (String) apartment.get("ReservedStatus"); 
 	        Long Identificator = (Long) apartment.get("Identificator"); 
 	        
+	        JSONArray reservedApartmentListJSON = (JSONArray) apartment.get("reservedApartmentList");
+	        ArrayList<String> reservedApartmentList = new ArrayList<String>();
+	        
+	        if(reservedApartmentListJSON!= null) {
+	        	for(int i = 0; i< reservedApartmentListJSON.size(); i++) {
+	        		reservedApartmentList.add((String) reservedApartmentListJSON.get(i));
+	        	}
+	        }
+
 	        JSONObject l = (JSONObject) apartment.get("Location");
 	        JSONObject a = (JSONObject) l.get("Address");
 
@@ -88,7 +97,7 @@ public class ApartmentsDAO {
 
 	        Address address = new Address(street, number,populatedPlace, zipCode);
 	        Location location  = new Location(latitude, longitude, address);
-	        Apartment ap = new Apartment(Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
+	        Apartment ap = new Apartment(reservedApartmentList,Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);	
 			apartments.add(ap);
 	    }
 
@@ -110,6 +119,17 @@ public class ApartmentsDAO {
 			apartment.put("TimeForCheckOut", a.getTimeForCheckOut());
 			apartment.put("Identificator", a.getIdentificator());
 			apartment.put("ReservedStatus", a.getReservedStatus());
+			
+			JSONArray reservedApartmentListJSON = new JSONArray();
+			ArrayList<String> reservedApartmentList = a.getReservedApartmentList();
+			
+			//if(reservedApartmentList != null) {
+				for (String s : reservedApartmentList) {
+					reservedApartmentListJSON.add(s);
+				}
+			//}
+			
+			apartment.put("reservedApartmentList", reservedApartmentListJSON);
 			
 			JSONObject location = new JSONObject();
 			Location l = a.getLocation();

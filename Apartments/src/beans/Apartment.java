@@ -26,7 +26,7 @@ public class Apartment {
 	private String status; // ACTIVE ili INACTIVE
 
 	private ArrayList<String> amentities; // TODO: Srediti ovo kada napravimo klasu sadrzaja apartmana
-	private ArrayList<String> reservations; // TODO: a i ovo kad napravimo klasu rezervvacija.
+	private ArrayList<String> reservedApartmentList; 
 
 	private Long identificator;
 	private String reservedStatus;
@@ -43,9 +43,10 @@ public class Apartment {
 		this.status = status;
 	}
 
-	public Apartment(Long identificator2, String typeOfA,Long numberOfRooms2, Long numberOfGuests2, Location location, Long pricePerNight2,
+	public Apartment(ArrayList<String> reservedApartmentList, Long identificator2, String typeOfA,Long numberOfRooms2, Long numberOfGuests2, Location location, Long pricePerNight2,
 			String timeForCheckIn, String timeForCheckOut, String status, String reservedStatus) {
 
+		this.reservedApartmentList = reservedApartmentList;
 		this.typeOfApartment = typeOfA;
 		this.numberOfRooms = numberOfRooms2;
 		this.numberOfGuests = numberOfGuests2;
@@ -104,12 +105,12 @@ public class Apartment {
 		this.amentities = amentities;
 	}
 
-	public ArrayList<String> getReservations() {
-		return reservations;
+	public ArrayList<String> getReservedApartmentList() {
+		return reservedApartmentList;
 	}
 
-	public void setReservations(ArrayList<String> reservations) {
-		this.reservations = reservations;
+	public void setReservedApartmentList(ArrayList<String> reservationsID) {
+		this.reservedApartmentList = reservationsID;
 	}
 
 	public Long getNumberOfGuests() {
