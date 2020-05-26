@@ -4,6 +4,8 @@ Vue.component("guest-reservation",{
         return {
             reservations: [],
             user: {},
+            ocena: "ocena od 1 do 5",
+            komentar:"",
             searchData: {
       
             }
@@ -23,7 +25,11 @@ Vue.component("guest-reservation",{
                 <h2> Guest username: {{ reservation.guest.userName }} </h2>
                 <h2> Poruka za Host-a: {{ reservation.messageForHost }} </h2>
                 <button @click="deleteReservation(reservation.reservationID, reservation.reservedApartment.identificator)">DELETE RESERVATION</button>
-               
+    	       
+    	        <input v-model="komentar" placeholder="Vas komentar o apartmanu">
+    	        <input v-model="ocena" placeholder="Vasa ocena o apartmanu">
+    	        
+    	        <button @click="submitKomentar(reservation.reservedApartment.identificator,komentar,ocena)">SUBMIT</button>
             </li>
         </ul>
         
@@ -37,13 +43,29 @@ Vue.component("guest-reservation",{
                 <td> {{ reservation.reservedApartment.typeOfApartment }} </td>
                 <td>  {{ reservation.dateOfReservation }} </td>
                 <td> {{ reservation.guest.userName }}  </td>
-
+    			
             </tr>
         </table>
     </div>
     
     `,
     methods: {
+    	submitKomentar: function(apartmentID,komentar,ocena){
+    		axios
+            .post('rest/reservation/makeComment',{
+                 "guestUserName": this.user.userName,
+                 "apartmentID": apartmentID,
+                 "txtOfComment": komentar,
+                 "ratingForApartment": ocena,
+           })
+           .then(response =>{
+          	 
+              toastr["success"]("Success changes!!", "Success!");
+           })
+           .catch(err => {
+             toastr["error"]("Failed during changes :(", "Fail");
+           })     
+    	},
     	deleteReservation: function(identificator, apartmentID){
       	  axios
             .post('rest/reservation/deleteReservations',{

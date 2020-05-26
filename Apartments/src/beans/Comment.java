@@ -4,10 +4,10 @@ public class Comment {
 	private Guest guestCommentAuthor; // Gost koji je ostavio komentar
 	private Apartment apartmentComment; // Apartman na koji se odnosi komentar
 	private String txtOfComment;
-	private Long ratingForApartment;
+	private String ratingForApartment;
 
 	public Comment(Guest guestCommentAuthor, Apartment apartmentComment, String txtOfComment,
-			Long ratingForApartment) {
+			String ratingForApartment) {
 		super();
 		this.guestCommentAuthor = guestCommentAuthor;
 		this.apartmentComment = apartmentComment;
@@ -39,11 +39,11 @@ public class Comment {
 		this.txtOfComment = txtOfComment;
 	}
 
-	public Long getRatingForApartment() {
+	public String getRatingForApartment() {
 		return ratingForApartment;
 	}
 
-	public void setRatingForApartment(Long ratingForApartment) {
+	public void setRatingForApartment(String ratingForApartment) {
 		this.ratingForApartment = ratingForApartment;
 	}
 }

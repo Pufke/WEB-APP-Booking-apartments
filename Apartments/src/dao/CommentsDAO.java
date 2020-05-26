@@ -92,7 +92,7 @@ public class CommentsDAO {
 		Apartment apartment = new Apartment(null, Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);
 		//TODO PREPRAVITI NULL U Listu apartmana
 		String txtOfComment = (String) comment.get("txtOfComment");
-		Long ratingForApartment = (Long) comment.get("ratingForApartment");
+		String ratingForApartment = (String) comment.get("ratingForApartment");
 		
 		Comment newComment = new Comment(guest,apartment,txtOfComment,ratingForApartment);
 		comments.add(newComment);
@@ -101,7 +101,7 @@ public class CommentsDAO {
 	}
 
 	@SuppressWarnings({ "unused", "unchecked" })
-	private void saveAmenitiesJSON() {
+	public void saveCommentJSON() {
 
 		JSONArray commentsList = new JSONArray();
 

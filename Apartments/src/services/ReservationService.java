@@ -16,12 +16,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Apartment;
+import beans.Comment;
 import beans.Guest;
 import beans.Reservation;
 import beans.User;
 import dao.ApartmentsDAO;
+import dao.CommentsDAO;
 import dao.ReservationDAO;
 import dao.UsersDAO;
+import dto.CommentDTO;
 import dto.DeleteReservationDTO;
 import dto.ReservationDTO;
 
@@ -76,6 +79,20 @@ public class ReservationService {
 		}
 		
 		return apartments;
+		
+	}
+	
+	private CommentsDAO getComments() {
+		CommentsDAO comments = (CommentsDAO) ctx.getAttribute("comments");
+		
+		if(comments == null) {
+			comments = new CommentsDAO();
+			comments.readComments();
+			
+			ctx.setAttribute("comments", comments);
+		}
+		
+		return comments;
 		
 	}
 	
@@ -172,6 +189,47 @@ public class ReservationService {
 		
 		reservationsCTX.saveReservationsJSON();
 		apartmentsCTX.saveApartmentsJSON();
+		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+
+	}
+	
+	@POST
+	@Path("/makeComment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response makeComment(CommentDTO commentData) {
+		ReservationDAO reservationsCTX = getReservations();
+		UsersDAO usersCTX = getUsers();
+		ApartmentsDAO apartmentsCTX = getApartments();
+		CommentsDAO commentsCTX = getComments();
+		
+		ArrayList<Comment> comments = commentsCTX.getValues();
+		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
+		Collection<User> users = usersCTX.getValues();
+		
+		Apartment apartment = new Apartment();
+		User user = new User();
+		
+		for (Apartment a : apartments) {
+			if(a.getIdentificator() == commentData.apartmentID) {
+				apartment = a;
+				break;
+			}
+		}
+		for (User u: users) {
+			if(u.getUserName().equals(commentData.guestUserName)) {
+				user = u;
+				break;
+			}
+		}
+		
+		
+	   Comment comment = new Comment((Guest) user, apartment, commentData.txtOfComment, commentData.ratingForApartment);
+		
+	   comments.add(comment);
+	   
+		apartmentsCTX.saveApartmentsJSON();
+		commentsCTX.saveCommentJSON();
 		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
 
 	}
