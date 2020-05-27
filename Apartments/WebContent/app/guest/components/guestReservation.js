@@ -7,13 +7,33 @@ Vue.component("guest-reservation",{
             ocena: "ocena od 1 do 5",
             komentar:"",
             searchData: {
-      
+                location: "",
+                checkIn: "",
+                checkOut: "",
+                price: 0.0,
+                rooms: 0,
+                maxGuests:0
             }
         }
     },
 
     template:`
     <div id = "styleForApartmentsView">
+     	
+        <form @submit="searchParam" method='post'>
+
+            <input type="text" v-model="searchData.location" placeholder="Location..." >
+            <input type="date" v-model="searchData.checkIn" placeholder="Check in...">
+            <input type="date" v-model="searchData.checkOut" placeholder="Check out...">
+            <input type="number" v-model="searchData.price" placeholder="Price per night..." >
+            <input type="number" v-model="searchData.rooms" placeholder="Number of rooms ..." >
+            <input type="number" v-model="searchData.maxGuests" placeholder="Max guests in room..." >
+
+            <button type="submit" >Search</button>
+            <button type="submit" @click="cancelSearch">Cancel search</button>
+
+        </form>
+        
     	<h1> Trenutno ulogovani korisnik je {{ user.userName }} i ovo su rezervacije samo za tog korisnika!! :) </h1>
         <ul>
             <li v-for="reservation in reservations">
@@ -21,6 +41,8 @@ Vue.component("guest-reservation",{
                 <h2> ID apartmana: {{ reservation.reservedApartment.identificator }} </h2>
                 <h2> Tip apartmana: {{ reservation.reservedApartment.typeOfApartment }} </h2>
                 <h2> Status rezervacije: {{ reservation.statusOfReservation }} </h2>
+                <h2> Cena za noc: {{ reservation.reservedApartment.pricePerNight }} </h2>
+                <h2> Ukupna cena: {{ reservation.totalPrice }} </h2>
                 <h2> Datum rezervacije: {{ reservation.dateOfReservation }} </h2>
                 <h2> Guest username: {{ reservation.guest.userName }} </h2>
                 <h2> Poruka za Host-a: {{ reservation.messageForHost }} </h2>
@@ -46,10 +68,79 @@ Vue.component("guest-reservation",{
     			
             </tr>
         </table>
+        
+         <button type="button" @click="sortAsc">SORT ASC</button>
+         <button type="button" @click="sortDesc">SORT ASC</button>
+        
     </div>
     
     `,
     methods: {
+    	sortAsc: function(){
+        	this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['ASC','DESC']);
+        },
+        sortDesc: function(){
+        	this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['DESC','ASC']);
+        },
+        multisort: function(arr, columns, order_by) {
+            if(typeof columns == 'undefined') {
+                columns = []
+                for(x=0;x<arr[0].length;x++) {
+                    columns.push(x);
+                }
+            }
+
+            if(typeof order_by == 'undefined') {
+                order_by = []
+                for(x=0;x<arr[0].length;x++) {
+                    order_by.push('ASC');
+                }
+            }
+
+            function multisort_recursive(a,b,columns,order_by,index) {  
+                var direction = order_by[index] == 'DESC' ? 1 : 0;
+
+                var is_numeric = !isNaN(a[columns[index]]-b[columns[index]]);
+
+                var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
+                var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
+
+                if(!is_numeric) {
+                    /*
+                        If we have string, then convert it to
+                        array of charachter with .split("")
+                        then go through every ellement and 
+                        get ascii value from it and add that to sum
+                        of that word, with that, we have uniq value for every
+                        word.
+
+                        author: vaxi
+                    */
+                   let sum_x=0;
+                   let sum_y=0;
+                   
+                   x.split("").forEach(element => sum_x += element.charCodeAt())
+                   y.split("").forEach(element => sum_y += element.charCodeAt())
+
+                   x= sum_x;
+                   y=sum_y;
+                }
+
+                if(x < y) {
+                        return direction == 0 ? -1 : 1;
+                }
+
+                if(x == y)  {
+                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
+                }
+
+                return direction == 0 ? 1 : -1;
+            }
+
+            return arr.sort(function (a,b) {
+                return multisort_recursive(a,b,columns,order_by,0);
+            });
+        },
     	submitKomentar: function(apartmentID,komentar,ocena){
     		axios
             .post('rest/reservation/makeComment',{
@@ -86,8 +177,51 @@ Vue.component("guest-reservation",{
            .catch(err => {
              toastr["error"]("Failed during changes :(", "Fail");
            })     
-        }
     },
+    searchParam: function(event){
+        event.preventDefault();
+        
+        axios
+        .post('rest/search/SearchReservations',{
+            "location":''+ this.searchData.location,
+            "checkIn" :''+ this.searchData.checkIn,
+            "checkOut": this.searchData.checkOut,
+            "price" :   this.searchData.price,
+            "rooms" :   this.searchData.rooms,
+            "maxGuests":this.searchData.maxGuests 
+        })
+        .then(response =>{
+        	this.reservations = [];
+        	response.data.forEach(el => {
+        		if(el.guest.userName == this.user.userName){
+        			this.reservations.push(el);
+        		}
+                });
+        	return this.reservations;
+        })
+      },
+      cancelSearch: function(){
+        this.searchData.location = "";
+        this.searchData.checkIn = "";
+        this.searchData.checkOut = "";
+        this.searchData.price = 0.0;
+        this.searchData.rooms = 0;
+        this.searchData.maxGuests = 0;
+
+        axios
+        .get('rest/reservation/getReservations')
+        .then( response => {
+        	this.reservations = [];
+        	response.data.forEach(el => {
+        		console.log( this.user.userName);
+        		if(el.guest.userName == this.user.userName){
+        			this.reservations.push(el);
+        		}
+                });
+        	return this.reservations;
+        });
+       }
+      },
     mounted() {
         let one = 'rest/reservation/getReservations';
         let two = 'rest/edit/profileUser';

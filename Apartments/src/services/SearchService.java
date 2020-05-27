@@ -104,6 +104,40 @@ public class SearchService {
 		return searchedApartments;
 	}
 	
+	@POST
+	@Path("/SearchReservations")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> getSearchedReservations(SearchDTO searchParam){
+		System.out.println("\n\n SEARCH RESERVATIONS\n\n");
+		
+		ArrayList<Reservation> allReservations = getReservations().getValues();
+		ArrayList<Reservation> searchedReservations = new ArrayList<Reservation>();		// apartments which appropriate search
+		
+		
+		for (Reservation reservation : allReservations) {
+			if(
+					(searchParam.location.equals("") ? true : reservation.getReservedApartment().getLocation().equals(searchParam.location)) &&
+					(searchParam.checkIn.equals("") ? true :reservation.getReservedApartment().getTimeForCheckIn().equals(searchParam.checkIn)) &&
+					(searchParam.checkOut.equals("") ? true : reservation.getReservedApartment().getTimeForCheckOut().equals(searchParam.checkOut)) &&
+					((searchParam.price == 0.0) ? true : ((double) reservation.getReservedApartment().getPricePerNight() == searchParam.price)) &&
+					((searchParam.rooms == 0) ? true : ((double) reservation.getReservedApartment().getNumberOfRooms() == searchParam.rooms)) &&
+					((searchParam.maxGuests == 0) ? true : ((double) reservation.getReservedApartment().getNumberOfGuests() == searchParam.maxGuests))
+							
+					) {
+				System.out.println("DODAJEM");
+				searchedReservations.add(reservation);
+			}else {
+				System.out.println(searchParam.price);
+				System.out.println("NISAM DODAO");
+			}
+			
+		}
+		
+	
+		return searchedReservations;
+	}
+	
 	private ReservationDAO getReservations() {
 		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
 		
