@@ -19,7 +19,7 @@ toastr.options = {
     "hideMethod": "fadeOut"
 }
 
-Vue.component("administrator-apartments",{
+Vue.component("administrator-apartments", {
     data() {
         return {
             apartments: [],
@@ -29,18 +29,18 @@ Vue.component("administrator-apartments",{
                 checkOut: "",
                 price: 0.0,
                 rooms: 0,
-                maxGuests:0
+                maxGuests: 0
             },
             apartmentForChange: {},
             hideDialog: true,
             filterDataForApartment: {
-                typeOfApartment : "",
+                typeOfApartment: "",
                 status: ""
             }
         }
     },
 
-    template:`
+    template: `
     <div id = "styleForApartmentsView">
 
 
@@ -137,130 +137,130 @@ Vue.component("administrator-apartments",{
 
     `,
     methods: {
-        onchangeTypeOfApartment: function(){
-            if(this.filterDataForApartment.typeOfApartment == ""){
+        onchangeTypeOfApartment: function () {
+            if (this.filterDataForApartment.typeOfApartment == "") {
                 // Reset to all apartments
                 //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
                 // ne ovako da uzme sve kada se iskljuci filter
                 axios
-                .get('rest/apartments/getApartments')
-                .then( response => {
-                    this.apartments = [];
-                    response.data.forEach(el => {
-                        if(el.status == "ACTIVE" || el.status == "INACTIVE")
-                            this.apartments.push(el);
+                    .get('rest/apartments/getApartments')
+                    .then(response => {
+                        this.apartments = [];
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE" || el.status == "INACTIVE")
+                                this.apartments.push(el);
                         });
-                    return this.apartments;
-                });
+                        return this.apartments;
+                    });
 
-            }else{
-                let tempApartments = (this.apartments).filter( apartment => apartment.typeOfApartment == this.filterDataForApartment.typeOfApartment);
+            } else {
+                let tempApartments = (this.apartments).filter(apartment => apartment.typeOfApartment == this.filterDataForApartment.typeOfApartment);
                 this.apartments = tempApartments;
             }
         },
-        onchangeStatus: function(){
-            if(this.filterDataForApartment.status == ""){
+        onchangeStatus: function () {
+            if (this.filterDataForApartment.status == "") {
                 // Reset to all apartments
                 //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
                 // ne ovako da uzme sve kada se iskljuci filter
                 axios
-                .get('rest/apartments/getApartments')
-                .then( response => {
-                    this.apartments = [];
-                    response.data.forEach(el => {
-                        if(el.status == "ACTIVE" || el.status == "INACTIVE")
-                            this.apartments.push(el);
+                    .get('rest/apartments/getApartments')
+                    .then(response => {
+                        this.apartments = [];
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE" || el.status == "INACTIVE")
+                                this.apartments.push(el);
                         });
-                    return this.apartments;
-                });
+                        return this.apartments;
+                    });
 
-            }else{
-                let tempApartments = (this.apartments).filter( apartment => apartment.status == this.filterDataForApartment.status);
+            } else {
+                let tempApartments = (this.apartments).filter(apartment => apartment.status == this.filterDataForApartment.status);
                 this.apartments = tempApartments;
             }
         },
-        changeApartment: function(apartment){
+        changeApartment: function (apartment) {
             this.hideDialog = !this.hideDialog;
 
             this.apartmentForChange = apartment;
 
         },
-        confirmChanging: function(){
+        confirmChanging: function () {
             axios
-            .post('rest/apartments/changeApartment',{
-                "identificator": this.apartmentForChange.identificator,
-                "timeForCheckIn": this.apartmentForChange.timeForCheckIn,
-                "timeForCheckOut": this.apartmentForChange.timeForCheckOut,
-                "pricePerNight": this.apartmentForChange.pricePerNight,
-                "numberOfRooms": this.apartmentForChange.numberOfRooms,
-                "numberOfGuests": this.apartmentForChange.numberOfGuests
-            })
-            .then( response =>{
-                this.apartments = [];
-                response.data.forEach(el => {
-                    if(el.status == "ACTIVE" || el.status == "INACTIVE")
-                        this.apartments.push(el);
+                .post('rest/apartments/changeApartment', {
+                    "identificator": this.apartmentForChange.identificator,
+                    "timeForCheckIn": this.apartmentForChange.timeForCheckIn,
+                    "timeForCheckOut": this.apartmentForChange.timeForCheckOut,
+                    "pricePerNight": this.apartmentForChange.pricePerNight,
+                    "numberOfRooms": this.apartmentForChange.numberOfRooms,
+                    "numberOfGuests": this.apartmentForChange.numberOfGuests
+                })
+                .then(response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if (el.status == "ACTIVE" || el.status == "INACTIVE")
+                            this.apartments.push(el);
                     });
-                toastr["success"]("You make success change !!", "Success changes!");
+                    toastr["success"]("You make success change !!", "Success changes!");
 
-                return this.apartments;
-            });
+                    return this.apartments;
+                });
         },
-        deleteApartment: function(apartment){
+        deleteApartment: function (apartment) {
             this.apartmentForChange = apartment;
             this.requestForDeleteApartment();
         },
-        requestForDeleteApartment: function(){            
+        requestForDeleteApartment: function () {
             axios
-            .delete('rest/apartments/deleteApartment',{
-                data:{
-                    "reservedStatus": this.apartmentForChange.reservedStatus,
-                    "identificator": this.apartmentForChange.identificator
-                }
-                
+                .delete('rest/apartments/deleteApartment', {
+                    data: {
+                        "reservedStatus": this.apartmentForChange.reservedStatus,
+                        "identificator": this.apartmentForChange.identificator
+                    }
 
-            })
-            .then( response =>{
-                this.apartments = [];
-                response.data.forEach(el => {
-                    if(el.status == "ACTIVE" || el.status == "INACTIVE")
-                        this.apartments.push(el);
+
+                })
+                .then(response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if (el.status == "ACTIVE" || el.status == "INACTIVE")
+                            this.apartments.push(el);
                     });
-                toastr["success"]("You make success delete !!", "Success delete!");
+                    toastr["success"]("You make success delete !!", "Success delete!");
 
-                return this.apartments;
-            });
+                    return this.apartments;
+                });
         },
-        sortAsc: function(){
-        	this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['ASC','DESC']);
+        sortAsc: function () {
+            this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['ASC', 'DESC']);
         },
-        sortDesc: function(){
-        	this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['DESC','ASC']);
+        sortDesc: function () {
+            this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['DESC', 'ASC']);
         },
-        multisort: function(arr, columns, order_by) {
-            if(typeof columns == 'undefined') {
+        multisort: function (arr, columns, order_by) {
+            if (typeof columns == 'undefined') {
                 columns = []
-                for(x=0;x<arr[0].length;x++) {
+                for (x = 0; x < arr[0].length; x++) {
                     columns.push(x);
                 }
             }
 
-            if(typeof order_by == 'undefined') {
+            if (typeof order_by == 'undefined') {
                 order_by = []
-                for(x=0;x<arr[0].length;x++) {
+                for (x = 0; x < arr[0].length; x++) {
                     order_by.push('ASC');
                 }
             }
 
-            function multisort_recursive(a,b,columns,order_by,index) {  
+            function multisort_recursive(a, b, columns, order_by, index) {
                 var direction = order_by[index] == 'DESC' ? 1 : 0;
 
-                var is_numeric = !isNaN(a[columns[index]]-b[columns[index]]);
+                var is_numeric = !isNaN(a[columns[index]] - b[columns[index]]);
 
                 var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
                 var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
 
-                if(!is_numeric) {
+                if (!is_numeric) {
                     /*
                         If we have string, then convert it to
                         array of charachter with .split("")
@@ -271,82 +271,82 @@ Vue.component("administrator-apartments",{
 
                         author: vaxi
                     */
-                   let sum_x=0;
-                   let sum_y=0;
-                   
-                   x.split("").forEach(element => sum_x += element.charCodeAt())
-                   y.split("").forEach(element => sum_y += element.charCodeAt())
+                    let sum_x = 0;
+                    let sum_y = 0;
 
-                   x= sum_x;
-                   y=sum_y;
+                    x.split("").forEach(element => sum_x += element.charCodeAt())
+                    y.split("").forEach(element => sum_y += element.charCodeAt())
+
+                    x = sum_x;
+                    y = sum_y;
                 }
 
-                if(x < y) {
-                        return direction == 0 ? -1 : 1;
+                if (x < y) {
+                    return direction == 0 ? -1 : 1;
                 }
 
-                if(x == y)  {
-                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
+                if (x == y) {
+                    return columns.length - 1 > index ? multisort_recursive(a, b, columns, order_by, index + 1) : 0;
                 }
 
                 return direction == 0 ? 1 : -1;
             }
 
-            return arr.sort(function (a,b) {
-                return multisort_recursive(a,b,columns,order_by,0);
+            return arr.sort(function (a, b) {
+                return multisort_recursive(a, b, columns, order_by, 0);
             });
         },
-      searchParam: function(event){
-        event.preventDefault();
-        
-        axios
-        .post('rest/search/apartments',{
-            "location":''+ this.searchData.location,
-            "checkIn" :''+ this.searchData.checkIn,
-            "checkOut": this.searchData.checkOut,
-            "price" :   this.searchData.price,
-            "rooms" :   this.searchData.rooms,
-            "maxGuests":this.searchData.maxGuests 
-        })
-        .then(response =>{
-        	this.apartments = [];
-        	response.data.forEach(el => {
-        		if(el.status == "ACTIVE")
-        			this.apartments.push(el);
-        		});
-        	return this.apartments;
-        })
-      },
-      cancelSearch: function(){
-        this.searchData.location = "";
-        this.searchData.checkIn = "";
-        this.searchData.checkOut = "";
-        this.searchData.price = 0.0;
-        this.searchData.rooms = 0;
-        this.searchData.maxGuests = 0;
+        searchParam: function (event) {
+            event.preventDefault();
 
-        axios
-        .get('rest/apartments/getApartments')
-        .then( response => {
-        	this.apartments = [];
-        	response.data.forEach(el => {
-        		if(el.status == "ACTIVE")
-        			this.apartments.push(el);
-        		});
-        	return this.apartments;
-        });
+            axios
+                .post('rest/search/apartments', {
+                    "location": '' + this.searchData.location,
+                    "checkIn": '' + this.searchData.checkIn,
+                    "checkOut": this.searchData.checkOut,
+                    "price": this.searchData.price,
+                    "rooms": this.searchData.rooms,
+                    "maxGuests": this.searchData.maxGuests
+                })
+                .then(response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if (el.status == "ACTIVE")
+                            this.apartments.push(el);
+                    });
+                    return this.apartments;
+                })
+        },
+        cancelSearch: function () {
+            this.searchData.location = "";
+            this.searchData.checkIn = "";
+            this.searchData.checkOut = "";
+            this.searchData.price = 0.0;
+            this.searchData.rooms = 0;
+            this.searchData.maxGuests = 0;
 
-      }
+            axios
+                .get('rest/apartments/getApartments')
+                .then(response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if (el.status == "ACTIVE")
+                            this.apartments.push(el);
+                    });
+                    return this.apartments;
+                });
+
+        }
     },
     mounted() {
         axios
-        .get('rest/apartments/getApartments')
-        .then( response => {
-        	response.data.forEach(el => {
-        		if(el.status == "ACTIVE" || el.status == "INACTIVE")
-        			this.apartments.push(el);
-        		});
-        	return this.apartments;
-        });
+            .get('rest/apartments/getApartments')
+            .then(response => {
+                response.data.forEach(el => {
+                    if (el.status == "ACTIVE" || el.status == "INACTIVE")
+                        this.apartments.push(el);
+                });
+                return this.apartments;
+            });
     },
 })

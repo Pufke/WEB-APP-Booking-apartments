@@ -5,6 +5,9 @@ public class Location {
 	private String longitude; //Geografska dužina
 	private Address address;
 
+	public Location() {
+		
+	}
 	
 	public Location(String latitude, String longitude, Address address) {
 		super();

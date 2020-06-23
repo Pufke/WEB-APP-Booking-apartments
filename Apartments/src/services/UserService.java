@@ -1,5 +1,6 @@
 package services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,6 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import beans.Administrator;
 import beans.Guest;
@@ -46,32 +50,30 @@ public class UserService {
 	public Response login(UserLoginDTO user) {
 		UsersDAO users = getUsers();
 		
-		User compareUser = users.getUser(user.username);
+		User userForLogin = users.getUser(user.username);
 		
-		if(compareUser == null) {
+		if(userForLogin == null) {
 			System.out.println("Nema takvog usera");
 			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again").build();
-		}else if(!compareUser.getPassword().equals(user.password)) {
+		}else if(!userForLogin.getPassword().equals(user.password)) {
 			System.out.println("SIFRE NISU JEDNAKE");
 			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again").build();
 		}
 		
+		request.getSession().setAttribute("loginUser", userForLogin);			// we give him a session
+		
+		
 		
 		// We know this, because in users we have 3 types of instances[Administrator, Guest, Host]
-		if(compareUser.getRole().equals("ADMINISTRATOR")) {
-			Administrator admin = new Administrator(compareUser.getUserName(), compareUser.getPassword(), compareUser.getName(), compareUser.getSurname());
-			request.getSession().setAttribute("loginUser", admin);  							// we give him a session
+		if(userForLogin.getRole().equals("ADMINISTRATOR")) {
 			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/administratorDashboard.html").build();
 			
-		}else if(compareUser.getRole().equals("GUEST")) {
-			Guest guest = new Guest(compareUser.getUserName(), compareUser.getPassword(), compareUser.getName(), compareUser.getSurname());
-			request.getSession().setAttribute("loginUser", guest);  							// we give him a session
+		}else if(userForLogin.getRole().equals("GUEST")) {
 			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/guestDashboard.html").build();
 			
-		}else if(compareUser.getRole().equals("HOST")) {
-			Host host = new Host(compareUser.getUserName(), compareUser.getPassword(), compareUser.getName(), compareUser.getSurname());
-			request.getSession().setAttribute("loginUser", host);  							// we give him a session
+		}else if(userForLogin.getRole().equals("HOST")) {
 			return Response.status(Response.Status.ACCEPTED).entity("/Apartments/hostDashboard.html").build();
+			
 		}
 		
 		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/loginaaa").build();		//redirect to login when is login accepted
@@ -149,7 +151,7 @@ public class UserService {
 		return searchedUsers;
 	}
 	
-	private UsersDAO getUsers() {
+	private UsersDAO getUsers(){
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
 		if(users == null) {
 			users = new UsersDAO();

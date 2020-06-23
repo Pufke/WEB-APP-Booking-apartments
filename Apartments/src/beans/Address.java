@@ -6,6 +6,10 @@ public class Address {
 	private String populatedPlace;
 	private String zipCode; //npr. Sutjeska 3, Novi Sad 21000 
 	
+	public Address() {
+		
+	}
+	
 	public Address(String street, String number, String populatedPlace, String zipCode) {
 		super();
 		this.street = street;
