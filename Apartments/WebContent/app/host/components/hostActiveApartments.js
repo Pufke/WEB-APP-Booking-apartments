@@ -31,14 +31,8 @@ Vue.component("host-ActiveApartments",{
     
     `,
     mounted(){
-
-        /*
-            1. Zatrazim tekuceg korisnika i dobijem sve info o njemu[on ima u sebi listu apartmana koji su njegovi]
-            2. Protrcim kroz njegovu listu apartmana, i to dodam u apartments koji se prikazuje na frontu.
-        */
-
         axios
-        .get('rest/apartments/getApartments')
+        .get('rest/apartments/getMyApartments')
         .then( response=> {
         	response.data.forEach(el => {
         		if(el.status == "ACTIVE")

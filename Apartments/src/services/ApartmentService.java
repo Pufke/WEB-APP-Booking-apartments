@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Apartment;
+import beans.User;
 import dao.ApartmentsDAO;
 import dto.ApartmentChangeDTO;
 import dto.ApartmentsDTO;
@@ -34,6 +35,22 @@ public class ApartmentService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String test() {
 		return "Hello Jersey";
+	}
+	
+	@GET
+	@Path("/getMyApartments")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> getJustMyApartments(){
+		
+		// With this, we get user who is loged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		System.out.println("\n\n\n DOBAVLJANJE SAMO APARTMANA DOMACINA: "+ user.getUserName());
+		// TODO: Ovde se menja ako budemo presli samo na ID-eve.
+		
+		return user.getApartmentsForRentingHOST();
 	}
 	
 	@GET
