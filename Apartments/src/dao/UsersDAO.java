@@ -31,6 +31,7 @@ import beans.Host;
 import beans.Location;
 import beans.Reservation;
 import beans.User;
+import dto.ApartmentChangeDTO;
 import dto.UserDTO;
 
 public class UsersDAO {
@@ -134,6 +135,26 @@ public class UsersDAO {
 		return false;
 	}
 
+	public void changeHostApartment(User updatedUser, ApartmentChangeDTO updatedApartment) {
+		// Find user with that name, and change his data.
+		for (User user : users.values()) {
+			if (user.getUserName().equals(updatedUser.getUserName())) {
+				
+				// find which apartment we need to change for this host
+				for(Apartment apartment : user.getApartmentsForRentingHOST()) {
+					if (updatedApartment.identificator.equals(apartment.getIdentificator())) {
+						apartment.setPricePerNight(updatedApartment.pricePerNight);
+						apartment.setTimeForCheckIn(updatedApartment.timeForCheckIn);
+						apartment.setTimeForCheckOut(updatedApartment.timeForCheckOut);
+						apartment.setNumberOfRooms(updatedApartment.numberOfRooms);
+						apartment.setNumberOfGuests(updatedApartment.numberOfGuests);
+						saveUsersJSON();
+						return;
+					}
+				}
+			}
+		}
+	}
 	
 
 	public LinkedHashMap<String, User> getUsers() {
