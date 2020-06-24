@@ -119,11 +119,11 @@ Vue.component("administrator-apartments", {
                 <form method='post'>
 
                     
-                    <input type="date" v-model="apartmentForChange.timeForCheckIn" placeholder="Check in...">
-                    <input type="date" v-model="apartmentForChange.timeForCheckOut" placeholder="Check out...">
-                    <input type="number" v-model="apartmentForChange.pricePerNight" placeholder="Price per night..." >
-                    <input type="number" v-model="apartmentForChange.numberOfRooms" placeholder="Number of rooms ..." >
-                    <input type="number" v-model="apartmentForChange.numberOfGuests" placeholder="Max guests in room..." >
+                    <input  type="date" v-model="apartmentForChange.timeForCheckIn" placeholder="Check in...">
+                    <input  type="date" v-model="apartmentForChange.timeForCheckOut" placeholder="Check out...">
+                    <input  type="number" v-model="apartmentForChange.pricePerNight" placeholder="Price per night..." >
+                    <input  type="number" v-model="apartmentForChange.numberOfRooms" placeholder="Number of rooms ..." >
+                    <input  type="number" v-model="apartmentForChange.numberOfGuests" placeholder="Max guests in room..." >
 
                     <button type="button" @click="confirmChanging">Confirm</button>
                     <button type="button" @click="hideDialog = !hideDialog">Cancel</button>
@@ -186,6 +186,14 @@ Vue.component("administrator-apartments", {
 
         },
         confirmChanging: function () {
+
+            // Check is empty field input
+            // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
+            if( !this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests){
+                toastr["warning"]("All field is required", "Watch out !");
+                return;
+            }
+
             axios
                 .post('rest/apartments/changeApartment', {
                     "identificator": this.apartmentForChange.identificator,
