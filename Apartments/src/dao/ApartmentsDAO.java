@@ -13,11 +13,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Address;
 import beans.Apartment;
 import beans.Location;
+import beans.User;
 import dto.ApartmentChangeDTO;
 import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
@@ -40,73 +44,37 @@ public class ApartmentsDAO {
 	/**
 	 * Read the apartments from the file.
 	 */
-	@SuppressWarnings("unchecked")
 	public void readApartments() {
-		BufferedReader in = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		File file = new File(this.path);
+
+		List<Apartment> loadedApartments = new ArrayList<Apartment>();
 		try {
-			File file = new File(this.path);
-			if (!file.exists()) {
-				file = new File(this.path);
-			}
-			System.out.println(file);
-			JSONParser jsonParser = new JSONParser();
 
-			try (FileReader reader = new FileReader(path)) {
-				Object obj = jsonParser.parse(reader);
-				JSONArray apartments = (JSONArray) obj;
-				System.out.println(apartments);
-				apartments.forEach(apar -> parseApartmentObject((JSONObject) apar));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			loadedApartments = objectMapper.readValue(file, new TypeReference<List<Apartment>>() {
+			});
 
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-				}
-			}
-		}
-	}
-
-	private void parseApartmentObject(JSONObject apartment) {
-		String status = (String) apartment.get("status");
-		String TypeOfApartment = (String) apartment.get("TypeOfApartment");
-		Long PricePerNight = (Long) apartment.get("PricePerNight");
-		Long NumberOfRooms = (Long) apartment.get("NumberOfRooms");
-		Long NumberOfGuests = (Long) apartment.get("NumberOfGuests");
-		String TimeForCheckIn = (String) apartment.get("TimeForCheckIn");
-		String TimeForCheckOut = (String) apartment.get("TimeForCheckOut");
-		String ReservedStatus = (String) apartment.get("ReservedStatus");
-		Long Identificator = (Long) apartment.get("Identificator");
-
-		JSONArray reservedApartmentListJSON = (JSONArray) apartment.get("reservedApartmentList");
-		ArrayList<String> reservedApartmentList = new ArrayList<String>();
-
-		if (reservedApartmentListJSON != null) {
-			for (int i = 0; i < reservedApartmentListJSON.size(); i++) {
-				reservedApartmentList.add((String) reservedApartmentListJSON.get(i));
-			}
+			
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-		JSONObject l = (JSONObject) apartment.get("Location");
-		JSONObject a = (JSONObject) l.get("Address");
-
-		String latitude = (String) l.get("latitude");
-		String longitude = (String) l.get("longitude");
-
-		String street = (String) a.get("street");
-		String number = (String) a.get("number");
-		String populatedPlace = (String) a.get("populatedPlace");
-		String zipCode = (String) a.get("zipCode");
-
-		Address address = new Address(street, number, populatedPlace, zipCode);
-		Location location = new Location(latitude, longitude, address);
-		Apartment ap = new Apartment(reservedApartmentList, Identificator, TypeOfApartment, NumberOfRooms,
-				NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);
-		apartments.add(ap);
+		System.out.println("\n\n ucitavam preko object mapera \n\n");
+		for (Apartment a : loadedApartments) {
+			System.out.println("ID APARTMANA: " + a.getIdentificator());
+			apartments.add(a);
+		}
+		System.out.println("\n\n");
 	}
+
 
 	public void saveApartmentsJSON() {
 		
@@ -126,62 +94,6 @@ public class ApartmentsDAO {
 		}
 		
 	}
-//	public void saveApartmentsJSON() {
-//		
-//		JSONArray apartmentList = new JSONArray();
-//		
-//		for (Apartment a : apartments) {
-//			
-//			JSONObject apartment = new JSONObject();
-//			apartment.put("status", a.getStatus());
-//			apartment.put("TypeOfApartment", a.getTypeOfApartment());
-//			apartment.put("PricePerNight", a.getPricePerNight());
-//			apartment.put("NumberOfRooms", a.getNumberOfRooms());
-//			apartment.put("NumberOfGuests", a.getNumberOfGuests());
-//			apartment.put("TimeForCheckIn", a.getTimeForCheckIn());
-//			apartment.put("TimeForCheckOut", a.getTimeForCheckOut());
-//			apartment.put("Identificator", a.getIdentificator());
-//			apartment.put("ReservedStatus", a.getReservedStatus());
-//			
-//			JSONArray reservedApartmentListJSON = new JSONArray();
-//			ArrayList<String> reservedApartmentList = a.getReservedApartmentList();
-//			
-//			//if(reservedApartmentList != null) {
-//				for (String s : reservedApartmentList) {
-//					reservedApartmentListJSON.add(s);
-//				}
-//			//}
-//			
-//			apartment.put("reservedApartmentList", reservedApartmentListJSON);
-//			
-//			JSONObject location = new JSONObject();
-//			Location l = a.getLocation();
-//			location.put("latitude", l.getLatitude());
-//			location.put("longitude", l.getLongitude());
-//			
-//			JSONObject address = new JSONObject();
-//			Address adres = l.getAddress();
-//			address.put("street", adres.getStreet());
-//			address.put("number", adres.getNumber());
-//			address.put("populatedPlace", adres.getPopulatedPlace());
-//			address.put("zipCode", adres.getZipCode());
-//			
-//			location.put("Address", address);
-//			apartment.put("Location", location);
-//			//Add apartments to list
-//			apartmentList.add(apartment);
-//		}
-//		//Write JSON file
-//        try (FileWriter file = new FileWriter(path)) {
-// 
-//            file.write(apartmentList.toJSONString());
-//            file.flush();
-// 
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//		
-//	}
 
 	public Boolean changeApartment(ApartmentsDTO updateApartment) {
 
