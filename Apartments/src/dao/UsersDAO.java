@@ -32,6 +32,7 @@ import beans.Location;
 import beans.Reservation;
 import beans.User;
 import dto.ApartmentChangeDTO;
+import dto.ApartmentDTOJSON;
 import dto.UserDTO;
 
 public class UsersDAO {
@@ -135,7 +136,32 @@ public class UsersDAO {
 		return false;
 	}
 
-	public void changeHostApartment(User updatedUser, ApartmentChangeDTO updatedApartment) {
+	public void addHostApartments(User updatedUser, ApartmentDTOJSON newItem) {
+		// Find user with that name, and change his data.
+			for (User user : users.values()) {
+				if (user.getUserName().equals(updatedUser.getUserName())) {
+					
+					// If we are here, then this user does not have this apartman so wee need to add it
+					Apartment apartment = new Apartment();
+					apartment.setStatus(newItem.addedApartment.getStatus());
+					apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
+					apartment.setPricePerNight(newItem.addedApartment.getPricePerNight());
+					apartment.setTimeForCheckIn(newItem.addedApartment.getTimeForCheckIn());
+					apartment.setTimeForCheckOut(newItem.addedApartment.getTimeForCheckOut());
+					apartment.setNumberOfRooms(newItem.addedApartment.getNumberOfRooms());
+					apartment.setNumberOfGuests(newItem.addedApartment.getNumberOfGuests());
+					apartment.setLocation(newItem.addedApartment.getLocation());
+					
+					
+					user.getApartmentsForRentingHOST().add(apartment);
+					saveUsersJSON();
+					return;
+				}
+			}
+		
+	}
+	
+	public void changeHostApartments(User updatedUser, ApartmentChangeDTO updatedApartment) {
 		// Find user with that name, and change his data.
 		for (User user : users.values()) {
 			if (user.getUserName().equals(updatedUser.getUserName())) {
@@ -154,6 +180,10 @@ public class UsersDAO {
 				}
 			}
 		}
+		
+		
+		
+		
 	}
 	
 
@@ -180,5 +210,7 @@ public class UsersDAO {
 
 		return null;
 	}
+
+	
 
 }

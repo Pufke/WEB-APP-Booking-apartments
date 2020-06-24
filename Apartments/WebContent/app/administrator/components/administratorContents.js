@@ -19,20 +19,20 @@ toastr.options = {
     "hideMethod": "fadeOut"
 }
 
-Vue.component("administrator-contents",{
+Vue.component("administrator-contents", {
     data() {
         return {
             amenities: [],
             hideDialog: true,
             itemForChange: {
                 amenitiesID: 999,
-                name : ""
+                name: ""
             },
             hideAddDialog: true,
             newItemName: ""
         }
     },
-    template:`
+    template: `
     <div id = "styleForApartmentsView" >
         <h1> List of content in apartments </h1>
 
@@ -109,81 +109,83 @@ Vue.component("administrator-contents",{
 
     `,
     methods: {
-        addItem: function(){
+        addItem: function () {
             this.hideAddDialog = !this.hideAddDialog;
         },
-        confirmAdding: function(){
-            
+        confirmAdding: function () {
+
             axios
-            .post('rest/amenities/addItem',{
-                "newItemName": this.newItemName
-            })
-            .then( response =>{
-                this.amenities = [];
-                response.data.forEach(el => {
-                    this.amenities.push(el);
-            });
-            toastr["success"]("You make success adding !!", "Success adding!");
-            return this.amenities;
-            });
+                .post('rest/amenities/addItem', {
+                    "newItemName": this.newItemName
+                })
+                .then(response => {
+                    this.amenities = [];
+                    response.data.forEach(el => {
+                        this.amenities.push(el);
+                    });
+                    toastr["success"]("You make success adding !!", "Success adding!");
+                    return this.amenities;
+                });
 
         },
-        changeItem: function(item){
+        changeItem: function (item) {
             this.hideDialog = !this.hideDialog;
 
             this.itemForChange = item;
 
         },
-        confirmChanging: function(){
-            
+        confirmChanging: function () {
+
             axios
-            .post('rest/amenities/changeItem',{
-                "amenitiesID": this.itemForChange.amenitiesID,
-                "name": this.itemForChange.name
-            })
-            .then( response =>{
-                this.amenities = [];
-                response.data.forEach(el => {
-                    this.amenities.push(el);
-            });
-            toastr["success"]("You make success change !!", "Success changes!");
-            return this.amenities;
-            });
+                .post('rest/amenities/changeItem', {
+                    "amenitiesID": this.itemForChange.amenitiesID,
+                    "name": this.itemForChange.name
+                })
+                .then(response => {
+                    this.amenities = [];
+                    response.data.forEach(el => {
+                        this.amenities.push(el);
+                    });
+                    toastr["success"]("You make success change !!", "Success changes!");
+                    return this.amenities;
+                });
 
         },
-        deleteItem: function(item){
+        deleteItem: function (item) {
             this.itemForChange = item;
             this.requestForDeleteItem();
         },
-        requestForDeleteItem: function(){
+        requestForDeleteItem: function () {
 
             axios
-            .delete('rest/amenities/deleteItem',{
-                data:{
-                    "amenitiesID": this.itemForChange.amenitiesID,
-                    "name": this.itemForChange.name
-                }
-                
-            })
-            .then( response =>{
-                this.amenities = [];
-                response.data.forEach(el => {
-                    this.amenities.push(el);
-            });
-            toastr["success"]("You make success delete !!", "Success delete!");
-            return this.amenities;
-            });
+                .delete('rest/amenities/deleteItem', {
+                    data: {
+                        "amenitiesID": this.itemForChange.amenitiesID,
+                        "name": this.itemForChange.name
+                    }
+
+                })
+                .then(response => {
+                    this.amenities = [];
+                    response.data.forEach(el => {
+                        this.amenities.push(el);
+                    });
+                    toastr["success"]("You make success delete !!", "Success delete!");
+                    return this.amenities;
+                });
 
         }
     },
     mounted() {
+
         axios
-        .get('rest/amenities/getAmenities')
-        .then( response => {
-        	response.data.forEach(el => {
-        		this.amenities.push(el);
-        	});
-        	return this.amenities;
-        });
+            .get('rest/amenities/getAmenities')
+            .then(response => {
+                response.data.forEach(el => {
+                    this.amenities.push(el);
+                });
+                return this.amenities;
+            });
+
     },
 });

@@ -218,3 +218,34 @@ table{
 	cursor: pointer;
 }
 /* End of style for dialog of adding amenities */
+
+/* Style for dialog of adding apartments of HOST */
+
+#addDialogForApartments .modal-contents {
+	height: 550px;
+	width: 500px;
+	background-color: white;
+	text-align: center;
+	padding: 20px;
+	position: relative;
+	border-radius: 4px;
+}
+
+#addDialogForApartments input {
+	margin: 15px auto;
+	display: block;
+	width: 50%;
+	padding: 8px;
+	border: 1px solid gray;
+}
+
+#addDialogForApartments .close {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	font-size: 42px;
+	color: #333;
+	transform: rotate(45deg);
+	cursor: pointer;
+}
+/* End of style for dialog of adding apartments of HOST */

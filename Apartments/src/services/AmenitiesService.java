@@ -33,18 +33,6 @@ public class AmenitiesService {
 		return getAmenities().getValues();
 	}
 	
-	private AmenitiesDAO getAmenities() {
-
-		AmenitiesDAO amenities = (AmenitiesDAO) ctx.getAttribute("amenities");
-
-		if (amenities == null) {
-			amenities = new AmenitiesDAO();
-			amenities.readAmenities();
-			ctx.setAttribute("amenities", amenities);
-		}
-
-		return amenities;
-	}
 	
 	@POST
 	@Path("/addItem")
@@ -84,5 +72,18 @@ public class AmenitiesService {
 		amenitiesDAO.deleteItem(deletedItem.amenitiesID);
 		
 		return getAmenities().getValues();
+	}
+	
+	private AmenitiesDAO getAmenities() {
+
+		AmenitiesDAO amenities = (AmenitiesDAO) ctx.getAttribute("amenities");
+
+		if (amenities == null) {
+			amenities = new AmenitiesDAO();
+			amenities.readAmenities();
+			ctx.setAttribute("amenities", amenities);
+		}
+
+		return amenities;
 	}
 }

@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -14,11 +15,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import beans.AmenitiesItem;
 import beans.Apartment;
 import beans.User;
+import dao.AmenitiesDAO;
 import dao.ApartmentsDAO;
 import dao.UsersDAO;
+import dto.AmenitiesItemAddDTO;
 import dto.ApartmentChangeDTO;
+import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
 
 //apartments/getApartments
@@ -37,6 +46,28 @@ public class ApartmentService {
 		return "Hello Jersey";
 	}
 
+	@POST
+	@Path("/addNewApartments")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> addItem(ApartmentDTOJSON newItem){
+		System.out.println("\n stigao je NOVI APARTMAN sa statusom: " + newItem.addedApartment.getStatus() );
+		
+		ApartmentsDAO apartmentsDAO = getApartments();
+		apartmentsDAO.addNewApartments(newItem);
+		
+		// With this, we get user who is loged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+		UsersDAO allUsersDAO = getUsers();
+
+		// Add that apartment in list of hosts apartments
+		allUsersDAO.addHostApartments(user, newItem);
+		
+		return user.getApartmentsForRentingHOST();
+	}
+	
 	@GET
 	@Path("/getMyApartments")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -74,7 +105,7 @@ public class ApartmentService {
 		UsersDAO allUsersDAO = getUsers();
 
 		// Update that apartment in list of hosts apartments
-		allUsersDAO.changeHostApartment(user, updatedApartment);
+		allUsersDAO.changeHostApartments(user, updatedApartment);
 
 		return user.getApartmentsForRentingHOST();
 	}
