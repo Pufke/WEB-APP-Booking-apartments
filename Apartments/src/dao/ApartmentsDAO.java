@@ -39,6 +39,8 @@ public class ApartmentsDAO {
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator
 				+ "apartments.json";
 		this.apartments = new ArrayList<Apartment>();
+		
+		System.out.println(this.path);
 	}
 
 	/**
@@ -132,6 +134,17 @@ public class ApartmentsDAO {
 
 		return false;
 	}
+	
+	public void activateApartment(long identificator) {
+		for (Apartment apartment : apartments) {
+			if (apartment.getIdentificator().equals(identificator)) {
+				apartment.setStatus("ACTIVE");
+				saveApartmentsJSON();
+				return;
+			}
+		}
+		
+	}
 
 	public Boolean deleteReservation(ApartmentsDTO updateApartment) {
 
@@ -180,5 +193,7 @@ public class ApartmentsDAO {
 		apartments.add(apartment);
 		saveApartmentsJSON();
 	}
+
+
 
 }

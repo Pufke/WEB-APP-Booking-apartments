@@ -90,7 +90,7 @@ public class UsersDAO {
 
 	public void saveUsersJSON() {
 
-		// Get all users 
+		// Get all users
 		List<User> allUsers = new ArrayList<User>();
 		for (User u : getValues()) {
 			allUsers.add(u);
@@ -105,7 +105,7 @@ public class UsersDAO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void addUser(User user) {
 		if (!users.containsValue(user)) {
 			// TODO: Proveriti da li stvarno dobro proverava
@@ -138,36 +138,36 @@ public class UsersDAO {
 
 	public void addHostApartments(User updatedUser, ApartmentDTOJSON newItem) {
 		// Find user with that name, and change his data.
-			for (User user : users.values()) {
-				if (user.getUserName().equals(updatedUser.getUserName())) {
-					
-					// If we are here, then this user does not have this apartman so wee need to add it
-					Apartment apartment = new Apartment();
-					apartment.setStatus(newItem.addedApartment.getStatus());
-					apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
-					apartment.setPricePerNight(newItem.addedApartment.getPricePerNight());
-					apartment.setTimeForCheckIn(newItem.addedApartment.getTimeForCheckIn());
-					apartment.setTimeForCheckOut(newItem.addedApartment.getTimeForCheckOut());
-					apartment.setNumberOfRooms(newItem.addedApartment.getNumberOfRooms());
-					apartment.setNumberOfGuests(newItem.addedApartment.getNumberOfGuests());
-					apartment.setLocation(newItem.addedApartment.getLocation());
-					
-					
-					user.getApartmentsForRentingHOST().add(apartment);
-					saveUsersJSON();
-					return;
-				}
+		for (User user : users.values()) {
+			if (user.getUserName().equals(updatedUser.getUserName())) {
+
+				// If we are here, then this user does not have this apartman so wee need to add
+				// it
+				Apartment apartment = new Apartment();
+				apartment.setStatus(newItem.addedApartment.getStatus());
+				apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
+				apartment.setPricePerNight(newItem.addedApartment.getPricePerNight());
+				apartment.setTimeForCheckIn(newItem.addedApartment.getTimeForCheckIn());
+				apartment.setTimeForCheckOut(newItem.addedApartment.getTimeForCheckOut());
+				apartment.setNumberOfRooms(newItem.addedApartment.getNumberOfRooms());
+				apartment.setNumberOfGuests(newItem.addedApartment.getNumberOfGuests());
+				apartment.setLocation(newItem.addedApartment.getLocation());
+
+				user.getApartmentsForRentingHOST().add(apartment);
+				saveUsersJSON();
+				return;
 			}
-		
+		}
+
 	}
-	
+
 	public void changeHostApartments(User updatedUser, ApartmentChangeDTO updatedApartment) {
 		// Find user with that name, and change his data.
 		for (User user : users.values()) {
 			if (user.getUserName().equals(updatedUser.getUserName())) {
-				
+
 				// find which apartment we need to change for this host
-				for(Apartment apartment : user.getApartmentsForRentingHOST()) {
+				for (Apartment apartment : user.getApartmentsForRentingHOST()) {
 					if (updatedApartment.identificator.equals(apartment.getIdentificator())) {
 						apartment.setPricePerNight(updatedApartment.pricePerNight);
 						apartment.setTimeForCheckIn(updatedApartment.timeForCheckIn);
@@ -180,12 +180,26 @@ public class UsersDAO {
 				}
 			}
 		}
-		
-		
-		
-		
+
 	}
-	
+
+	public void activateApartmentOfHost(User userWithNewActivatedApartment, Long idOfApartmentForActivation) {
+		// Find user with that name, and change his data.
+		for (User user : users.values()) {
+			if (user.getUserName().equals(userWithNewActivatedApartment.getUserName())) {
+
+				// find which apartment we need to change for this host
+				for (Apartment apartment : user.getApartmentsForRentingHOST()) {
+					if (idOfApartmentForActivation.equals(apartment.getIdentificator())) {
+						apartment.setStatus("ACTIVE");
+						saveUsersJSON();
+						return;
+					}
+				}
+			}
+		}
+
+	}
 
 	public LinkedHashMap<String, User> getUsers() {
 		return users;
@@ -210,7 +224,5 @@ public class UsersDAO {
 
 		return null;
 	}
-
-	
 
 }
