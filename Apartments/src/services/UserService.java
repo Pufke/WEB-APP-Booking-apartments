@@ -95,9 +95,9 @@ public class UserService {
 		newUser.setID(1111);
 		newUser.setUserName(user.username);
 		newUser.setPassword(user.password);
-		newUser.setPassword(user.name);
-		newUser.setPassword(user.surname);
-		newUser.setPassword(user.role);
+		newUser.setName(user.name);
+		newUser.setSurname(user.surname);
+		newUser.setRole(user.role);
 		
 		users.addUser(newUser);
 		users.saveUsersJSON();

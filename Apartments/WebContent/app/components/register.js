@@ -19,7 +19,7 @@ toastr.options = {
     "hideMethod": "fadeOut"
 }
 
-Vue.component("app-register",{
+Vue.component("app-register", {
     data() {
         return {
             users: {},
@@ -28,7 +28,7 @@ Vue.component("app-register",{
             message: null
         }
     },
-    template:`
+    template: `
     <div class ="forica">
 
         <form id='register-form' @submit="checkRegistration" method='post'>
@@ -69,7 +69,7 @@ Vue.component("app-register",{
     
     `,
     methods: {
-        checkRegistration: function(event){
+        checkRegistration: function (event) {
             /* Prevent submit if we have errors ! */
             event.preventDefault();
 
@@ -77,7 +77,7 @@ Vue.component("app-register",{
              * Save errors, and make notification from him.
              */
             this.errors = [];
-            
+
 
             /**
              * VALIDATION for frontend !
@@ -97,47 +97,53 @@ Vue.component("app-register",{
 
             if (!this.newUser.surname) {
                 this.errors.push('Field surname is required.');
-            } 
+            }
 
             if (!this.errors.length) {
                 axios
-                .post('rest/users/registration',{"username":''+ this.newUser.userName, "password":''+this.newUser.password, "name":''+this.newUser.name, "surname":''+this.newUser.surname, "role":''+this.newUser.role})
-                .then(response=>{
-                    this.message = response.data;
-                    console.log("\n\n ------- PODACI -------\n");
-                    console.log(response.data);
-                    toastr["success"]("Let's go, Log in !!", "Success registration!");
-                    console.log("\n\n ----------------------\n\n");
-                    //TODO 10: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na login.
-                    /**
-                     * Opis problema:
-                     * Kada se aktivira ovaj zahtev ka bekendu,
-                     * pri povratku, bi trebao da nastavi dalje
-                     * jer je uspesan, ali zbog event.preventDefault();
-                     * koji nam je na ovoj formi, on ostaje na istoj stranici
-                     * sto je okej kada je u pitanju greska, ali kada
-                     * je uspesno registrovanje, trebalo bi da nekako
-                     * deaktiviramo taj prevend default.
-                     * 
-                     * Posto nisam nasao drugacije resenje od predloga na Stacku
-                     * no da simuliram klik misa, simuliram ga i vodim na stranicu
-                     * logina.
-                     * 
-                     * Drugo pitanje je, kako iscitati onu poruku sto smo
-                     * nakacili na Responsu[na bekendu kao povratnu vrednost].
-                     * Kako bi onda mogli da je ispisemo ovde.
-                     * 
-                     * author: Vaxi
-                     */
-                    
-                    location.href = response.data; // we get from backend redirection to login with this
-                })
-                .catch(err =>{ 
-                    console.log("\n\n ------- ERROR -------\n");
-                    console.log(err);
-                    toastr["error"]("We have alredy user with same username, try another one", "Fail");
-                    console.log("\n\n ----------------------\n\n");
-                })
+                    .post('rest/users/registration', {
+                        "username": this.newUser.userName,
+                        "password": this.newUser.password,
+                        "name": this.newUser.name,
+                        "surname": this.newUser.surname,
+                        "role": this.newUser.role
+                    })
+                    .then(response => {
+                        this.message = response.data;
+                        console.log("\n\n ------- PODACI -------\n");
+                        console.log(response.data);
+                        toastr["success"]("Let's go, Log in !!", "Success registration!");
+                        console.log("\n\n ----------------------\n\n");
+                        //TODO 10: Napraviti bolju resenje od ovoga, jer je ovo bas HC redirektovanje na login.
+                        /**
+                         * Opis problema:
+                         * Kada se aktivira ovaj zahtev ka bekendu,
+                         * pri povratku, bi trebao da nastavi dalje
+                         * jer je uspesan, ali zbog event.preventDefault();
+                         * koji nam je na ovoj formi, on ostaje na istoj stranici
+                         * sto je okej kada je u pitanju greska, ali kada
+                         * je uspesno registrovanje, trebalo bi da nekako
+                         * deaktiviramo taj prevend default.
+                         * 
+                         * Posto nisam nasao drugacije resenje od predloga na Stacku
+                         * no da simuliram klik misa, simuliram ga i vodim na stranicu
+                         * logina.
+                         * 
+                         * Drugo pitanje je, kako iscitati onu poruku sto smo
+                         * nakacili na Responsu[na bekendu kao povratnu vrednost].
+                         * Kako bi onda mogli da je ispisemo ovde.
+                         * 
+                         * author: Vaxi
+                         */
+
+                        location.href = response.data; // we get from backend redirection to login with this
+                    })
+                    .catch(err => {
+                        console.log("\n\n ------- ERROR -------\n");
+                        console.log(err);
+                        toastr["error"]("We have alredy user with same username, try another one", "Fail");
+                        console.log("\n\n ----------------------\n\n");
+                    })
                 return true;
             }
 
@@ -148,11 +154,11 @@ Vue.component("app-register",{
                 console.log(element)
                 toastr["error"](element, "Fail")
             });
-             
 
-            
+
+
         }
-        
+
     },
     mounted() {
         axios.get('rest/users/getNewUser').then(response => (this.newUser = response.data));
