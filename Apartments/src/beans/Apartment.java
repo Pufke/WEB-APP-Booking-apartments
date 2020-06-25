@@ -1,45 +1,43 @@
 package beans;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Apartment {
-	
 
-	private Long ID;
-	private int logicalDeleted;						// 1 - deleted, 0 - not deleted
-	private String typeOfApartment; 				// it can be STANDARD or ROOM
-	private Long numberOfRooms;
-	private Long numberOfGuests;
+	private Integer ID;
+	private Integer logicalDeleted; // 1 - deleted, 0 - not deleted
+	private String typeOfApartment; // it can be STANDARD or ROOM
+	private Integer numberOfRooms;
+	private Integer numberOfGuests;
 	private Location location;
-													// TODO : ALOOOOOOOOOOOOOOOOOOOO, RESITI OVO, datumi za izdavanje i dostupnost
-													// po datumima.
-	private ArrayList<String> datesForHosting;		// TODO: Trenutno je ovako, razmisliti oko tipa i hendlovanja oko datuma
-													// za izdavanje(koje zadaje domacin)
 
-	private Integer hostID; 
-	private ArrayList<Integer> apartmentCommentsIDs; 
-	private String images; 							// TODO: Videti sta cemo za slike
+	private ArrayList<DateRange> datesForHosting; // host set those dates
+	private ArrayList<DateRange> availableDates;
 
-	private Long pricePerNight;
+	private Integer hostID;
+	private ArrayList<Integer> apartmentCommentsIDs;
+	private String imagesPath; // TODO: Videti sta cemo za slike
 
-	private String timeForCheckIn; 
-	private String timeForCheckOut;
-	private String status; 							// ACTIVE or INACTIVE
+	private Double pricePerNight;
 
-	private ArrayList<Integer> apartmentAmentitiesIDs; 
-	private ArrayList<String> listOfReservationsIDs; 
+	private LocalTime timeForCheckIn;
+	private LocalTime timeForCheckOut;
+	private String status; // ACTIVE or INACTIVE
 
-	
+	private ArrayList<Integer> apartmentAmentitiesIDs;
+	private ArrayList<Integer> listOfReservationsIDs;
+
 	public Apartment() {
-		
+
 	}
 
-
-	public Apartment(Long iD, int logicalDeleted, String typeOfApartment, Long numberOfRooms, Long numberOfGuests,
-			Location location, ArrayList<String> datesForHosting, Integer hostID,
-			ArrayList<Integer> apartmentCommentsIDs, String images, Long pricePerNight, String timeForCheckIn,
-			String timeForCheckOut, String status, ArrayList<Integer> apartmentAmentitiesIDs,
-			ArrayList<String> listOfReservationsIDs) {
+	
+	public Apartment(Integer iD, Integer logicalDeleted, String typeOfApartment, Integer numberOfRooms,
+			Integer numberOfGuests, Location location, ArrayList<DateRange> datesForHosting,
+			ArrayList<DateRange> availableDates, Integer hostID, ArrayList<Integer> apartmentCommentsIDs,
+			String imagesPath, Double pricePerNight, LocalTime timeForCheckIn, LocalTime timeForCheckOut, String status,
+			ArrayList<Integer> apartmentAmentitiesIDs, ArrayList<Integer> listOfReservationsIDs) {
 		super();
 		ID = iD;
 		this.logicalDeleted = logicalDeleted;
@@ -48,9 +46,10 @@ public class Apartment {
 		this.numberOfGuests = numberOfGuests;
 		this.location = location;
 		this.datesForHosting = datesForHosting;
+		this.availableDates = availableDates;
 		this.hostID = hostID;
 		this.apartmentCommentsIDs = apartmentCommentsIDs;
-		this.images = images;
+		this.imagesPath = imagesPath;
 		this.pricePerNight = pricePerNight;
 		this.timeForCheckIn = timeForCheckIn;
 		this.timeForCheckOut = timeForCheckOut;
@@ -60,173 +59,143 @@ public class Apartment {
 	}
 
 
-	public Long getID() {
+
+	public Integer getID() {
 		return ID;
 	}
 
-
-	public void setID(Long iD) {
+	public void setID(Integer iD) {
 		ID = iD;
 	}
 
-
-	public int getLogicalDeleted() {
+	public Integer getLogicalDeleted() {
 		return logicalDeleted;
 	}
 
-
-	public void setLogicalDeleted(int logicalDeleted) {
+	public void setLogicalDeleted(Integer logicalDeleted) {
 		this.logicalDeleted = logicalDeleted;
 	}
-
 
 	public String getTypeOfApartment() {
 		return typeOfApartment;
 	}
 
-
 	public void setTypeOfApartment(String typeOfApartment) {
 		this.typeOfApartment = typeOfApartment;
 	}
 
-
-	public Long getNumberOfRooms() {
+	public Integer getNumberOfRooms() {
 		return numberOfRooms;
 	}
 
-
-	public void setNumberOfRooms(Long numberOfRooms) {
+	public void setNumberOfRooms(Integer numberOfRooms) {
 		this.numberOfRooms = numberOfRooms;
 	}
 
-
-	public Long getNumberOfGuests() {
+	public Integer getNumberOfGuests() {
 		return numberOfGuests;
 	}
 
-
-	public void setNumberOfGuests(Long numberOfGuests) {
+	public void setNumberOfGuests(Integer numberOfGuests) {
 		this.numberOfGuests = numberOfGuests;
 	}
-
 
 	public Location getLocation() {
 		return location;
 	}
 
-
 	public void setLocation(Location location) {
 		this.location = location;
 	}
 
-
-	public ArrayList<String> getDatesForHosting() {
+	public ArrayList<DateRange> getDatesForHosting() {
 		return datesForHosting;
 	}
 
-
-	public void setDatesForHosting(ArrayList<String> datesForHosting) {
+	public void setDatesForHosting(ArrayList<DateRange> datesForHosting) {
 		this.datesForHosting = datesForHosting;
 	}
 
+	public ArrayList<DateRange> getAvailableDates() {
+		return availableDates;
+	}
+
+	public void setAvailableDates(ArrayList<DateRange> availableDates) {
+		this.availableDates = availableDates;
+	}
 
 	public Integer getHostID() {
 		return hostID;
 	}
 
-
 	public void setHostID(Integer hostID) {
 		this.hostID = hostID;
 	}
-
 
 	public ArrayList<Integer> getApartmentCommentsIDs() {
 		return apartmentCommentsIDs;
 	}
 
-
 	public void setApartmentCommentsIDs(ArrayList<Integer> apartmentCommentsIDs) {
 		this.apartmentCommentsIDs = apartmentCommentsIDs;
 	}
 
-
-	public String getImages() {
-		return images;
+	public String getImagesPath() {
+		return imagesPath;
 	}
 
-
-	public void setImages(String images) {
-		this.images = images;
+	public void setImagesPath(String imagesPath) {
+		this.imagesPath = imagesPath;
 	}
 
-
-	public Long getPricePerNight() {
+	public Double getPricePerNight() {
 		return pricePerNight;
 	}
 
-
-	public void setPricePerNight(Long pricePerNight) {
+	public void setPricePerNight(Double pricePerNight) {
 		this.pricePerNight = pricePerNight;
 	}
 
-
-	public String getTimeForCheckIn() {
+	public LocalTime getTimeForCheckIn() {
 		return timeForCheckIn;
 	}
 
-
-	public void setTimeForCheckIn(String timeForCheckIn) {
+	public void setTimeForCheckIn(LocalTime timeForCheckIn) {
 		this.timeForCheckIn = timeForCheckIn;
 	}
 
-
-	public String getTimeForCheckOut() {
+	public LocalTime getTimeForCheckOut() {
 		return timeForCheckOut;
 	}
 
-
-	public void setTimeForCheckOut(String timeForCheckOut) {
+	public void setTimeForCheckOut(LocalTime timeForCheckOut) {
 		this.timeForCheckOut = timeForCheckOut;
 	}
-
 
 	public String getStatus() {
 		return status;
 	}
 
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 
 	public ArrayList<Integer> getApartmentAmentitiesIDs() {
 		return apartmentAmentitiesIDs;
 	}
 
-
 	public void setApartmentAmentitiesIDs(ArrayList<Integer> apartmentAmentitiesIDs) {
 		this.apartmentAmentitiesIDs = apartmentAmentitiesIDs;
 	}
 
-
-	public ArrayList<String> getListOfReservationsIDs() {
+	public ArrayList<Integer> getListOfReservationsIDs() {
 		return listOfReservationsIDs;
 	}
 
-
-	public void setListOfReservationsIDs(ArrayList<String> listOfReservationsIDs) {
+	public void setListOfReservationsIDs(ArrayList<Integer> listOfReservationsIDs) {
 		this.listOfReservationsIDs = listOfReservationsIDs;
 	}
 
-
-	
-	
-	
-	
-	
-	
-	
 	
 
 }

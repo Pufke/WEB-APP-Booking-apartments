@@ -1,15 +1,16 @@
 package dao;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import beans.AmenitiesItem;
 import dto.AmenitiesItemAddDTO;
 import dto.AmenitiesItemDTO;
@@ -25,69 +26,50 @@ public class AmenitiesDAO {
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "amenities.json";
 		this.amenities = new ArrayList<AmenitiesItem>();
+		
+		// UNCOMMENT IF WANT TO PUT DUMMY DATA IN FILE 
+		addMockupData();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void readAmenities() {
-		BufferedReader in = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		File file = new File(this.path);
+
+		List<AmenitiesItem> loadedAmenities = new ArrayList<AmenitiesItem>();
 		try {
-			File file = new File(this.path);
-			if (!file.exists()) {
-				file = new File(this.path);
-			}
-			JSONParser jsonParser = new JSONParser();
 
-			try (FileReader reader = new FileReader(path)) {
-				Object obj = jsonParser.parse(reader);
-				JSONArray amenities = (JSONArray) obj;
-				System.out.println(amenities);
-				amenities.forEach(amenitiesItem -> parseAmenitiesObject((JSONObject) amenitiesItem));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			loadedAmenities = objectMapper.readValue(file, new TypeReference<List<AmenitiesItem>>() {
+			});
 
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-				}
-			}
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
+		System.out.println("\n\n ucitavam preko object mapera \n\n");
+		for (AmenitiesItem a : loadedAmenities) {
+			System.out.println("IME SADRZAJA: " + a.getItemName());
+			amenities.add(a);
+		}
+		System.out.println("\n\n");
 	}
 
-	private void parseAmenitiesObject(JSONObject amenitiesItem) {
-
-		Long ID = (Long) amenitiesItem.get("amenitiesItemID");
-		String name = (String) amenitiesItem.get("itemName");
-
-		AmenitiesItem newAmenitiesItem = new AmenitiesItem(ID, name);
-		amenities.add(newAmenitiesItem);
-
-		System.out.println("\n\t Sadrzaj apartmana \n");
-		System.out.println(newAmenitiesItem.getName());
-
-	}
-
-	@SuppressWarnings({ "unchecked" })
 	private void saveAmenitiesJSON() {
 
-		JSONArray amenitiesList = new JSONArray();
-
-		for (AmenitiesItem item : amenities) {
-
-			JSONObject itemToSave = new JSONObject();
-
-			itemToSave.put("amenitiesItemID", item.getAmenitiesID());
-			itemToSave.put("itemName", item.getName());
-
-			amenitiesList.add(itemToSave);
+		// Get all amenities
+		List<AmenitiesItem> allAmenities = new ArrayList<AmenitiesItem>();
+		for (AmenitiesItem a : getValues()) {
+			allAmenities.add(a);
 		}
-		
-		// Writing to JSON file
-		try (FileWriter file = new FileWriter(path)) {
-			file.write(amenitiesList.toJSONString());
-			file.flush();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			// Write them to the file
+			objectMapper.writeValue(new FileOutputStream(this.path), allAmenities);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -100,41 +82,64 @@ public class AmenitiesDAO {
 	}
 
 	public Boolean changeItem(AmenitiesItemDTO updatedItem) {
-		
-		for(AmenitiesItem item : amenities) {
-			if(item.getAmenitiesID().equals(updatedItem.amenitiesID)) {
+
+		for (AmenitiesItem item : amenities) {
+			if (item.getID().equals((updatedItem.amenitiesID).intValue())) {
 				System.out.println(" nasao sam item sa id-om: " + updatedItem.amenitiesID);
-				
-				item.setName(updatedItem.name);
+
+				item.setItemName(updatedItem.name);
 				saveAmenitiesJSON();
 				return true;
 			}
 		}
-		
+
 		return false;
-		
+
 	}
 
 	public void deleteItem(Long amenitiesID) {
-		
+
 		for (AmenitiesItem amenitiesItem : amenities) {
-			if(amenitiesItem.getAmenitiesID().equals(amenitiesID)) {
+			if (amenitiesItem.getID().equals((amenitiesID).intValue())) {
 				amenities.remove(amenitiesItem);
 				saveAmenitiesJSON();
 				return;
 			}
 		}
 		return;
-		
+
 	}
 
 	public Boolean addItem(AmenitiesItemAddDTO newItem) {
-		
-		amenities.add(new AmenitiesItem((long) (amenities.size()+1),newItem.newItemName));
+
+		amenities.add(new AmenitiesItem(amenities.size() + 1, 0, newItem.newItemName));
 		saveAmenitiesJSON();
-		
+
 		return true;
+
+	}
+
+	/**
+	 * Method for adding dummy data to JSON file of comments
+	 */
+	@SuppressWarnings("unused")
+	private void addMockupData() {
 		
+		// Make all amenities
+		List<AmenitiesItem> allAmenities = new ArrayList<AmenitiesItem>();
+		
+		allAmenities.add(new AmenitiesItem(1, 0, "Tus kabina"));
+		allAmenities.add(new AmenitiesItem(2, 0, "Kuhinja"));
+		allAmenities.add(new AmenitiesItem(3, 0, "Terasa"));
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			// Write them to the file
+			objectMapper.writeValue(new FileOutputStream(this.path), allAmenities);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

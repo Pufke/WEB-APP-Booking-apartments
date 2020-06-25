@@ -32,8 +32,7 @@ public class UsersDAO {
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "users.json";
 		this.users = new LinkedHashMap<String, User>();
 		
-		// UNCOMMENT IF YOU WANT TO ADD MOCKUP DATA TO FILE
-		addMockupData();
+		// UNCOMMENT IF YOU WANT TO ADD MOCKUP DATA TO FILE addMockupData();
 	}
 
 	/**
@@ -56,13 +55,10 @@ public class UsersDAO {
 			});
 
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -95,7 +91,6 @@ public class UsersDAO {
 
 	public void addUser(User user) {
 		if (!users.containsValue(user)) {
-			// TODO: Proveriti da li stvarno dobro proverava
 			System.out.println("DODAO SAM: " + user.getUserName());
 			users.put(user.getUserName(), user);
 		}

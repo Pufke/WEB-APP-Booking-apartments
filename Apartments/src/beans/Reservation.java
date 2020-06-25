@@ -1,27 +1,31 @@
 package beans;
 
+import java.time.LocalDate;
 
 public class Reservation {
 	
 	private Integer ID;
-	//private int logicalDeleted;						// 1 - deleted, 0 - not deleted
+	private Integer logicalDeleted; 							// 1 - deleted, 0 - not deleted
+	
 	private Integer idOfReservedApartment;
-	private String startDateOfReservation;					// date of when reservation is started
-	private String numberOfNights; 							// num of nights 
-	private Long totalPrice;								// total price for reservation
+	private LocalDate startDateOfReservation;					// date of when reservation is started
+	private Integer numberOfNights; 							// num of nights 
+	private Double totalPrice;									// total price for reservation
 	private String messageForHost; 							
 	private Integer guestID; 								
-	private String statusOfReservation;						//(Kreirana, Odbijena, Odustanak, Prihvacena, Zavrsena)
+	private String statusOfReservation;							//(Kreirana, Odbijena, Odustanak, Prihvacena, Zavrsena)
 	
 	
 	public Reservation() {
 		
 	}
-	
-	public Reservation(Integer iD, Integer idOfReservedApartment, String startDateOfReservation, String numberOfNights,
-			Long totalPrice, String messageForHost, Integer guestID, String statusOfReservation) {
+
+	public Reservation(Integer iD, Integer logicalDeleted, Integer idOfReservedApartment,
+			LocalDate startDateOfReservation, Integer numberOfNights, Double totalPrice, String messageForHost,
+			Integer guestID, String statusOfReservation) {
 		super();
 		ID = iD;
+		this.logicalDeleted = logicalDeleted;
 		this.idOfReservedApartment = idOfReservedApartment;
 		this.startDateOfReservation = startDateOfReservation;
 		this.numberOfNights = numberOfNights;
@@ -31,7 +35,6 @@ public class Reservation {
 		this.statusOfReservation = statusOfReservation;
 	}
 
-
 	public Integer getID() {
 		return ID;
 	}
@@ -39,6 +42,16 @@ public class Reservation {
 
 	public void setID(Integer iD) {
 		ID = iD;
+	}
+
+
+	public Integer getLogicalDeleted() {
+		return logicalDeleted;
+	}
+
+
+	public void setLogicalDeleted(Integer logicalDeleted) {
+		this.logicalDeleted = logicalDeleted;
 	}
 
 
@@ -52,32 +65,32 @@ public class Reservation {
 	}
 
 
-	public String getStartDateOfReservation() {
+	public LocalDate getStartDateOfReservation() {
 		return startDateOfReservation;
 	}
 
 
-	public void setStartDateOfReservation(String startDateOfReservation) {
+	public void setStartDateOfReservation(LocalDate startDateOfReservation) {
 		this.startDateOfReservation = startDateOfReservation;
 	}
 
 
-	public String getNumberOfNights() {
+	public Integer getNumberOfNights() {
 		return numberOfNights;
 	}
 
 
-	public void setNumberOfNights(String numberOfNights) {
+	public void setNumberOfNights(Integer numberOfNights) {
 		this.numberOfNights = numberOfNights;
 	}
 
 
-	public Long getTotalPrice() {
+	public Double getTotalPrice() {
 		return totalPrice;
 	}
 
 
-	public void setTotalPrice(Long totalPrice) {
+	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 
@@ -111,10 +124,6 @@ public class Reservation {
 		this.statusOfReservation = statusOfReservation;
 	}
 
-	
-
-	
-	
 	
 	
 }

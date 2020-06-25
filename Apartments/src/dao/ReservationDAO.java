@@ -3,6 +3,7 @@ package dao;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,8 @@ public class ReservationDAO {
 				+ "reservations.json";
 		this.reservations = new ArrayList<Reservation>();
 		
-		// UNCOMMENT IF YOU WANT TO SAVE MOCKUP DATA DO FILE addMockupData();
+		// UNCOMMENT IF YOU WANT TO SAVE MOCKUP DATA DO FILE 
+		//addMockupData();
 	}
 
 	public void readReservations() {
@@ -42,13 +44,10 @@ public class ReservationDAO {
 			});
 
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -90,8 +89,8 @@ public class ReservationDAO {
 
 		// Make all reservations
 		List<Reservation> allReservations = new ArrayList<Reservation>();
-		allReservations.add(new Reservation(1, 1, "20-02-2020", "3", 100l, "Brate, da me klima ceka, nemoj se igras sa vatrom", 2, "Kreirana"));
-		allReservations.add(new Reservation(2, 2, "12-04-2020", "2", 99l, "Ako moze samo da me docekaju otvoreni prozori", 2, "Kreirana"));
+		allReservations.add(new Reservation(1,0, 1, LocalDate.of(2020,05,20), 3, 100.0, "Brate, da me klima ceka, nemoj se igras sa vatrom", 2, "Kreirana"));
+		allReservations.add(new Reservation(2,0, 2, LocalDate.of(2020,06,14), 2, 99.0, "Ako moze samo da me docekaju otvoreni prozori", 2, "Kreirana"));
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {

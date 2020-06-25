@@ -13,10 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-
-
 
 import beans.Apartment;
 import beans.User;
@@ -100,7 +96,7 @@ public class ApartmentService {
 		
 		// Update that apartment in list of all apartments
 		ApartmentsDAO apartmentsDAO = getApartments();
-		apartmentsDAO.activateApartment(idOfApartmentForActivation);
+		apartmentsDAO.activateApartment((int) idOfApartmentForActivation);
 		
 		return apartmentsDAO.getHostApartments(user);
 		

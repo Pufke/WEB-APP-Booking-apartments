@@ -29,7 +29,8 @@ public class CommentsDAO {
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "comments.json";
 		this.comments = new ArrayList<Comment>();
 		
-		// UNCOMMENT IF WANT TO PUT DUMMY DATA IN FILE addMockupData();
+		// UNCOMMENT IF WANT TO PUT DUMMY DATA IN FILE 
+		//addMockupData();
 	}
 
 	public void readComments() {
@@ -44,13 +45,10 @@ public class CommentsDAO {
 			});
 
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

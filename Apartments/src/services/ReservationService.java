@@ -2,7 +2,6 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -111,7 +110,7 @@ public class ReservationService {
 		User user = new User();
 
 		for (Apartment a : apartments) {
-			if (a.getID() == reservationData.apartmentIdentificator) {
+			if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {
 				// a.setReservedStatus("Rezervisano");
 				apartment = a;
 				break;
@@ -124,14 +123,14 @@ public class ReservationService {
 			}
 		}
 
-		String uniqueID = UUID.randomUUID().toString();
-		ArrayList<String> reservedApartmentList = apartment.getListOfReservationsIDs();
+		Integer uniqueID = 191919;
+		ArrayList<Integer> reservedApartmentList = apartment.getListOfReservationsIDs();
 		reservedApartmentList.add(uniqueID);
 
-		apartment.setListOfReservationsIDs(reservedApartmentList);
-		Reservation reservation = new Reservation(Integer.parseInt(uniqueID), (apartment.getID()).intValue(),
-				reservationData.dateOfReservation, reservationData.numberOfNights, 1600l,
-				reservationData.messageForHost, user.getID(), reservationData.statusOfReservation);
+//		apartment.setListOfReservationsIDs(reservedApartmentList);
+//		Reservation reservation = new Reservation(uniqueID,0 , apartment.getID(),
+//				reservationData.dateOfReservation, reservationData.numberOfNights, 1600.0,
+//				reservationData.messageForHost, user.getID(), reservationData.statusOfReservation);
 
 //		for (Reservation r : reservations) {
 //			if (r.getGuest().getUserName().equals(reservation.getGuest().getUserName())
@@ -142,7 +141,7 @@ public class ReservationService {
 //
 //			}
 //		}
-		reservations.add(reservation);
+//		reservations.add(reservation);
 
 		reservationsCTX.saveReservationsJSON();
 		apartmentsCTX.saveApartmentsJSON();
@@ -172,9 +171,9 @@ public class ReservationService {
 		}
 
 		for (Apartment a : apartments) {
-			if (a.getID() == reservationData.apartmentIdentificator) {
-				ArrayList<String> rezervacije = a.getListOfReservationsIDs();
-				for (String s : rezervacije) {
+			if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {
+				ArrayList<Integer> rezervacije = a.getListOfReservationsIDs();
+				for (Integer s : rezervacije) {
 					if (s.equals(reservationData.reservationID)) {
 						rezervacije.remove(s);
 						break;
@@ -211,7 +210,7 @@ public class ReservationService {
 		User user = new User();
 
 		for (Apartment a : apartments) {
-			if (a.getID() == commentData.apartmentID) {
+			if (a.getID().equals((commentData.apartmentID).intValue())) {
 				apartment = a;
 				break;
 			}

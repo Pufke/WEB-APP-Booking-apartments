@@ -1,11 +1,10 @@
 package dao;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,11 +16,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Address;
 import beans.Apartment;
+import beans.DateRange;
 import beans.Location;
 import beans.User;
 import dto.ApartmentChangeDTO;
 import dto.ApartmentDTOJSON;
-import dto.ApartmentsDTO;
 
 public class ApartmentsDAO {
 
@@ -37,7 +36,8 @@ public class ApartmentsDAO {
 				+ "apartments.json";
 		this.apartments = new ArrayList<Apartment>();
 
-		// UNCOMENT IF WANT TO ADD DUMMY DATA TO FILE addMockupData();
+		// UNCOMENT IF WANT TO ADD DUMMY DATA TO FILE 
+		//addMockupData();
 
 		System.out.println(this.path);
 	}
@@ -47,7 +47,6 @@ public class ApartmentsDAO {
 	 */
 	public void readApartments() {
 		ObjectMapper objectMapper = new ObjectMapper();
-
 		File file = new File(this.path);
 
 		List<Apartment> loadedApartments = new ArrayList<Apartment>();
@@ -57,13 +56,10 @@ public class ApartmentsDAO {
 			});
 
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -100,14 +96,14 @@ public class ApartmentsDAO {
 	public Boolean changeApartment(ApartmentChangeDTO updatedApartment) {
 
 		for (Apartment apartment : apartments) {
-			if (apartment.getID().equals(updatedApartment.identificator)) {
+			if (apartment.getID().equals((updatedApartment.identificator).intValue())) {
 				System.out.println(
 						"NASAO SAM APARTMAN " + updatedApartment.identificator + " i sad cu mu izmeniti podatke");
-				apartment.setPricePerNight(updatedApartment.pricePerNight);
-				apartment.setTimeForCheckIn(updatedApartment.timeForCheckIn);
-				apartment.setTimeForCheckOut(updatedApartment.timeForCheckOut);
-				apartment.setNumberOfRooms(updatedApartment.numberOfRooms);
-				apartment.setNumberOfGuests(updatedApartment.numberOfGuests);
+				apartment.setPricePerNight((updatedApartment.pricePerNight).doubleValue());
+				apartment.setTimeForCheckIn(LocalTime.of(21, 30, 59, 11001));
+				apartment.setTimeForCheckOut(LocalTime.of(21, 30, 59, 11001));
+				apartment.setNumberOfRooms((updatedApartment.numberOfRooms).intValue());
+				apartment.setNumberOfGuests((updatedApartment.numberOfGuests).intValue());
 				saveApartmentsJSON();
 				return true;
 			}
@@ -116,7 +112,7 @@ public class ApartmentsDAO {
 		return false;
 	}
 
-	public void activateApartment(long identificator) {
+	public void activateApartment(int identificator) {
 		for (Apartment apartment : apartments) {
 			if (apartment.getID().equals(identificator)) {
 				apartment.setStatus("ACTIVE");
@@ -165,24 +161,23 @@ public class ApartmentsDAO {
 	public Collection<Apartment> getHostApartments(User user) {
 
 		List<Apartment> hostApartments = new ArrayList<Apartment>();
-		
-		for(int id : user.getApartmentsForRentingHostIDs()) {
+
+		for (int id : user.getApartmentsForRentingHostIDs()) {
 			hostApartments.add(getApartmentById(id));
 		}
-		
-		
+
 		return hostApartments;
 	}
 
 	public Apartment getApartmentById(Integer id) {
-		for(Apartment ap: apartments) {
-			if(ap.getID().equals(id.intValue())) {
+		for (Apartment ap : apartments) {
+			if (ap.getID().equals(id.intValue())) {
 				return ap;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Method for adding dummy data to JSON file of apartments
 	 */
@@ -190,15 +185,20 @@ public class ApartmentsDAO {
 		// Make list for writing
 		List<Apartment> allApartments = new ArrayList<Apartment>();
 
-		Long ID = 1l;
-		int logicalDeleted = 0; // 1 - deleted, 0 - not deleted
+		Integer ID = 1;
+		Integer logicalDeleted = 0; // 1 - deleted, 0 - not deleted
 		String typeOfApartment = "STANDARD"; // it can be STANDARD or ROOM
-		Long numberOfRooms = 11l;
-		Long numberOfGuests = 5l;
+		Integer numberOfRooms = 11;
+		Integer numberOfGuests = 5;
 		Location location = new Location("41", "42", new Address("Danila Kisa", "33", "Novi Sad", "21000"));
 
-		ArrayList<String> datesForHosting = new ArrayList<String>();
-		datesForHosting.add("12-09-2020 do 22-10-2020");
+		ArrayList<DateRange> datesForHosting = new ArrayList<DateRange>();
+		datesForHosting.add(new DateRange(LocalDate.of(2020, 12, 31), LocalDate.of(2021, 1, 15)));
+		datesForHosting.add(new DateRange(LocalDate.of(2021, 1, 21), LocalDate.of(2021, 3, 21)));
+
+		ArrayList<DateRange> availableDates = new ArrayList<DateRange>();
+		availableDates.add(new DateRange(LocalDate.of(2020, 12, 31), LocalDate.of(2021, 1, 15)));
+		availableDates.add(new DateRange(LocalDate.of(2021, 1, 21), LocalDate.of(2021, 3, 21)));
 
 		Integer hostID = 1;
 		ArrayList<Integer> apartmentCommentsIDs = new ArrayList<Integer>();
@@ -207,26 +207,26 @@ public class ApartmentsDAO {
 
 		String images = "empty";
 
-		Long pricePerNight = 10l;
+		Double pricePerNight = 100.0;
 
-		String timeForCheckIn = "17:00";
-		String timeForCheckOut = "11:00";
+		LocalTime timeForCheckIn = LocalTime.of(23, 30, 59, 11001);
+		LocalTime timeForCheckOut = LocalTime.of(11, 30, 59, 11001);
 		String status = "ACTIVE";
 
 		ArrayList<Integer> apartmentAmentitiesIDs = new ArrayList<Integer>();
 		apartmentAmentitiesIDs.add(1);
 		apartmentAmentitiesIDs.add(2);
 
-		ArrayList<String> listOfReservationsIDs = new ArrayList<String>();
-		listOfReservationsIDs.add("1");
-		listOfReservationsIDs.add("2");
+		ArrayList<Integer> listOfReservationsIDs = new ArrayList<Integer>();
+		listOfReservationsIDs.add(1);
+		listOfReservationsIDs.add(2);
 
 		Apartment a1 = new Apartment(ID, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
-				datesForHosting, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn, timeForCheckOut,
-				status, apartmentAmentitiesIDs, listOfReservationsIDs);
-		Apartment a2 = new Apartment(2l, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
-				datesForHosting, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn, timeForCheckOut,
-				status, apartmentAmentitiesIDs, listOfReservationsIDs);
+				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn,
+				timeForCheckOut, status, apartmentAmentitiesIDs, listOfReservationsIDs);
+		Apartment a2 = new Apartment(2, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
+				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn,
+				timeForCheckOut, status, apartmentAmentitiesIDs, listOfReservationsIDs);
 
 		allApartments.add(a1);
 		allApartments.add(a2);

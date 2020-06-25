@@ -1,31 +1,40 @@
 package beans;
 
 public class AmenitiesItem {
-	private Long amenitiesItemID;
-	private String itemName;				// name of amenities item
+	private Integer ID;
+	private Integer logicalDeleted;						// 1 - deleted, 0 - not deleted
+	private String itemName;							// name of amenities item
 	
 	public AmenitiesItem() {
-		this.amenitiesItemID = 9999L;
-		this.itemName = "without name";
+		
 	}
 	
-	public AmenitiesItem(Long amenitiesID, String name) {
+	public AmenitiesItem(Integer iD, Integer logicalDeleted, String itemName) {
 		super();
-		this.amenitiesItemID = amenitiesID;
-		this.itemName = name;
+		ID = iD;
+		this.logicalDeleted = logicalDeleted;
+		this.itemName = itemName;
 	}
-	public Long getAmenitiesID() {
-		return amenitiesItemID;
+	public Integer getID() {
+		return ID;
 	}
-	public void setAmenitiesID(Long amenitiesID) {
-		this.amenitiesItemID = amenitiesID;
+	public void setID(Integer iD) {
+		ID = iD;
 	}
-	public String getName() {
+	public Integer getLogicalDeleted() {
+		return logicalDeleted;
+	}
+	public void setLogicalDeleted(Integer logicalDeleted) {
+		this.logicalDeleted = logicalDeleted;
+	}
+	public String getItemName() {
 		return itemName;
 	}
-	public void setName(String name) {
-		this.itemName = name;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
+	
+	
 	
 	
 }
