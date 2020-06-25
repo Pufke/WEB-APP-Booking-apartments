@@ -1,6 +1,8 @@
 package beans;
 
-import java.time.LocalDate;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Reservation {
 	
@@ -8,7 +10,8 @@ public class Reservation {
 	private Integer logicalDeleted; 							// 1 - deleted, 0 - not deleted
 	
 	private Integer idOfReservedApartment;
-	private LocalDate startDateOfReservation;					// date of when reservation is started
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private Date startDateOfReservation;					// date of when reservation is started
 	private Integer numberOfNights; 							// num of nights 
 	private Double totalPrice;									// total price for reservation
 	private String messageForHost; 							
@@ -20,9 +23,9 @@ public class Reservation {
 		
 	}
 
-	public Reservation(Integer iD, Integer logicalDeleted, Integer idOfReservedApartment,
-			LocalDate startDateOfReservation, Integer numberOfNights, Double totalPrice, String messageForHost,
-			Integer guestID, String statusOfReservation) {
+	public Reservation(Integer iD, Integer logicalDeleted, Integer idOfReservedApartment, Date startDateOfReservation,
+			Integer numberOfNights, Double totalPrice, String messageForHost, Integer guestID,
+			String statusOfReservation) {
 		super();
 		ID = iD;
 		this.logicalDeleted = logicalDeleted;
@@ -65,12 +68,12 @@ public class Reservation {
 	}
 
 
-	public LocalDate getStartDateOfReservation() {
+	public Date getStartDateOfReservation() {
 		return startDateOfReservation;
 	}
 
 
-	public void setStartDateOfReservation(LocalDate startDateOfReservation) {
+	public void setStartDateOfReservation(Date startDateOfReservation) {
 		this.startDateOfReservation = startDateOfReservation;
 	}
 
