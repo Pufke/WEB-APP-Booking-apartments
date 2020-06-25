@@ -3,10 +3,10 @@ package dao;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -47,6 +47,7 @@ public class ApartmentsDAO {
 	 */
 	public void readApartments() {
 		ObjectMapper objectMapper = new ObjectMapper();
+		
 		File file = new File(this.path);
 
 		List<Apartment> loadedApartments = new ArrayList<Apartment>();
@@ -100,8 +101,8 @@ public class ApartmentsDAO {
 				System.out.println(
 						"NASAO SAM APARTMAN " + updatedApartment.identificator + " i sad cu mu izmeniti podatke");
 				apartment.setPricePerNight((updatedApartment.pricePerNight).doubleValue());
-				apartment.setTimeForCheckIn(LocalTime.of(21, 30, 59, 11001));
-				apartment.setTimeForCheckOut(LocalTime.of(21, 30, 59, 11001));
+				apartment.setTimeForCheckIn(new Date());
+				apartment.setTimeForCheckOut(new Date());
 				apartment.setNumberOfRooms((updatedApartment.numberOfRooms).intValue());
 				apartment.setNumberOfGuests((updatedApartment.numberOfGuests).intValue());
 				saveApartmentsJSON();
@@ -193,12 +194,12 @@ public class ApartmentsDAO {
 		Location location = new Location("41", "42", new Address("Danila Kisa", "33", "Novi Sad", "21000"));
 
 		ArrayList<DateRange> datesForHosting = new ArrayList<DateRange>();
-		datesForHosting.add(new DateRange(LocalDate.of(2020, 12, 31), LocalDate.of(2021, 1, 15)));
-		datesForHosting.add(new DateRange(LocalDate.of(2021, 1, 21), LocalDate.of(2021, 3, 21)));
+		datesForHosting.add(new DateRange( new Date(), new Date()));
+		datesForHosting.add(new DateRange(new Date(), new Date()));
 
 		ArrayList<DateRange> availableDates = new ArrayList<DateRange>();
-		availableDates.add(new DateRange(LocalDate.of(2020, 12, 31), LocalDate.of(2021, 1, 15)));
-		availableDates.add(new DateRange(LocalDate.of(2021, 1, 21), LocalDate.of(2021, 3, 21)));
+		availableDates.add(new DateRange(new Date(), new Date()));
+		availableDates.add(new DateRange(new Date(), new Date()));
 
 		Integer hostID = 1;
 		ArrayList<Integer> apartmentCommentsIDs = new ArrayList<Integer>();
@@ -209,8 +210,8 @@ public class ApartmentsDAO {
 
 		Double pricePerNight = 100.0;
 
-		LocalTime timeForCheckIn = LocalTime.of(23, 30, 59, 11001);
-		LocalTime timeForCheckOut = LocalTime.of(11, 30, 59, 11001);
+		Date timeForCheckIn = new Date();
+		Date timeForCheckOut = new Date();
 		String status = "ACTIVE";
 
 		ArrayList<Integer> apartmentAmentitiesIDs = new ArrayList<Integer>();

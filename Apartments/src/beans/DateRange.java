@@ -1,35 +1,44 @@
 package beans;
 
-import java.time.LocalDate;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * Class which encapsulate dates range.
  */
 public class DateRange {
 	
-	private LocalDate fromDate;
-	private LocalDate toDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private Date fromDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private Date toDate;
 
-	public DateRange(LocalDate fromDate, LocalDate toDate) {
+	public DateRange() {
+		
+	}
+
+	public DateRange(Date fromDate, Date toDate) {
 		super();
 		this.fromDate = fromDate;
 		this.toDate = toDate;
 	}
 
-	public LocalDate getFromDate() {
+	public Date getFromDate() {
 		return fromDate;
 	}
 
-	public void setFromDate(LocalDate fromDate) {
+	public void setFromDate(Date fromDate) {
 		this.fromDate = fromDate;
 	}
 
-	public LocalDate getToDate() {
+	public Date getToDate() {
 		return toDate;
 	}
 
-	public void setToDate(LocalDate toDate) {
+	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}
+	
+	
 
 }

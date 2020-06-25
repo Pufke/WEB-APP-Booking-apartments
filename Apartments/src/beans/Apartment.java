@@ -1,7 +1,9 @@
 package beans;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Apartment {
 
@@ -21,8 +23,11 @@ public class Apartment {
 
 	private Double pricePerNight;
 
-	private LocalTime timeForCheckIn;
-	private LocalTime timeForCheckOut;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
+	private Date timeForCheckIn;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
+	private Date timeForCheckOut;
+	
 	private String status; // ACTIVE or INACTIVE
 
 	private ArrayList<Integer> apartmentAmentitiesIDs;
@@ -31,12 +36,11 @@ public class Apartment {
 	public Apartment() {
 
 	}
-
 	
 	public Apartment(Integer iD, Integer logicalDeleted, String typeOfApartment, Integer numberOfRooms,
 			Integer numberOfGuests, Location location, ArrayList<DateRange> datesForHosting,
 			ArrayList<DateRange> availableDates, Integer hostID, ArrayList<Integer> apartmentCommentsIDs,
-			String imagesPath, Double pricePerNight, LocalTime timeForCheckIn, LocalTime timeForCheckOut, String status,
+			String imagesPath, Double pricePerNight, Date timeForCheckIn, Date timeForCheckOut, String status,
 			ArrayList<Integer> apartmentAmentitiesIDs, ArrayList<Integer> listOfReservationsIDs) {
 		super();
 		ID = iD;
@@ -156,19 +160,19 @@ public class Apartment {
 		this.pricePerNight = pricePerNight;
 	}
 
-	public LocalTime getTimeForCheckIn() {
+	public Date getTimeForCheckIn() {
 		return timeForCheckIn;
 	}
 
-	public void setTimeForCheckIn(LocalTime timeForCheckIn) {
+	public void setTimeForCheckIn(Date timeForCheckIn) {
 		this.timeForCheckIn = timeForCheckIn;
 	}
 
-	public LocalTime getTimeForCheckOut() {
+	public Date getTimeForCheckOut() {
 		return timeForCheckOut;
 	}
 
-	public void setTimeForCheckOut(LocalTime timeForCheckOut) {
+	public void setTimeForCheckOut(Date timeForCheckOut) {
 		this.timeForCheckOut = timeForCheckOut;
 	}
 
@@ -196,6 +200,7 @@ public class Apartment {
 		this.listOfReservationsIDs = listOfReservationsIDs;
 	}
 
+	
 	
 
 }

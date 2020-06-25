@@ -33,7 +33,7 @@ Vue.component("host-ActiveApartments", {
                 comments: null,
                 datesForHosting: null,
                 host: null,
-                identificator: 10000,
+                identificator: 10,
                 images: null,
                 location: {
                     address: {
@@ -179,9 +179,11 @@ Vue.component("host-ActiveApartments", {
 
             // Check is empty field input
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests) {
+            if (!this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut 
+                || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests) {
                 toastr["warning"]("All field is required", "Watch out !");
                 return;
+           
             }
 
             axios

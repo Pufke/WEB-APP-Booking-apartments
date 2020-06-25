@@ -129,6 +129,9 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> getJustApartments() {
 		System.out.println("CALLED GET JUST APARTMENTS");
+		for(Apartment ap : getApartments().getValues()) {
+			System.out.println("statusa apartman: " + ap.getStatus() + " i ID: " + ap.getID() + "\n");
+		}
 		return getApartments().getValues();
 	}
 
