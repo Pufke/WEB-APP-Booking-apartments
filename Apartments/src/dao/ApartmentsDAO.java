@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -73,8 +74,6 @@ public class ApartmentsDAO {
 		}
 		System.out.println("\n\n");
 	}
-
-	
 
 	public void saveApartmentsJSON() {
 
@@ -162,6 +161,27 @@ public class ApartmentsDAO {
 		apartments.add(apartment);
 		saveApartmentsJSON();
 	}
+
+	public Collection<Apartment> getHostApartments(User user) {
+
+		List<Apartment> hostApartments = new ArrayList<Apartment>();
+		
+		for(int id : user.getApartmentsForRentingHostIDs()) {
+			hostApartments.add(getApartmentById(id));
+		}
+		
+		
+		return hostApartments;
+	}
+
+	public Apartment getApartmentById(Integer id) {
+		for(Apartment ap: apartments) {
+			if(ap.getID().equals(id.intValue())) {
+				return ap;
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * Method for adding dummy data to JSON file of apartments
@@ -181,29 +201,36 @@ public class ApartmentsDAO {
 		datesForHosting.add("12-09-2020 do 22-10-2020");
 
 		Integer hostID = 1;
-		ArrayList<Integer> apartmentCommentsIDs = new ArrayList<Integer>(); 
-		apartmentCommentsIDs.add(1); apartmentCommentsIDs.add(2);
-		
-		String images="empty"; 
+		ArrayList<Integer> apartmentCommentsIDs = new ArrayList<Integer>();
+		apartmentCommentsIDs.add(1);
+		apartmentCommentsIDs.add(2);
 
-		Long pricePerNight=10l;
+		String images = "empty";
 
-		String timeForCheckIn="17:00";
+		Long pricePerNight = 10l;
+
+		String timeForCheckIn = "17:00";
 		String timeForCheckOut = "11:00";
-		String status = "ACTIVE"; 
+		String status = "ACTIVE";
 
 		ArrayList<Integer> apartmentAmentitiesIDs = new ArrayList<Integer>();
-		apartmentAmentitiesIDs.add(1); apartmentAmentitiesIDs.add(2);
-		
+		apartmentAmentitiesIDs.add(1);
+		apartmentAmentitiesIDs.add(2);
+
 		ArrayList<String> listOfReservationsIDs = new ArrayList<String>();
-		listOfReservationsIDs.add("1"); listOfReservationsIDs.add("2");
-		
-		Apartment a1 = new Apartment(ID, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location, datesForHosting, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn, timeForCheckOut, status, apartmentAmentitiesIDs, listOfReservationsIDs);
-		Apartment a2 = new Apartment(2l, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location, datesForHosting, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn, timeForCheckOut, status, apartmentAmentitiesIDs, listOfReservationsIDs);
-		
+		listOfReservationsIDs.add("1");
+		listOfReservationsIDs.add("2");
+
+		Apartment a1 = new Apartment(ID, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
+				datesForHosting, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn, timeForCheckOut,
+				status, apartmentAmentitiesIDs, listOfReservationsIDs);
+		Apartment a2 = new Apartment(2l, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
+				datesForHosting, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn, timeForCheckOut,
+				status, apartmentAmentitiesIDs, listOfReservationsIDs);
+
 		allApartments.add(a1);
 		allApartments.add(a2);
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			// Write them to the file

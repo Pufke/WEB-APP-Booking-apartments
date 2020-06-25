@@ -11,7 +11,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import beans.Guest;
 import beans.User;
 import dao.UsersDAO;
 import dto.UserDTO;
@@ -35,7 +34,7 @@ public class PofileService {
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
 		
-		if(user instanceof Guest || user.getRole().equals("GUEST")) {
+		if(user.getRole().equals("GUEST")) {
 			System.out.println("\n\n\n \t DOBIO SAM " + user.getRole()+"\n\n");
 			System.out.println("username: " +user.getUserName() + " password: " + user.getPassword());
 		}else {

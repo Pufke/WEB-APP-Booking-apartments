@@ -1,6 +1,6 @@
 package services;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,12 +15,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
-import beans.Administrator;
-import beans.Guest;
-import beans.Host;
 import beans.User;
 import dao.UsersDAO;
 import dto.UserDTO;
@@ -97,7 +91,14 @@ public class UserService {
 			return Response.status(Response.Status.BAD_REQUEST).entity("We have alredy user with same username. Please try another one").build();
 		}	
 		
-		User newUser = new User(user.username, user.password, user.name, user.surname, user.role);
+		User newUser = new User();
+		newUser.setID(1111);
+		newUser.setUserName(user.username);
+		newUser.setPassword(user.password);
+		newUser.setPassword(user.name);
+		newUser.setPassword(user.surname);
+		newUser.setPassword(user.role);
+		
 		users.addUser(newUser);
 		users.saveUsersJSON();
 		
@@ -109,7 +110,10 @@ public class UserService {
 	@Path("/getNewUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User getNewUser() {
-		User user = new User("100","noviName","noviSifra");
+		User user = new User();
+		user.setID(9999);
+		user.setUserName("Novi userName");
+		user.setPassword("Novi pass");
 		return user;
 		
 		// TODO: promeniti da daje pametniji id useru

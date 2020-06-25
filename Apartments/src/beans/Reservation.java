@@ -4,6 +4,7 @@ package beans;
 public class Reservation {
 	
 	private Integer ID;
+	//private int logicalDeleted;						// 1 - deleted, 0 - not deleted
 	private Integer idOfReservedApartment;
 	private String startDateOfReservation;					// date of when reservation is started
 	private String numberOfNights; 							// num of nights 

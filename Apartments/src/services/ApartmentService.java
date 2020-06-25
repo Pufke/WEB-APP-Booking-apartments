@@ -1,6 +1,6 @@
 package services;
 
-import java.util.ArrayList;
+
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -15,17 +15,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import beans.AmenitiesItem;
+
+
 import beans.Apartment;
 import beans.User;
-import dao.AmenitiesDAO;
+
 import dao.ApartmentsDAO;
 import dao.UsersDAO;
-import dto.AmenitiesItemAddDTO;
+
 import dto.ApartmentChangeDTO;
 import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
@@ -65,7 +63,9 @@ public class ApartmentService {
 		// Add that apartment in list of hosts apartments
 		allUsersDAO.addHostApartments(user, newItem);
 		
-		return user.getApartmentsForRentingHOST();
+		
+		
+		return apartmentsDAO.getHostApartments(user);
 	}
 	
 	@GET
@@ -79,9 +79,11 @@ public class ApartmentService {
 		User user = (User) request.getSession().getAttribute("loginUser");
 
 		System.out.println("\n\n\n DOBAVLJANJE SAMO APARTMANA DOMACINA: " + user.getUserName());
-		// TODO: Ovde se menja ako budemo presli samo na ID-eve.
 
-		return user.getApartmentsForRentingHOST();
+		ApartmentsDAO apartmentsDAO = getApartments();
+
+
+		return apartmentsDAO.getHostApartments(user);
 	}
 
 	@POST
@@ -94,17 +96,13 @@ public class ApartmentService {
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-		UsersDAO allUsersDAO = getUsers();
-		// Update that apartment in list of hosts apartments
-		allUsersDAO.activateApartmentOfHost(user, idOfApartmentForActivation);
-		
+		User user = (User) request.getSession().getAttribute("loginUser");		
 		
 		// Update that apartment in list of all apartments
-		ApartmentsDAO apartments = getApartments();
-		apartments.activateApartment(idOfApartmentForActivation);
+		ApartmentsDAO apartmentsDAO = getApartments();
+		apartmentsDAO.activateApartment(idOfApartmentForActivation);
 		
-		return user.getApartmentsForRentingHOST();
+		return apartmentsDAO.getHostApartments(user);
 		
 	}
 	
@@ -123,15 +121,11 @@ public class ApartmentService {
 				+ updatedApartment.pricePerNight + "\n\n");
 
 		// Update that apartment in list of all apartments
-		ApartmentsDAO apartments = getApartments();
-		apartments.changeApartment(updatedApartment);
+		ApartmentsDAO apartmentsDAO = getApartments();
+		apartmentsDAO.changeApartment(updatedApartment);
 
-		UsersDAO allUsersDAO = getUsers();
 
-		// Update that apartment in list of hosts apartments
-		allUsersDAO.changeHostApartments(user, updatedApartment);
-
-		return user.getApartmentsForRentingHOST();
+		return apartmentsDAO.getHostApartments(user);
 	}
 
 	@GET

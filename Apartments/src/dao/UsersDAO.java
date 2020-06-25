@@ -1,37 +1,21 @@
 package dao;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import beans.Address;
-import beans.Administrator;
-import beans.Apartment;
-import beans.Guest;
-import beans.Host;
-import beans.Location;
-import beans.Reservation;
 import beans.User;
-import dto.ApartmentChangeDTO;
+
 import dto.ApartmentDTOJSON;
 import dto.UserDTO;
 
@@ -47,6 +31,9 @@ public class UsersDAO {
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "users.json";
 		this.users = new LinkedHashMap<String, User>();
+		
+		// UNCOMMENT IF YOU WANT TO ADD MOCKUP DATA TO FILE
+		addMockupData();
 	}
 
 	/**
@@ -143,59 +130,9 @@ public class UsersDAO {
 
 				// If we are here, then this user does not have this apartman so wee need to add
 				// it
-				Apartment apartment = new Apartment();
-				apartment.setStatus(newItem.addedApartment.getStatus());
-				apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
-				apartment.setPricePerNight(newItem.addedApartment.getPricePerNight());
-				apartment.setTimeForCheckIn(newItem.addedApartment.getTimeForCheckIn());
-				apartment.setTimeForCheckOut(newItem.addedApartment.getTimeForCheckOut());
-				apartment.setNumberOfRooms(newItem.addedApartment.getNumberOfRooms());
-				apartment.setNumberOfGuests(newItem.addedApartment.getNumberOfGuests());
-				apartment.setLocation(newItem.addedApartment.getLocation());
-
-				user.getApartmentsForRentingHOST().add(apartment);
+				user.getApartmentsForRentingHostIDs().add((newItem.addedApartment.getID().intValue()));
 				saveUsersJSON();
 				return;
-			}
-		}
-
-	}
-
-	public void changeHostApartments(User updatedUser, ApartmentChangeDTO updatedApartment) {
-		// Find user with that name, and change his data.
-		for (User user : users.values()) {
-			if (user.getUserName().equals(updatedUser.getUserName())) {
-
-				// find which apartment we need to change for this host
-				for (Apartment apartment : user.getApartmentsForRentingHOST()) {
-					if (updatedApartment.identificator.equals(apartment.getID())) {
-						apartment.setPricePerNight(updatedApartment.pricePerNight);
-						apartment.setTimeForCheckIn(updatedApartment.timeForCheckIn);
-						apartment.setTimeForCheckOut(updatedApartment.timeForCheckOut);
-						apartment.setNumberOfRooms(updatedApartment.numberOfRooms);
-						apartment.setNumberOfGuests(updatedApartment.numberOfGuests);
-						saveUsersJSON();
-						return;
-					}
-				}
-			}
-		}
-
-	}
-
-	public void activateApartmentOfHost(User userWithNewActivatedApartment, Long idOfApartmentForActivation) {
-		// Find user with that name, and change his data.
-		for (User user : users.values()) {
-			if (user.getUserName().equals(userWithNewActivatedApartment.getUserName())) {
-
-				// find which apartment we need to change for this host
-				for (Apartment apartment : user.getApartmentsForRentingHOST()) {
-					if (idOfApartmentForActivation.equals(apartment.getID())) {
-						apartment.setStatus("ACTIVE");
-						saveUsersJSON();
-						return;
-					}
-				}
 			}
 		}
 
@@ -223,6 +160,46 @@ public class UsersDAO {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Method for adding dummy data to JSON file of users
+	 */
+	@SuppressWarnings("unused")
+	private void addMockupData() {
+
+		// Make all users
+		List<User> allUsers = new ArrayList<User>();
+
+		List<Integer> apartmentsForRentingHostIDs = new ArrayList<Integer>(); // apartmani za izdavanje
+		apartmentsForRentingHostIDs.add(1);
+		apartmentsForRentingHostIDs.add(2);
+
+		List<Integer> rentedApartmentsOfGuestIDs = new ArrayList<Integer>(); // iznajmljeni apartmani
+
+		List<Integer> listOfReservationsGuestIDs = new ArrayList<Integer>(); // lista rezervacija
+		
+		allUsers.add(new User(1, 0, 0, "dule", "12345", "Dule", "Maksimovic", "ADMINISTRATOR", "Male",
+				new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>()));
+		
+		allUsers.add(new User(2, 0, 0, "vaxi", "12345", "Vladislav", "Maksimovic", "HOST", "Male",
+				apartmentsForRentingHostIDs, new ArrayList<Integer>(), new ArrayList<Integer>()));
+		
+		
+		rentedApartmentsOfGuestIDs.add(1); rentedApartmentsOfGuestIDs.add(2);
+		listOfReservationsGuestIDs.add(10); listOfReservationsGuestIDs.add(20);
+		allUsers.add(new User(3, 0, 0, "pufke", "12345", "Nemanja", "Pualic", "GUEST", "Male",
+				new ArrayList<Integer>(), rentedApartmentsOfGuestIDs, listOfReservationsGuestIDs));
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			// Write them to the file
+			objectMapper.writeValue(new FileOutputStream(this.path), allUsers);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

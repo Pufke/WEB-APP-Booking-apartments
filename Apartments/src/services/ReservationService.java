@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 
 import beans.Apartment;
 import beans.Comment;
-import beans.Guest;
 import beans.Reservation;
 import beans.User;
 import dao.ApartmentsDAO;
@@ -132,7 +131,7 @@ public class ReservationService {
 		apartment.setListOfReservationsIDs(reservedApartmentList);
 		Reservation reservation = new Reservation(Integer.parseInt(uniqueID), (apartment.getID()).intValue(),
 				reservationData.dateOfReservation, reservationData.numberOfNights, 1600l,
-				reservationData.messageForHost, Integer.parseInt(user.getId()), reservationData.statusOfReservation);
+				reservationData.messageForHost, user.getID(), reservationData.statusOfReservation);
 
 //		for (Reservation r : reservations) {
 //			if (r.getGuest().getUserName().equals(reservation.getGuest().getUserName())
@@ -200,7 +199,6 @@ public class ReservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response makeComment(CommentDTO commentData) {
-		ReservationDAO reservationsCTX = getReservations();
 		UsersDAO usersCTX = getUsers();
 		ApartmentsDAO apartmentsCTX = getApartments();
 		CommentsDAO commentsCTX = getComments();
@@ -225,7 +223,7 @@ public class ReservationService {
 			}
 		}
 
-		Comment comment = new Comment(1000, 0, Integer.parseInt(user.getId()), (apartment.getID()).intValue(),
+		Comment comment = new Comment(1000, 0, user.getID(), (apartment.getID()).intValue(),
 				commentData.txtOfComment, commentData.ratingForApartment);
 
 		comments.add(comment);
