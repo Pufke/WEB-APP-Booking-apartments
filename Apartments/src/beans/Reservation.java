@@ -3,79 +3,117 @@ package beans;
 
 public class Reservation {
 	
-	private String reservationID;
-	private Apartment reservedApartment;
-	private String dateOfReservation;
-	private String numberOfNights; // Broj nocenja
-	private Long totalPrice;
-	private String messageForHost; //Poruka pri rezervaciji;
-	private Guest guest; //Guest koji je napravio rezervaciju
-	private String statusOfReservation;//(Kreirana, Odbijena, Odustanak, Prihvacena, Zavrsena)
+	private Integer ID;
+	private Integer idOfReservedApartment;
+	private String startDateOfReservation;					// date of when reservation is started
+	private String numberOfNights; 							// num of nights 
+	private Long totalPrice;								// total price for reservation
+	private String messageForHost; 							
+	private Integer guestID; 								
+	private String statusOfReservation;						//(Kreirana, Odbijena, Odustanak, Prihvacena, Zavrsena)
 	
-	public Reservation(String reservationID, Apartment reservedApartment, String dateOfReservation,
-			String numberOfNights, Long totalPrice,
-			String messageForHost, Guest guest, String statusOfReservation) {
+	
+	public Reservation() {
+		
+	}
+	
+	public Reservation(Integer iD, Integer idOfReservedApartment, String startDateOfReservation, String numberOfNights,
+			Long totalPrice, String messageForHost, Integer guestID, String statusOfReservation) {
 		super();
-		this.reservationID = reservationID;
-		this.reservedApartment = reservedApartment;
-		this.dateOfReservation = dateOfReservation;
+		ID = iD;
+		this.idOfReservedApartment = idOfReservedApartment;
+		this.startDateOfReservation = startDateOfReservation;
 		this.numberOfNights = numberOfNights;
 		this.totalPrice = totalPrice;
 		this.messageForHost = messageForHost;
-		this.guest = guest;
+		this.guestID = guestID;
 		this.statusOfReservation = statusOfReservation;
 	}
-	public Reservation() {
-		// TODO Auto-generated constructor stub
+
+
+	public Integer getID() {
+		return ID;
 	}
-	public Apartment getReservedApartment() {
-		return reservedApartment;
+
+
+	public void setID(Integer iD) {
+		ID = iD;
 	}
-	public void setReservedApartment(Apartment reservedApartment) {
-		this.reservedApartment = reservedApartment;
+
+
+	public Integer getIdOfReservedApartment() {
+		return idOfReservedApartment;
 	}
-	public String getDateOfReservation() {
-		return dateOfReservation;
+
+
+	public void setIdOfReservedApartment(Integer idOfReservedApartment) {
+		this.idOfReservedApartment = idOfReservedApartment;
 	}
-	public void setDateOfReservation(String dateOfReservation) {
-		this.dateOfReservation = dateOfReservation;
+
+
+	public String getStartDateOfReservation() {
+		return startDateOfReservation;
 	}
+
+
+	public void setStartDateOfReservation(String startDateOfReservation) {
+		this.startDateOfReservation = startDateOfReservation;
+	}
+
+
 	public String getNumberOfNights() {
 		return numberOfNights;
 	}
+
+
 	public void setNumberOfNights(String numberOfNights) {
 		this.numberOfNights = numberOfNights;
 	}
+
+
 	public Long getTotalPrice() {
 		return totalPrice;
 	}
+
+
 	public void setTotalPrice(Long totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+
+
 	public String getMessageForHost() {
 		return messageForHost;
 	}
+
+
 	public void setMessageForHost(String messageForHost) {
 		this.messageForHost = messageForHost;
 	}
-	public Guest getGuest() {
-		return guest;
+
+
+	public Integer getGuestID() {
+		return guestID;
 	}
-	public void setGuest(Guest guest) {
-		this.guest = guest;
+
+
+	public void setGuestID(Integer guestID) {
+		this.guestID = guestID;
 	}
+
+
 	public String getStatusOfReservation() {
 		return statusOfReservation;
 	}
+
+
 	public void setStatusOfReservation(String statusOfReservation) {
 		this.statusOfReservation = statusOfReservation;
 	}
-	public String getReservationID() {
-		return reservationID;
-	}
-	public void setReservationID(String reservationID) {
-		this.reservationID = reservationID;
-	}
+
+	
+
+	
+	
 	
 	
 }

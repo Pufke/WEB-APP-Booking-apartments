@@ -35,68 +35,66 @@ public class ReservationService {
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
-	
+
 	@GET
 	@Path("/getReservations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Reservation> getJustApartments(){
+	public ArrayList<Reservation> getJustApartments() {
 		System.out.println("CALLED GET JUST RESERVATIONS");
 		return getReservations().getValues();
 	}
-	
+
 	private ReservationDAO getReservations() {
 		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
-		
-		if(reservations == null) {
+
+		if (reservations == null) {
 			reservations = new ReservationDAO();
 			reservations.readReservations();
 			ctx.setAttribute("reservations", reservations);
 		}
 		return reservations;
 	}
-	
-	
+
 	private UsersDAO getUsers() {
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
-		if(users == null) {
+		if (users == null) {
 			users = new UsersDAO();
 			users.readUsers();
 			ctx.setAttribute("users", users);
-			
+
 		}
-		
+
 		return users;
 	}
 
 	private ApartmentsDAO getApartments() {
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
-		
-		if(apartments == null) {
+
+		if (apartments == null) {
 			apartments = new ApartmentsDAO();
 			apartments.readApartments();
-			
+
 			ctx.setAttribute("apartments", apartments);
 		}
-		
+
 		return apartments;
-		
+
 	}
-	
+
 	private CommentsDAO getComments() {
 		CommentsDAO comments = (CommentsDAO) ctx.getAttribute("comments");
-		
-		if(comments == null) {
+
+		if (comments == null) {
 			comments = new CommentsDAO();
 			comments.readComments();
-			
+
 			ctx.setAttribute("comments", comments);
 		}
-		
+
 		return comments;
-		
+
 	}
-	
-	
+
 	@POST
 	@Path("/makeReservations")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -105,50 +103,54 @@ public class ReservationService {
 		ReservationDAO reservationsCTX = getReservations();
 		UsersDAO usersCTX = getUsers();
 		ApartmentsDAO apartmentsCTX = getApartments();
-		
+
 		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
 		Collection<User> users = usersCTX.getValues();
 		ArrayList<Reservation> reservations = reservationsCTX.getValues();
-		
+
 		Apartment apartment = new Apartment();
 		User user = new User();
-		
+
 		for (Apartment a : apartments) {
-			if(a.getIdentificator() == reservationData.apartmentIdentificator) {
-				//a.setReservedStatus("Rezervisano");
+			if (a.getID() == reservationData.apartmentIdentificator) {
+				// a.setReservedStatus("Rezervisano");
 				apartment = a;
 				break;
 			}
 		}
-		for (User u: users) {
-			if(u.getUserName().equals(reservationData.guestUserName)) {
+		for (User u : users) {
+			if (u.getUserName().equals(reservationData.guestUserName)) {
 				user = u;
 				break;
 			}
 		}
-		
+
 		String uniqueID = UUID.randomUUID().toString();
-		ArrayList<String> reservedApartmentList = apartment.getReservedApartmentList();
-	    reservedApartmentList.add(uniqueID);
-	    
-		apartment.setReservedApartmentList(reservedApartmentList);
-		Reservation reservation = new Reservation(uniqueID, apartment, reservationData.dateOfReservation, reservationData.numberOfNights, (long) 1600, reservationData.messageForHost, (Guest) user, reservationData.statusOfReservation);
-		
-		for (Reservation r : reservations) {
-			if (r.getGuest().getUserName().equals(reservation.getGuest().getUserName()) && r.getReservedApartment().getIdentificator() == reservation.getReservedApartment().getIdentificator() ) {
-				
-				return Response.status(Response.Status.EXPECTATION_FAILED).entity("Ovaj apartman je vec rezervisan").build();
-				
-			}
-		}
+		ArrayList<String> reservedApartmentList = apartment.getListOfReservationsIDs();
+		reservedApartmentList.add(uniqueID);
+
+		apartment.setListOfReservationsIDs(reservedApartmentList);
+		Reservation reservation = new Reservation(Integer.parseInt(uniqueID), (apartment.getID()).intValue(),
+				reservationData.dateOfReservation, reservationData.numberOfNights, 1600l,
+				reservationData.messageForHost, Integer.parseInt(user.getId()), reservationData.statusOfReservation);
+
+//		for (Reservation r : reservations) {
+//			if (r.getGuest().getUserName().equals(reservation.getGuest().getUserName())
+//					&& r.getReservedApartment().getID() == reservation.getReservedApartment().getID()) {
+//
+//				return Response.status(Response.Status.EXPECTATION_FAILED).entity("Ovaj apartman je vec rezervisan")
+//						.build();
+//
+//			}
+//		}
 		reservations.add(reservation);
-		
+
 		reservationsCTX.saveReservationsJSON();
 		apartmentsCTX.saveApartmentsJSON();
 		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
 
 	}
-	
+
 	@POST
 	@Path("/deleteReservations")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -156,43 +158,43 @@ public class ReservationService {
 	public Response deleteReservations(DeleteReservationDTO reservationData) {
 		ReservationDAO reservationsCTX = getReservations();
 		ApartmentsDAO apartmentsCTX = getApartments();
-		
+
 		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
 		ArrayList<Reservation> reservations = reservationsCTX.getValues();
-		
+
 		Reservation reservation = new Reservation();
-		
+
 		System.out.println(reservationData.reservationID);
 		for (Reservation r : reservations) {
-			if(r.getReservationID().equals(reservationData.reservationID)) {
+			if (r.getID().equals(Integer.parseInt(reservationData.reservationID))) {
 				reservation = r;
 				break;
 			}
 		}
-		
-		for(Apartment a : apartments ) {
-			if(a.getIdentificator() == reservationData.apartmentIdentificator) {
-				ArrayList<String> rezervacije = a.getReservedApartmentList();
+
+		for (Apartment a : apartments) {
+			if (a.getID() == reservationData.apartmentIdentificator) {
+				ArrayList<String> rezervacije = a.getListOfReservationsIDs();
 				for (String s : rezervacije) {
-					if(s.equals(reservationData.reservationID)) {
+					if (s.equals(reservationData.reservationID)) {
 						rezervacije.remove(s);
 						break;
 					}
-					
+
 				}
-				a.setReservedApartmentList(rezervacije);
+				a.setListOfReservationsIDs(rezervacije);
 				break;
 			}
 		}
 
 		reservations.remove(reservation);
-		
+
 		reservationsCTX.saveReservationsJSON();
 		apartmentsCTX.saveApartmentsJSON();
 		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
 
 	}
-	
+
 	@POST
 	@Path("/makeComment")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -202,37 +204,37 @@ public class ReservationService {
 		UsersDAO usersCTX = getUsers();
 		ApartmentsDAO apartmentsCTX = getApartments();
 		CommentsDAO commentsCTX = getComments();
-		
+
 		ArrayList<Comment> comments = commentsCTX.getValues();
 		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
 		Collection<User> users = usersCTX.getValues();
-		
+
 		Apartment apartment = new Apartment();
 		User user = new User();
-		
+
 		for (Apartment a : apartments) {
-			if(a.getIdentificator() == commentData.apartmentID) {
+			if (a.getID() == commentData.apartmentID) {
 				apartment = a;
 				break;
 			}
 		}
-		for (User u: users) {
-			if(u.getUserName().equals(commentData.guestUserName)) {
+		for (User u : users) {
+			if (u.getUserName().equals(commentData.guestUserName)) {
 				user = u;
 				break;
 			}
 		}
-		
-		
-	   Comment comment = new Comment((Guest) user, apartment, commentData.txtOfComment, commentData.ratingForApartment);
-		
-	   comments.add(comment);
-	   
+
+		Comment comment = new Comment(1000, 0, Integer.parseInt(user.getId()), (apartment.getID()).intValue(),
+				commentData.txtOfComment, commentData.ratingForApartment);
+
+		comments.add(comment);
+
 		apartmentsCTX.saveApartmentsJSON();
 		commentsCTX.saveCommentJSON();
 		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
 
 	}
-	
+
 }
 //reservation/makeReservations

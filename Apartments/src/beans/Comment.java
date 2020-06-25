@@ -1,49 +1,94 @@
 package beans;
 
 public class Comment {
-	private Guest guestCommentAuthor; // Gost koji je ostavio komentar
-	private Apartment apartmentComment; // Apartman na koji se odnosi komentar
+	
+	private Integer ID;
+	private Integer logicalDeleted;						// 1 - deleted, 0 - not deleted
+	private Integer guestAuthorOfCommentID; 			// Gost koji je ostavio komentar
+	private Integer commentForApartmentID; 			// Apartman na koji se odnosi komentar
 	private String txtOfComment;
 	private String ratingForApartment;
+	
+	
+	public Comment() {
+		
+	}
 
-	public Comment(Guest guestCommentAuthor, Apartment apartmentComment, String txtOfComment,
-			String ratingForApartment) {
+	
+	public Comment(Integer iD, Integer logicalDeleted, Integer guestAuthorOfCommentID, Integer commentForApartmentID,
+			String txtOfComment, String ratingForApartment) {
 		super();
-		this.guestCommentAuthor = guestCommentAuthor;
-		this.apartmentComment = apartmentComment;
+		ID = iD;
+		this.logicalDeleted = logicalDeleted;
+		this.guestAuthorOfCommentID = guestAuthorOfCommentID;
+		this.commentForApartmentID = commentForApartmentID;
 		this.txtOfComment = txtOfComment;
 		this.ratingForApartment = ratingForApartment;
 	}
 
-	public Guest getGuestCommentAuthor() {
-		return guestCommentAuthor;
+
+	public Integer getID() {
+		return ID;
 	}
 
-	public void setGuestCommentAuthor(Guest guestCommentAuthor) {
-		this.guestCommentAuthor = guestCommentAuthor;
+
+	public void setID(Integer iD) {
+		ID = iD;
 	}
 
-	public Apartment getApartmentComment() {
-		return apartmentComment;
+
+	public Integer getLogicalDeleted() {
+		return logicalDeleted;
 	}
 
-	public void setApartmentComment(Apartment apartmentComment) {
-		this.apartmentComment = apartmentComment;
+
+	public void setLogicalDeleted(Integer logicalDeleted) {
+		this.logicalDeleted = logicalDeleted;
 	}
+
+
+	public Integer getGuestAuthorOfCommentID() {
+		return guestAuthorOfCommentID;
+	}
+
+
+	public void setGuestAuthorOfCommentID(Integer guestAuthorOfCommentID) {
+		this.guestAuthorOfCommentID = guestAuthorOfCommentID;
+	}
+
+
+	public Integer getCommentForApartmentID() {
+		return commentForApartmentID;
+	}
+
+
+	public void setCommentForApartmentID(Integer commentForApartmentID) {
+		this.commentForApartmentID = commentForApartmentID;
+	}
+
 
 	public String getTxtOfComment() {
 		return txtOfComment;
 	}
 
+
 	public void setTxtOfComment(String txtOfComment) {
 		this.txtOfComment = txtOfComment;
 	}
+
 
 	public String getRatingForApartment() {
 		return ratingForApartment;
 	}
 
+
 	public void setRatingForApartment(String ratingForApartment) {
 		this.ratingForApartment = ratingForApartment;
 	}
+
+
+	
+
+	
+	
 }

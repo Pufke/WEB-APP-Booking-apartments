@@ -168,7 +168,7 @@ public class UsersDAO {
 
 				// find which apartment we need to change for this host
 				for (Apartment apartment : user.getApartmentsForRentingHOST()) {
-					if (updatedApartment.identificator.equals(apartment.getIdentificator())) {
+					if (updatedApartment.identificator.equals(apartment.getID())) {
 						apartment.setPricePerNight(updatedApartment.pricePerNight);
 						apartment.setTimeForCheckIn(updatedApartment.timeForCheckIn);
 						apartment.setTimeForCheckOut(updatedApartment.timeForCheckOut);
@@ -190,7 +190,7 @@ public class UsersDAO {
 
 				// find which apartment we need to change for this host
 				for (Apartment apartment : user.getApartmentsForRentingHOST()) {
-					if (idOfApartmentForActivation.equals(apartment.getIdentificator())) {
+					if (idOfApartmentForActivation.equals(apartment.getID())) {
 						apartment.setStatus("ACTIVE");
 						saveUsersJSON();
 						return;

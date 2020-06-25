@@ -1,21 +1,19 @@
 package dao;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import beans.Address;
-import beans.Apartment;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import beans.Comment;
-import beans.Guest;
-import beans.Location;
 
 
 public class CommentsDAO {
@@ -30,126 +28,52 @@ public class CommentsDAO {
 		}
 		this.path = System.getProperty("catalina.base") + File.separator + "podaci" + File.separator + "comments.json";
 		this.comments = new ArrayList<Comment>();
+		
+		// UNCOMMENT IF WANT TO PUT DUMMY DATA IN FILE addMockupData();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void readComments() {
-		BufferedReader in = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		File file = new File(this.path);
+
+		List<Comment> loadedComments = new ArrayList<Comment>();
 		try {
-			File file = new File(this.path);
-			if (!file.exists()) {
-				file = new File(this.path);
-			}
-			JSONParser jsonParser = new JSONParser();
 
-			try (FileReader reader = new FileReader(path)) {
-				Object obj = jsonParser.parse(reader);
-				JSONArray commentsJSON = (JSONArray) obj;
-				System.out.println(commentsJSON);
-				commentsJSON.forEach(comment -> parseCommentObject((JSONObject) comment));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			loadedComments = objectMapper.readValue(file, new TypeReference<List<Comment>>() {
+			});
 
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-				}
-			}
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		System.out.println("\n\n ucitavam preko object mapera \n\n");
+		for (Comment a : loadedComments) {
+			System.out.println("TXT KOMENTARA: " + a.getTxtOfComment());
+			comments.add(a);
+		}
+		System.out.println("\n\n");
 	}
 
-	private void parseCommentObject(JSONObject comment) {
-
-		String status = (String) comment.get("status");    
-        String TypeOfApartment = (String) comment.get("TypeOfApartment"); 
-        Long PricePerNight = (Long) comment.get("PricePerNight"); 
-        Long NumberOfRooms = (Long) comment.get("NumberOfRooms"); 
-        Long NumberOfGuests = (Long) comment.get("NumberOfGuests"); 
-        String TimeForCheckIn = (String) comment.get("TimeForCheckIn"); 
-        String TimeForCheckOut = (String) comment.get("TimeForCheckOut"); 
-        String ReservedStatus = (String) comment.get("ReservedStatus"); 
-        Long Identificator = (Long) comment.get("Identificator"); 
-		
-        String userName = (String) comment.get("userName");    
-        String password = (String) comment.get("password");
-		String name = (String) comment.get("name");
-		String surname = (String) comment.get("surname");
-        
-		String latitude = (String) comment.get("latitude");
-        String longitude = (String) comment.get("longitude");
-    
-        String street = (String) comment.get("street");
-        String number = (String) comment.get("number");
-        String populatedPlace = (String) comment.get("populatedPlace");
-        String zipCode = (String) comment.get("zipCode");
-		
-		Guest guest = new Guest(userName, password, name, surname);
-		Address address = new Address(street, number,populatedPlace, zipCode);
-        Location location  = new Location(latitude, longitude, address);
-		Apartment apartment = new Apartment(null, Identificator ,TypeOfApartment, NumberOfRooms, NumberOfGuests, location, PricePerNight, TimeForCheckIn, TimeForCheckOut, status, ReservedStatus);
-		//TODO PREPRAVITI NULL U Listu apartmana
-		String txtOfComment = (String) comment.get("txtOfComment");
-		String ratingForApartment = (String) comment.get("ratingForApartment");
-		
-		Comment newComment = new Comment(guest,apartment,txtOfComment,ratingForApartment);
-		comments.add(newComment);
-		
-		System.out.println("Dodao sam novi komentar");
-	}
-
-	@SuppressWarnings({ "unused", "unchecked" })
 	public void saveCommentJSON() {
 
-		JSONArray commentsList = new JSONArray();
-
-		for (Comment comment : comments) {
-
-			JSONObject commentToSave = new JSONObject();
-			
-			commentToSave.put("txtOfComment", comment.getTxtOfComment());
-			commentToSave.put("ratingForApartment", comment.getRatingForApartment());
-			
-			
-			Apartment a = comment.getApartmentComment();
-			
-			commentToSave.put("status", a.getStatus());
-			commentToSave.put("TypeOfApartment", a.getTypeOfApartment());
-			commentToSave.put("PricePerNight", a.getPricePerNight());
-			commentToSave.put("NumberOfRooms", a.getNumberOfRooms());
-			commentToSave.put("NumberOfGuests", a.getNumberOfGuests());
-			commentToSave.put("TimeForCheckIn", a.getTimeForCheckIn());
-			commentToSave.put("TimeForCheckOut", a.getTimeForCheckOut());
-			commentToSave.put("Identificator", a.getIdentificator());
-			commentToSave.put("ReservedStatus", a.getReservedStatus());
-				
-			Location l = a.getLocation();
-			commentToSave.put("latitude", l.getLatitude());
-			commentToSave.put("longitude", l.getLongitude());
-			
-			Address adres = l.getAddress();
-			commentToSave.put("street", adres.getStreet());
-			commentToSave.put("number", adres.getNumber());
-			commentToSave.put("populatedPlace", adres.getPopulatedPlace());
-			commentToSave.put("zipCode", adres.getZipCode());
-			
-			Guest guest = comment.getGuestCommentAuthor();
-			commentToSave.put("userName", guest.getUserName());
-			commentToSave.put("password", guest.getPassword());
-			commentToSave.put("name", guest.getName());
-			commentToSave.put("surname", guest.getSurname());
-			commentToSave.put("role", guest.getRole());
-			
-			commentsList.add(commentToSave);
-			
+		// Get all comments
+		List<Comment> allComments = new ArrayList<Comment>();
+		for (Comment a : getValues()) {
+			allComments.add(a);
 		}
-		
-		// Writing to JSON file
-		try (FileWriter file = new FileWriter(path)) {
-			file.write(commentsList.toJSONString());
-			file.flush();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			// Write them to the file
+			objectMapper.writeValue(new FileOutputStream(this.path), allComments);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -161,6 +85,29 @@ public class CommentsDAO {
 		return comments;
 	}
 
+	/**
+	 * Method for adding dummy data to JSON file of comments
+	 */
+	@SuppressWarnings("unused")
+	private void addMockupData() {
+		
+		
+		// Make all comments
+		List<Comment> allComments = new ArrayList<Comment>();
+		allComments.add(new Comment(1,0,10,1,"Jako dobar i lep apartman","10"));
+		allComments.add(new Comment(2,0,20,2,"Gori apartman koliko je dobar","10"));
+		allComments.add(new Comment(3,0,30,3,"A nije lose","7"));
 
-	
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			// Write them to the file
+			objectMapper.writeValue(new FileOutputStream(this.path), allComments);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
 }

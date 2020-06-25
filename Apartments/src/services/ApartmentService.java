@@ -90,7 +90,7 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> activateApartment(ApartmentDTOJSON newItem){
 		
-		long idOfApartmentForActivation = newItem.addedApartment.getIdentificator();
+		long idOfApartmentForActivation = newItem.addedApartment.getID();
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
@@ -171,37 +171,6 @@ public class ApartmentService {
 		return getApartments().getValues();
 	}
 
-	@POST
-	@Path("/makeReseervation")
-	@Produces(MediaType.TEXT_PLAIN)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response saveApartment(ApartmentsDTO updateApartment) {
-		ApartmentsDAO apartments = getApartments();
-		if (apartments.changeApartment(updateApartment)) {
-			System.out.println(updateApartment.identificator);
-			return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
-
-		} else {
-			return Response.status(Response.Status.BAD_REQUEST).entity("ERROR DURING CHANGES").build();
-		}
-
-	}
-
-	@POST
-	@Path("/deleteReservation")
-	@Produces(MediaType.TEXT_PLAIN)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteReservation(ApartmentsDTO updateApartment) {
-		ApartmentsDAO apartments = getApartments();
-		if (apartments.deleteReservation(updateApartment)) {
-			System.out.println(updateApartment.identificator);
-			return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
-
-		} else {
-			return Response.status(Response.Status.BAD_REQUEST).entity("ERROR DURING CHANGES").build();
-		}
-
-	}
 
 	private ApartmentsDAO getApartments() {
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
