@@ -139,12 +139,11 @@ public class UsersDAO {
 		User host = findUserById(hostID);
 		List<Integer> apartmentsOfHostIDs = host.getApartmentsForRentingHostIDs();
 		apartmentsOfHostIDs.remove(apartmentID);
+		saveUsersJSON();
 
 	}
 
 	public User findUserById(Integer ID) {
-		User retUser = new User();
-		
 		for (User currentUser : getValues()) {
 			if(currentUser.getID().equals(ID))
 				return currentUser;

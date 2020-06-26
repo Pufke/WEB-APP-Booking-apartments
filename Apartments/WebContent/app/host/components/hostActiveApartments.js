@@ -229,7 +229,7 @@ Vue.component("host-ActiveApartments", {
 
             alert("potvrda");
         },
-        deleteApartment: function(apartment){
+        deleteApartment: function (apartment) {
             axios
                 .delete('rest/apartments/deleteHostApartment', {
                     data: {
