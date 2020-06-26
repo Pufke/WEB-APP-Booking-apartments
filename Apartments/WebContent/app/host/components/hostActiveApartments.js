@@ -98,17 +98,24 @@ Vue.component("host-ActiveApartments", {
             <div class="modal-contents">
         
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
-                <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt="">
+                <!-- <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt=""> -->
 
 
                 <form method='post'>
 
-                    
-                    <input  type="date" v-model="apartmentForChange.timeForCheckIn" placeholder="Check in...">
-                    <input  type="date" v-model="apartmentForChange.timeForCheckOut" placeholder="Check out...">
-                    <input  type="number" v-model="apartmentForChange.pricePerNight" placeholder="Price per night..." >
-                    <input  type="number" v-model="apartmentForChange.numberOfRooms" placeholder="Number of rooms ..." >
-                    <input  type="number" v-model="apartmentForChange.numberOfGuests" placeholder="Max guests in room..." >
+                    <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
+                    <input  type="date" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
+                    <input  type="date" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
+                    <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
+                    <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
+                    <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >    
+
+                    <!-- Address -->
+                    <input type="text" v-model="newApartment.location.address.populatedPlace" placeholder="Town name ...">
+                    <input type="text" v-model="newApartment.location.address.street" placeholder="Street ...">
+                    <input type="text" v-model="newApartment.location.address.number" placeholder="Number ...">
+                    <!-- End of address -->
+
 
                     <button type="button" @click="confirmChanging">Confirm</button>
                     <button type="button" @click="hideDialog = !hideDialog">Cancel</button>
@@ -163,15 +170,34 @@ Vue.component("host-ActiveApartments", {
         changeApartment: function (apartment) {
             this.hideDialog = !this.hideDialog;
 
-            this.apartmentForChange = apartment;
+            this.newApartment = apartment;
 
         },
+        /*
+apartmentAmentitiesIDs:Array[2]
+apartmentCommentsIDs:Array[2]
+availableDates:Array[2]
+datesForHosting:Array[2]
+hostID:1
+id:2
+imagesPath:"empty"
+listOfReservationsIDs:Array[2]
+location:Object
+logicalDeleted:0
+numberOfGuests:5
+numberOfRooms:11
+pricePerNight:100
+status:"ACTIVE"
+timeForCheckIn:16666000
+timeForCheckOut:16666000
+typeOfApartment:"STANDARD"
+        */
         confirmChanging: function () {
 
             // Check is empty field input
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut
-                || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests) {
+            if (!this.newApartment.id || !this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut
+                || !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms || !this.newApartment.numberOfGuests) {
                 toastr["warning"]("All field is required", "Watch out !");
                 return;
 
@@ -179,12 +205,7 @@ Vue.component("host-ActiveApartments", {
 
             axios
                 .post('rest/apartments/changeMyApartment', {
-                    "identificator": this.apartmentForChange.identificator,
-                    "timeForCheckIn": this.apartmentForChange.timeForCheckIn,
-                    "timeForCheckOut": this.apartmentForChange.timeForCheckOut,
-                    "pricePerNight": this.apartmentForChange.pricePerNight,
-                    "numberOfRooms": this.apartmentForChange.numberOfRooms,
-                    "numberOfGuests": this.apartmentForChange.numberOfGuests
+                    addedApartment: this.newApartment
                 })
                 .then(response => {
                     this.apartments = [];
@@ -274,6 +295,13 @@ Vue.component("host-ActiveApartments", {
         axios
             .get('rest/edit/profileUser')
             .then(response => this.newApartment.hostID = response.data.id)
+
+        // Just take model of apartment
+        axios
+            .get('rest/apartments/getDummyApartments')
+            .then(response => {
+                this.apartmentForChange = response.data
+            });
     }
 
 

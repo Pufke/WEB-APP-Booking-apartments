@@ -13,7 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.Address;
 import beans.Apartment;
+import beans.Location;
 import beans.User;
 
 import dao.ApartmentsDAO;
@@ -63,11 +65,23 @@ public class ApartmentService {
 	}
 
 	@GET
+	@Path("/getDummyApartments")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Apartment getDummyApartments() {
+
+		Apartment retApartment = new Apartment();
+		Address address = new Address("", "", "", "");
+		retApartment.setLocation(new Location("0", "0", address ));
+		
+		return retApartment;
+	}
+	
+	@GET
 	@Path("/getMyApartments")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> getJustMyApartments() {
 
-		// With this, we get user who is loged in.
+		// With this, we get user who is logged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
@@ -102,19 +116,19 @@ public class ApartmentService {
 	@Path("/changeMyApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> changeMyApartment(ApartmentChangeDTO updatedApartment) {
+	public Collection<Apartment> changeMyApartment(ApartmentDTOJSON newItem) {
 
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
 
-		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + updatedApartment.identificator + " i cenom"
-				+ updatedApartment.pricePerNight + "\n\n");
+		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + newItem.addedApartment.getID() + " i cenom"
+				+ newItem.addedApartment.getPricePerNight() + "\n\n");
 
 		// Update that apartment in list of all apartments
 		ApartmentsDAO apartmentsDAO = getApartments();
-		apartmentsDAO.changeApartment(updatedApartment);
+		apartmentsDAO.changeApartment(newItem.addedApartment);
 
 		return apartmentsDAO.getHostApartments(user);
 	}
@@ -134,13 +148,12 @@ public class ApartmentService {
 	@Path("/changeApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> changeApartment(ApartmentChangeDTO updatedApartment) {
-		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + updatedApartment.identificator + " i cenom"
-				+ updatedApartment.pricePerNight + "\n\n");
+	public Collection<Apartment> changeApartment(ApartmentDTOJSON updatedApartment) {
+		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + updatedApartment.addedApartment.getID() + " i cenom"
+				+ updatedApartment.addedApartment.getPricePerNight() + "\n\n");
 
 		ApartmentsDAO apartments = getApartments();
-
-		apartments.changeApartment(updatedApartment);
+		apartments.changeApartment(updatedApartment.addedApartment);
 
 		return getApartments().getValues();
 	}

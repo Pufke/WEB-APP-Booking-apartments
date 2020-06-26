@@ -94,17 +94,20 @@ public class ApartmentsDAO {
 	/*
 	 * Izmena podataka prosledjenog apartmana.
 	 */
-	public Boolean changeApartment(ApartmentChangeDTO updatedApartment) {
+	public Boolean changeApartment(Apartment updatedApartment) {
 
 		for (Apartment apartment : apartments) {
-			if (apartment.getID().equals((updatedApartment.identificator).intValue())) {
+			if (apartment.getID().equals((updatedApartment.getID()).intValue())) {
 				System.out.println(
-						"NASAO SAM APARTMAN " + updatedApartment.identificator + " i sad cu mu izmeniti podatke");
-				apartment.setPricePerNight((updatedApartment.pricePerNight).doubleValue());
+						"NASAO SAM APARTMAN " + updatedApartment.getID() + " i sad cu mu izmeniti podatke");
+				apartment.setPricePerNight((updatedApartment.getPricePerNight()).doubleValue());
 				apartment.setTimeForCheckIn(new Date());
 				apartment.setTimeForCheckOut(new Date());
-				apartment.setNumberOfRooms((updatedApartment.numberOfRooms).intValue());
-				apartment.setNumberOfGuests((updatedApartment.numberOfGuests).intValue());
+				apartment.setNumberOfRooms(updatedApartment.getNumberOfRooms());
+				apartment.setNumberOfGuests(updatedApartment.getNumberOfGuests());
+				apartment.setApartmentAmentitiesIDs(updatedApartment.getApartmentAmentitiesIDs());
+				apartment.setLocation(updatedApartment.getLocation());
+				
 				saveApartmentsJSON();
 				return true;
 			}
