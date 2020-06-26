@@ -47,18 +47,19 @@ public class ApartmentService {
 	public Collection<Apartment> addItem(ApartmentDTOJSON newItem){
 		System.out.println("\n stigao je NOVI APARTMAN sa statusom: " + newItem.addedApartment.getStatus() );
 		
-		ApartmentsDAO apartmentsDAO = getApartments();
-		apartmentsDAO.addNewApartments(newItem);
-		
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
-		UsersDAO allUsersDAO = getUsers();
+		
+		
+		ApartmentsDAO apartmentsDAO = getApartments();
+		apartmentsDAO.addNewApartments(newItem, user.getID());
 
 		// Add that apartment in list of hosts apartments
-		Integer uniqID = apartmentsDAO.getValues().size() + 1;
-		allUsersDAO.addHostApartments(user, uniqID);
+		UsersDAO allUsersDAO = getUsers();
+		Integer idOfApartment = apartmentsDAO.getValues().size();
+		allUsersDAO.addHostApartments(user, idOfApartment);
 		
 		
 		
@@ -89,7 +90,6 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> activateApartment(ApartmentDTOJSON newItem){
 		
-		long idOfApartmentForActivation = newItem.addedApartment.getID();
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
@@ -97,7 +97,7 @@ public class ApartmentService {
 		
 		// Update that apartment in list of all apartments
 		ApartmentsDAO apartmentsDAO = getApartments();
-		apartmentsDAO.activateApartment((int) idOfApartmentForActivation);
+		apartmentsDAO.activateApartment(newItem.addedApartment.getID());
 		
 		return apartmentsDAO.getHostApartments(user);
 		

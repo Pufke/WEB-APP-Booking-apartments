@@ -141,11 +141,12 @@ public class ApartmentsDAO {
 
 	}
 
-	public void addNewApartments(ApartmentDTOJSON newItem) {
+	public void addNewApartments(ApartmentDTOJSON newItem,Integer hostID) {
 
 		Apartment apartment = new Apartment();
 		apartment.setID( apartments.size() + 1);
-
+		apartment.setHostID(hostID);
+		
 		apartment.setStatus("INACTIVE");
 		apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
 		apartment.setPricePerNight(newItem.addedApartment.getPricePerNight());
