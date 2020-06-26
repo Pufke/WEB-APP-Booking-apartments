@@ -173,25 +173,6 @@ Vue.component("host-ActiveApartments", {
             this.newApartment = apartment;
 
         },
-        /*
-apartmentAmentitiesIDs:Array[2]
-apartmentCommentsIDs:Array[2]
-availableDates:Array[2]
-datesForHosting:Array[2]
-hostID:1
-id:2
-imagesPath:"empty"
-listOfReservationsIDs:Array[2]
-location:Object
-logicalDeleted:0
-numberOfGuests:5
-numberOfRooms:11
-pricePerNight:100
-status:"ACTIVE"
-timeForCheckIn:16666000
-timeForCheckOut:16666000
-typeOfApartment:"STANDARD"
-        */
         confirmChanging: function () {
 
             // Check is empty field input

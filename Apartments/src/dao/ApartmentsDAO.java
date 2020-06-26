@@ -46,8 +46,9 @@ public class ApartmentsDAO {
 	 * Read the apartments from the file.
 	 */
 	public void readApartments() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		ObjectMapper objectMapper = new ObjectMapper();
-		
+		objectMapper.setDateFormat(dateFormat);
 		File file = new File(this.path);
 
 		List<Apartment> loadedApartments = new ArrayList<Apartment>();
@@ -67,6 +68,10 @@ public class ApartmentsDAO {
 		System.out.println("\n\n ucitavam preko object mapera \n\n");
 		for (Apartment a : loadedApartments) {
 			System.out.println("ID APARTMANA: " + a.getID());
+			for (DateRange dateRange : a.getDatesForHosting()) {
+				System.out.println("from date: "+ dateRange.getFromDate());
+				System.out.println("to date: " + dateRange.getToDate());
+			}
 			apartments.add(a);
 		}
 		System.out.println("\n\n");
@@ -80,7 +85,9 @@ public class ApartmentsDAO {
 			allApartments.add(a);
 		}
 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDateFormat(dateFormat);
 		try {
 			// Write them to the file
 			objectMapper.writeValue(new FileOutputStream(this.path), allApartments);
@@ -182,7 +189,7 @@ public class ApartmentsDAO {
 
 	public Apartment getApartmentById(Integer id) {
 		for (Apartment ap : apartments) {
-			if (ap.getID().equals(id.intValue())) {
+			if (ap.getID().equals(id)) {
 				return ap;
 			}
 		}
@@ -242,7 +249,9 @@ public class ApartmentsDAO {
 		allApartments.add(a1);
 		allApartments.add(a2);
 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDateFormat(dateFormat);
 		try {
 			// Write them to the file
 			objectMapper.writeValue(new FileOutputStream(this.path), allApartments);

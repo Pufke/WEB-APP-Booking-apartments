@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Comment;
+import beans.User;
 
 
 public class CommentsDAO {
@@ -83,6 +84,30 @@ public class CommentsDAO {
 		return comments;
 	}
 
+	
+	public ArrayList<Comment> getCommentsForHostApartments(User user) {
+		
+		ArrayList<Comment> hostsApartments = new ArrayList<Comment>();
+		
+		for (Integer idOfApartments : user.getApartmentsForRentingHostIDs()) {
+			if(getCommentById(idOfApartments) != null) {
+				hostsApartments.add(getCommentById(idOfApartments));
+			}
+		}
+		
+		return hostsApartments;
+	}
+	
+	public Comment getCommentById(Integer id) {
+		for(Comment com : comments) {
+			if(com.getID().equals(id)) {
+				return com;
+			}
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * Method for adding dummy data to JSON file of comments
 	 */
@@ -107,5 +132,7 @@ public class CommentsDAO {
 		
 		
 	}
+
+	
 
 }

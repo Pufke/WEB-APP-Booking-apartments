@@ -11,8 +11,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.Comment;
+import beans.User;
+import dao.ApartmentsDAO;
 import dao.CommentsDAO;
-
 
 @Path("/comments")
 public class CommentsService {
@@ -21,15 +22,32 @@ public class CommentsService {
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
-	
+
 	@GET
 	@Path("/getComments")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Comment> getJustAmenities() {
+	public ArrayList<Comment> getJustComments() {
 		System.out.println("\n\n\n\n Pozvano getovanje svih komentara \n\n");
 		return getComments().getValues();
 	}
-	
+
+	@GET
+	@Path("/getMyComments")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Comment> getJustMyComments() {
+
+		// With this, we get user who is logged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+
+		System.out.println("\n\n\n DOBAVLJANJE SAMO APARTMANA DOMACINA: " + user.getUserName());
+
+		CommentsDAO commentsDAO = getComments();
+
+		return commentsDAO.getCommentsForHostApartments(user);
+	}
+
 	private CommentsDAO getComments() {
 
 		CommentsDAO commentsDAO = (CommentsDAO) ctx.getAttribute("comments");
@@ -41,5 +59,19 @@ public class CommentsService {
 		}
 
 		return commentsDAO;
+	}
+	
+	private ApartmentsDAO getApartments() {
+		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
+
+		if (apartments == null) {
+			apartments = new ApartmentsDAO();
+			apartments.readApartments();
+
+			ctx.setAttribute("apartments", apartments);
+		}
+
+		return apartments;
+
 	}
 }
