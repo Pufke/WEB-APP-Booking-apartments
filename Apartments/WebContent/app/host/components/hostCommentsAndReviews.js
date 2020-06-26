@@ -1,4 +1,4 @@
-Vue.component("host-CommentsAndReviews",{
+Vue.component("host-CommentsAndReviews", {
     data() {
         return {
             comments: []
@@ -14,6 +14,9 @@ Vue.component("host-CommentsAndReviews",{
                 <h2> Apartment ID: {{ comment.commentForApartmentID }} </h2>
                 <h2> Text: {{ comment.txtOfComment }} </h2>
                 <h2> Rating: {{ comment.ratingForApartment }} </h2>
+
+                <button v-if="comment.isAvailableToSee" type="button" @click="hideComment(comment)"> Hide </button>
+                <button v-if="!comment.isAvailableToSee" type="button" @click="showComment(comment)"> Show </button>
             </li>
         </ul>
 
@@ -31,6 +34,38 @@ Vue.component("host-CommentsAndReviews",{
 
     </div>
     `,
+    methods: {
+        hideComment: function (commentParam) {
+            axios
+                .post('rest/comments/hideComment', {
+                    comment: commentParam
+                })
+                .then(response => {
+                    this.comments = [];
+                    response.data.forEach(el => {
+                        this.comments.push(el);
+                    });
+                    toastr["success"]("You make success hide of comment !!", "Success hiding!");
+
+                    return this.comments;
+                });
+        },
+        showComment: function (commentParam) {
+            axios
+                .post('rest/comments/showComment', {
+                    comment: commentParam
+                })
+                .then(response => {
+                    this.comments = [];
+                    response.data.forEach(el => {
+                        this.comments.push(el);
+                    });
+                    toastr["success"]("You make success show of comment !!", "Success showing!");
+
+                    return this.comments;
+                });
+        }
+    },
     mounted() {
         axios
             .get('rest/comments/getMyComments')

@@ -231,7 +231,7 @@ public class ReservationService {
 			}
 		}
 
-		Comment comment = new Comment(1000, 0, user.getID(), (apartment.getID()).intValue(),
+		Comment comment = new Comment(1000, 0, 0, user.getID(), (apartment.getID()).intValue(),
 				commentData.txtOfComment, commentData.ratingForApartment);
 
 		comments.add(comment);
