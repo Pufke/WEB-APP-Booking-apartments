@@ -1,23 +1,23 @@
-Vue.component("guest-reservation",{
+Vue.component("guest-reservation", {
 
     data() {
         return {
             reservations: [],
             user: {},
             ocena: "ocena od 1 do 5",
-            komentar:"",
+            komentar: "",
             searchData: {
                 location: "",
                 checkIn: "",
                 checkOut: "",
                 price: 0.0,
                 rooms: 0,
-                maxGuests:0
+                maxGuests: 0
             }
         }
     },
 
-    template:`
+    template: `
     <div id = "styleForApartmentsView">
      	
         <form @submit="searchParam" method='post'>
@@ -37,15 +37,13 @@ Vue.component("guest-reservation",{
     	<h1> Trenutno ulogovani korisnik je {{ user.userName }} i ovo su rezervacije samo za tog korisnika!! :) </h1>
         <ul>
             <li v-for="reservation in reservations">
-            	<h2> ID rezervacije: {{ reservation.reservationID }} </h2>
-                <h2> ID apartmana: {{ reservation.reservedApartment.identificator }} </h2>
-                <h2> Tip apartmana: {{ reservation.reservedApartment.typeOfApartment }} </h2>
-                <h2> Status rezervacije: {{ reservation.statusOfReservation }} </h2>
-                <h2> Cena za noc: {{ reservation.reservedApartment.pricePerNight }} </h2>
-                <h2> Ukupna cena: {{ reservation.totalPrice }} </h2>
-                <h2> Datum rezervacije: {{ reservation.dateOfReservation }} </h2>
-                <h2> Guest username: {{ reservation.guest.userName }} </h2>
-                <h2> Poruka za Host-a: {{ reservation.messageForHost }} </h2>
+            	<h2> Reservation ID: {{ reservation.id }} </h2>
+                <h2> Apartment ID: {{ reservation.idOfReservedApartment }} </h2>
+                <h2> Total price: {{ reservation.totalPrice }} </h2>
+                <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
+                <h2> Guest ID: {{ reservation.guestID }} </h2>
+                <h2> Message for Host: {{ reservation.messageForHost }} </h2>
+                <h2> Status of reservation: {{ reservation.statusOfReservation }} </h2>
                 <button @click="deleteReservation(reservation.reservationID, reservation.reservedApartment.identificator)">DELETE RESERVATION</button>
     	       
     	        <input v-model="komentar" placeholder="Vas komentar o apartmanu">
@@ -58,13 +56,12 @@ Vue.component("guest-reservation",{
         <br>
         <table border="1">
         <tr bgcolor="lightgrey">
-        <th> ID apartmana</th> <th> Status rezervacije </th><th> Tip apartmana </th><th> dateOfReservation </th><th> Guests</th> </tr>
+        <th> ID apartmana</th> <th> Status rezervacije </th><th> startDateOfReservation </th><th> Guest ID </th> </tr>
             <tr v-for="reservation in reservations">
-                <td> {{ reservation.reservedApartment.identificator }} </td>
-                <td> {{ reservation.reservedApartment.statusOfReservation }} </td>
-                <td> {{ reservation.reservedApartment.typeOfApartment }} </td>
-                <td>  {{ reservation.dateOfReservation }} </td>
-                <td> {{ reservation.guest.userName }}  </td>
+                <td> {{ reservation.idOfReservedApartment }} </td>
+                <td> {{ reservation.statusOfReservation }} </td>
+                <td>  {{ reservation.startDateOfReservation }} </td>
+                <td> {{ reservation.guestID }}  </td>
     			
             </tr>
         </table>
@@ -75,37 +72,48 @@ Vue.component("guest-reservation",{
     </div>
     
     `,
+    /*
+guestID:3
+id:2
+idOfReservedApartment:2
+logicalDeleted:0
+messageForHost:"Ako moze samo da me docekaju otvoreni prozori"
+numberOfNights:2
+startDateOfReservation:1593043200000
+statusOfReservation:"Kreirana"
+totalPrice:99
+    */
     methods: {
-    	sortAsc: function(){
-        	this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['ASC','DESC']);
+        sortAsc: function () {
+            this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['ASC', 'DESC']);
         },
-        sortDesc: function(){
-        	this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['DESC','ASC']);
+        sortDesc: function () {
+            this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['DESC', 'ASC']);
         },
-        multisort: function(arr, columns, order_by) {
-            if(typeof columns == 'undefined') {
+        multisort: function (arr, columns, order_by) {
+            if (typeof columns == 'undefined') {
                 columns = []
-                for(x=0;x<arr[0].length;x++) {
+                for (x = 0; x < arr[0].length; x++) {
                     columns.push(x);
                 }
             }
 
-            if(typeof order_by == 'undefined') {
+            if (typeof order_by == 'undefined') {
                 order_by = []
-                for(x=0;x<arr[0].length;x++) {
+                for (x = 0; x < arr[0].length; x++) {
                     order_by.push('ASC');
                 }
             }
 
-            function multisort_recursive(a,b,columns,order_by,index) {  
+            function multisort_recursive(a, b, columns, order_by, index) {
                 var direction = order_by[index] == 'DESC' ? 1 : 0;
 
-                var is_numeric = !isNaN(a[columns[index]]-b[columns[index]]);
+                var is_numeric = !isNaN(a[columns[index]] - b[columns[index]]);
 
                 var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
                 var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
 
-                if(!is_numeric) {
+                if (!is_numeric) {
                     /*
                         If we have string, then convert it to
                         array of charachter with .split("")
@@ -116,112 +124,112 @@ Vue.component("guest-reservation",{
 
                         author: vaxi
                     */
-                   let sum_x=0;
-                   let sum_y=0;
-                   
-                   x.split("").forEach(element => sum_x += element.charCodeAt())
-                   y.split("").forEach(element => sum_y += element.charCodeAt())
+                    let sum_x = 0;
+                    let sum_y = 0;
 
-                   x= sum_x;
-                   y=sum_y;
+                    x.split("").forEach(element => sum_x += element.charCodeAt())
+                    y.split("").forEach(element => sum_y += element.charCodeAt())
+
+                    x = sum_x;
+                    y = sum_y;
                 }
 
-                if(x < y) {
-                        return direction == 0 ? -1 : 1;
+                if (x < y) {
+                    return direction == 0 ? -1 : 1;
                 }
 
-                if(x == y)  {
-                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
+                if (x == y) {
+                    return columns.length - 1 > index ? multisort_recursive(a, b, columns, order_by, index + 1) : 0;
                 }
 
                 return direction == 0 ? 1 : -1;
             }
 
-            return arr.sort(function (a,b) {
-                return multisort_recursive(a,b,columns,order_by,0);
+            return arr.sort(function (a, b) {
+                return multisort_recursive(a, b, columns, order_by, 0);
             });
         },
-    	submitKomentar: function(apartmentID,komentar,ocena){
-    		axios
-            .post('rest/reservation/makeComment',{
-                 "guestUserName": this.user.userName,
-                 "apartmentID": apartmentID,
-                 "txtOfComment": komentar,
-                 "ratingForApartment": ocena,
-           })
-           .then(response =>{
-          	 
-              toastr["success"]("Success changes!!", "Success!");
-           })
-           .catch(err => {
-             toastr["error"]("Failed during changes :(", "Fail");
-           })     
-    	},
-    	deleteReservation: function(identificator, apartmentID){
-      	  axios
-            .post('rest/reservation/deleteReservations',{
-                 "reservationID": identificator,
-                 "apartmentIdentificator": apartmentID,
-           })
-           .then(response =>{
-          	 filteredReservations = [];
-          	 this.reservations.forEach(el => {     
-        
-       		 	if(el.reservationID != identificator){
-       		 	   filteredReservations.push(el);
-        		}
-              });
-              this.reservations = filteredReservations;
-              toastr["success"]("Success changes!!", "Success!");
-           })
-           .catch(err => {
-             toastr["error"]("Failed during changes :(", "Fail");
-           })     
-    },
-    searchParam: function(event){
-        event.preventDefault();
-        
-        axios
-        .post('rest/search/SearchReservations',{
-            "location":''+ this.searchData.location,
-            "checkIn" :''+ this.searchData.checkIn,
-            "checkOut": this.searchData.checkOut,
-            "price" :   this.searchData.price,
-            "rooms" :   this.searchData.rooms,
-            "maxGuests":this.searchData.maxGuests 
-        })
-        .then(response =>{
-        	this.reservations = [];
-        	response.data.forEach(el => {
-        		if(el.guest.userName == this.user.userName){
-        			this.reservations.push(el);
-        		}
-                });
-        	return this.reservations;
-        })
-      },
-      cancelSearch: function(){
-        this.searchData.location = "";
-        this.searchData.checkIn = "";
-        this.searchData.checkOut = "";
-        this.searchData.price = 0.0;
-        this.searchData.rooms = 0;
-        this.searchData.maxGuests = 0;
+        submitKomentar: function (apartmentID, komentar, ocena) {
+            axios
+                .post('rest/reservation/makeComment', {
+                    "guestUserName": this.user.userName,
+                    "apartmentID": apartmentID,
+                    "txtOfComment": komentar,
+                    "ratingForApartment": ocena,
+                })
+                .then(response => {
 
-        axios
-        .get('rest/reservation/getReservations')
-        .then( response => {
-        	this.reservations = [];
-        	response.data.forEach(el => {
-        		console.log( this.user.userName);
-        		if(el.guest.userName == this.user.userName){
-        			this.reservations.push(el);
-        		}
+                    toastr["success"]("Success changes!!", "Success!");
+                })
+                .catch(err => {
+                    toastr["error"]("Failed during changes :(", "Fail");
+                })
+        },
+        deleteReservation: function (identificator, apartmentID) {
+            axios
+                .post('rest/reservation/deleteReservations', {
+                    "reservationID": identificator,
+                    "apartmentIdentificator": apartmentID,
+                })
+                .then(response => {
+                    filteredReservations = [];
+                    this.reservations.forEach(el => {
+
+                        if (el.reservationID != identificator) {
+                            filteredReservations.push(el);
+                        }
+                    });
+                    this.reservations = filteredReservations;
+                    toastr["success"]("Success changes!!", "Success!");
+                })
+                .catch(err => {
+                    toastr["error"]("Failed during changes :(", "Fail");
+                })
+        },
+        searchParam: function (event) {
+            event.preventDefault();
+
+            axios
+                .post('rest/search/SearchReservations', {
+                    "location": '' + this.searchData.location,
+                    "checkIn": '' + this.searchData.checkIn,
+                    "checkOut": this.searchData.checkOut,
+                    "price": this.searchData.price,
+                    "rooms": this.searchData.rooms,
+                    "maxGuests": this.searchData.maxGuests
+                })
+                .then(response => {
+                    this.reservations = [];
+                    response.data.forEach(el => {
+                        if (el.guest.userName == this.user.userName) {
+                            this.reservations.push(el);
+                        }
+                    });
+                    return this.reservations;
+                })
+        },
+        cancelSearch: function () {
+            this.searchData.location = "";
+            this.searchData.checkIn = "";
+            this.searchData.checkOut = "";
+            this.searchData.price = 0.0;
+            this.searchData.rooms = 0;
+            this.searchData.maxGuests = 0;
+
+            axios
+                .get('rest/reservation/getReservations')
+                .then(response => {
+                    this.reservations = [];
+                    response.data.forEach(el => {
+                        console.log(this.user.userName);
+                        if (el.guest.userName == this.user.userName) {
+                            this.reservations.push(el);
+                        }
+                    });
+                    return this.reservations;
                 });
-        	return this.reservations;
-        });
-       }
-      },
+        }
+    },
     mounted() {
         let one = 'rest/reservation/getReservations';
         let two = 'rest/edit/profileUser';
@@ -229,17 +237,17 @@ Vue.component("guest-reservation",{
         let requestOne = axios.get(one);
         let requestTwo = axios.get(two);
 
-        axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {    
-        	responses[0].data.forEach(el => {
-        		if(el.guest.userName == responses[1].data.userName){
-        			this.reservations.push(el);
-        		}
-                });
-             //this.reservations = responses[0].data;
-             this.user = responses[1].data;
+        axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+            responses[0].data.forEach(el => {
+                if (el.guestID == responses[1].data.id) {
+                    this.reservations.push(el);
+                }
+            });
+            //this.reservations = responses[0].data;
+            this.user = responses[1].data;
         })).catch(errors => {
             console.log("Greska brt");
         })
     },
-    
+
 })
