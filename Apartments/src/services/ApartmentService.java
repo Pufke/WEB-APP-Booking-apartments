@@ -1,6 +1,5 @@
 package services;
 
-
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -44,15 +43,14 @@ public class ApartmentService {
 	@Path("/addNewApartments")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> addItem(ApartmentDTOJSON newItem){
-		System.out.println("\n stigao je NOVI APARTMAN sa statusom: " + newItem.addedApartment.getStatus() );
-		
+	public Collection<Apartment> addItem(ApartmentDTOJSON newItem) {
+		System.out.println("\n stigao je NOVI APARTMAN sa statusom: " + newItem.addedApartment.getStatus());
+
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
-		
-		
+
 		ApartmentsDAO apartmentsDAO = getApartments();
 		apartmentsDAO.addNewApartments(newItem, user.getID());
 
@@ -60,12 +58,10 @@ public class ApartmentService {
 		UsersDAO allUsersDAO = getUsers();
 		Integer idOfApartment = apartmentsDAO.getValues().size();
 		allUsersDAO.addHostApartments(user, idOfApartment);
-		
-		
-		
+
 		return apartmentsDAO.getHostApartments(user);
 	}
-	
+
 	@GET
 	@Path("/getMyApartments")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -80,7 +76,6 @@ public class ApartmentService {
 
 		ApartmentsDAO apartmentsDAO = getApartments();
 
-
 		return apartmentsDAO.getHostApartments(user);
 	}
 
@@ -88,21 +83,21 @@ public class ApartmentService {
 	@Path("/activateApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> activateApartment(ApartmentDTOJSON newItem){
-		
+	public Collection<Apartment> activateApartment(ApartmentDTOJSON newItem) {
+
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");		
-		
+		User user = (User) request.getSession().getAttribute("loginUser");
+
 		// Update that apartment in list of all apartments
 		ApartmentsDAO apartmentsDAO = getApartments();
 		apartmentsDAO.activateApartment(newItem.addedApartment.getID());
-		
+
 		return apartmentsDAO.getHostApartments(user);
-		
+
 	}
-	
+
 	@POST
 	@Path("/changeMyApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -121,7 +116,6 @@ public class ApartmentService {
 		ApartmentsDAO apartmentsDAO = getApartments();
 		apartmentsDAO.changeApartment(updatedApartment);
 
-
 		return apartmentsDAO.getHostApartments(user);
 	}
 
@@ -130,7 +124,7 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> getJustApartments() {
 		System.out.println("CALLED GET JUST APARTMENTS");
-		for(Apartment ap : getApartments().getValues()) {
+		for (Apartment ap : getApartments().getValues()) {
 			System.out.println("statusa apartman: " + ap.getStatus() + " i ID: " + ap.getID() + "\n");
 		}
 		return getApartments().getValues();
@@ -152,6 +146,27 @@ public class ApartmentService {
 	}
 
 	@DELETE
+	@Path("/deleteHostApartment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> deleteHostApartment(ApartmentsDTO updatedApartment) {
+		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + updatedApartment.identificator + "\n\n");
+
+		ApartmentsDAO apartmentsDAO = getApartments();
+		apartmentsDAO.deleteApartment(updatedApartment.identificator);
+
+		// With this, we get user who is loged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+		UsersDAO allUsersDAO = getUsers();
+		allUsersDAO.deleteHostApartment(user.getID(), updatedApartment.identificator);
+		
+
+		return apartmentsDAO.getHostApartments(user);
+	}
+
+	@DELETE
 	@Path("/deleteApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -164,7 +179,6 @@ public class ApartmentService {
 
 		return getApartments().getValues();
 	}
-
 
 	private ApartmentsDAO getApartments() {
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");

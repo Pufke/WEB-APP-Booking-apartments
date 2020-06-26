@@ -74,6 +74,7 @@ Vue.component("host-ActiveApartments", {
                 <h2> {{ apartment.pricePerNight}} </h2>
 
                 <button type="button" @click="changeApartment(apartment)"> Change </button>
+                <button type="button" @click="deleteApartment(apartment)"> Delete </button>
             </li>
         </ul> 
         <!-- End of cards for apartments -->
@@ -158,26 +159,6 @@ Vue.component("host-ActiveApartments", {
     </div>
     
     `,
-
-    /*
-    apartmentAmentitiesIDs:Array[2]
-    apartmentCommentsIDs:Array[2]
-    availableDates:Array[2]
-    datesForHosting:Array[2]
-    hostID:1
-    id:1
-    imagesPath:"empty"
-    listOfReservationsIDs:Array[2]
-    location:Object
-    logicalDeleted:0
-    numberOfGuests:5
-    numberOfRooms:11
-    pricePerNight:100
-    status:"ACTIVE"
-    timeForCheckIn:40687000
-    timeForCheckOut:40687000
-    typeOfApartment:"STANDARD"
-    */
     methods: {
         changeApartment: function (apartment) {
             this.hideDialog = !this.hideDialog;
@@ -248,6 +229,27 @@ Vue.component("host-ActiveApartments", {
 
             alert("potvrda");
         },
+        deleteApartment: function(apartment){
+            axios
+                .delete('rest/apartments/deleteHostApartment', {
+                    data: {
+                        "hostID": 1,
+                        "identificator": apartment.id
+                    }
+
+
+                })
+                .then(response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if (el.status == "ACTIVE")
+                            this.apartments.push(el);
+                    });
+                    toastr["success"]("You make success delete !!", "Success delete!");
+
+                    return this.apartments;
+                });
+        }
     },
     mounted() {
         axios

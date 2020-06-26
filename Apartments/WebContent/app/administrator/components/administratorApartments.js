@@ -222,8 +222,8 @@ Vue.component("administrator-apartments", {
             axios
                 .delete('rest/apartments/deleteApartment', {
                     data: {
-                        "reservedStatus": this.apartmentForChange.reservedStatus,
-                        "identificator": this.apartmentForChange.identificator
+                        "hostID": 1,
+                        "identificator": this.apartmentForChange.id
                     }
 
 

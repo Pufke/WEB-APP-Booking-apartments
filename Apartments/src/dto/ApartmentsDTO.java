@@ -1,6 +1,6 @@
 package dto;
 
 public class ApartmentsDTO {
-	public String reservedStatus;
+	public int hostID;			// id of host which is this apartment
 	public int identificator;
 }

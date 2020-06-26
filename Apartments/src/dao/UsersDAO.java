@@ -132,7 +132,27 @@ public class UsersDAO {
 		}
 
 	}
+	
+	public void deleteHostApartment(Integer hostID, Integer apartmentID) {
 
+		System.out.println("\n\n hostu sa id-em: " + hostID + " smo obrisali apartman sa id-em: " + apartmentID);
+		User host = findUserById(hostID);
+		List<Integer> apartmentsOfHostIDs = host.getApartmentsForRentingHostIDs();
+		apartmentsOfHostIDs.remove(apartmentID);
+
+	}
+
+	public User findUserById(Integer ID) {
+		User retUser = new User();
+		
+		for (User currentUser : getValues()) {
+			if(currentUser.getID().equals(ID))
+				return currentUser;
+		}
+		
+		return null;
+	}
+	
 	public LinkedHashMap<String, User> getUsers() {
 		return users;
 	}
@@ -196,5 +216,7 @@ public class UsersDAO {
 		}
 
 	}
+
+	
 
 }

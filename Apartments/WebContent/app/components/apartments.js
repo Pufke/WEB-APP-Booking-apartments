@@ -162,7 +162,7 @@ Vue.component("view-apartments", {
             .then(response => {
                 this.apartments = [];
                 response.data.forEach(el => {
-                    if (el.status == "ACTIVE")
+                    if (el.status == "ACTIVE" && el.logicalDeleted == 0)
                         this.apartments.push(el);
                 });
                 return this.apartments;
