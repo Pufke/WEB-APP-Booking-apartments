@@ -36,10 +36,9 @@ Vue.component("guest-apartments", {
 
         <ul>
             <li v-for="apartment in apartments">
-                <h2> ID : {{ apartment.identificator }} </h2>
+                <h2> ID : {{ apartment.id }} </h2>
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
-                <h2> {{ apartment.reservedStatus }} </h2>
                 <h2> ADRESA: </h2> 
                 <h3> Mesto: {{ apartment.location.address.populatedPlace }} </h3>
                 <h3> Ulica: {{ apartment.location.address.street }} </h3>
@@ -49,16 +48,16 @@ Vue.component("guest-apartments", {
                 <h2> Lokacija: </h2> 
                 <h3> Geografska duzina: {{ apartment.location.longitude }} </h3>
                  <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
-                <button @click="makeReseervation2(apartment.identificator)">MAKE RESERVATION</button>
+                <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
             </li>
         </ul>
         
         <br>
         <table border="1">
         <tr bgcolor="lightgrey">
-        <th> ID </th> <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th><th> Reserved status </th> </tr>
+        <th> ID </th> <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th> </tr>
             <tr v-for="apartment in apartments">
-                <td> {{ apartment.identificator }} </td>
+                <td> {{ apartment.id }} </td>
                 <td> {{ apartment.status }} </td>
                 <td> {{ apartment.typeOfApartment }} </td>
                 <td> {{ apartment.pricePerNight}} </td>
@@ -67,7 +66,6 @@ Vue.component("guest-apartments", {
                 <td> {{ apartment.timeForCheckIn}} </td>
                 <td> {{ apartment.timeForCheckOut}} </td>
                 <td> {{ apartment.location}} </td>
-                <td> {{ apartment.reservedStatus }} </td>
 
             </tr>
         </table>
