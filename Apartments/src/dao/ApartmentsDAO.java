@@ -128,11 +128,12 @@ public class ApartmentsDAO {
 		return apartments;
 	}
 
-	public void deleteApartment(int identificator) {
+	public void deleteApartment(Integer identificator) {
 
 		for (Apartment apartment : apartments) {
 			if (apartment.getID().equals(identificator)) {
-				apartments.remove(apartment);
+				apartment.setLogicalDeleted(1);				// 1- logical deleted, 0 - not logical deleted
+				System.out.println("\n\n\t\tapartman sa id-em: " + apartment.getID() + " logicki obrisan: " + apartment.getLogicalDeleted());
 				saveApartmentsJSON();
 				return;
 			}
@@ -146,6 +147,7 @@ public class ApartmentsDAO {
 		Apartment apartment = new Apartment();
 		apartment.setID( apartments.size() + 1);
 		apartment.setHostID(hostID);
+		apartment.setLogicalDeleted(0);
 		
 		apartment.setStatus("INACTIVE");
 		apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
