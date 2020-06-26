@@ -41,13 +41,11 @@ Vue.component("administrator-reservations",{
 
         <ul>
             <li v-for="reservation in reservations">
-                <h2> Cena apartmana: {{ reservation.reservedApartment.pricePerNight }} </h2>
-                <h2> ID apartmana: {{ reservation.reservedApartment.identificator }} </h2>
-                <h2> Tip apartmana: {{ reservation.reservedApartment.typeOfApartment }} </h2>
-                <h2> Status rezervacije: {{ reservation.statusOfReservation }} </h2>
-                <h2> Datum rezervacije: {{ reservation.dateOfReservation }} </h2>
-                <h2> Guest username: {{ reservation.guest.userName }} </h2>
-                <h2> Poruka za Host-a: {{ reservation.messageForHost }} </h2>
+                <h2> Guest ID: {{ reservation.guestID }} </h2>
+                <h2> ID of reserved apartment: {{ reservation.idOfReservedApartment }} </h2>
+                <h2> Status : {{ reservation.statusOfReservation }} </h2>
+                <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
+                <h2> Message for host: {{ reservation.messageForHost }} </h2>
                
             </li>
         </ul>
@@ -55,13 +53,12 @@ Vue.component("administrator-reservations",{
         <br>
         <table border="1">
         <tr bgcolor="lightgrey">
-        <th> ID apartmana</th> <th> Status rezervacije </th><th> Tip apartmana </th><th> dateOfReservation </th><th> Guests</th> </tr>
+        <th> ID apartmana</th> <th> Status rezervacije </th><th> startDateOfReservation </th><th> Guest ID</th> </tr>
             <tr v-for="reservation in reservations">
-                <td> {{ reservation.reservedApartment.identificator }} </td>
+                <td> {{ reservation.idOfReservedApartment }} </td>
                 <td> {{ reservation.statusOfReservation }} </td>
-                <td> {{ reservation.reservedApartment.typeOfApartment }} </td>
-                <td>  {{ reservation.dateOfReservation }} </td>
-                <td> {{ reservation.guest.userName }}  </td>
+                <td>  {{ reservation.startDateOfReservation }} </td>
+                <td> {{ reservation.guestID}}  </td>
 
             </tr>
         </table>

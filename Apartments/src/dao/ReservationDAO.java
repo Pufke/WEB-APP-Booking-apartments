@@ -29,7 +29,7 @@ public class ReservationDAO {
 		this.reservations = new ArrayList<Reservation>();
 		
 		// UNCOMMENT IF YOU WANT TO SAVE MOCKUP DATA DO FILE 
-		addMockupData();
+		//addMockupData();
 	}
 
 	public void readReservations() {

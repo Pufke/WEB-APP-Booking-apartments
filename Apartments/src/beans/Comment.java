@@ -5,7 +5,7 @@ public class Comment {
 	private Integer ID;
 	private Integer logicalDeleted;						// 1 - deleted, 0 - not deleted
 	private Integer guestAuthorOfCommentID; 			// Gost koji je ostavio komentar
-	private Integer commentForApartmentID; 			// Apartman na koji se odnosi komentar
+	private Integer commentForApartmentID; 				// Apartman na koji se odnosi komentar
 	private String txtOfComment;
 	private String ratingForApartment;
 	

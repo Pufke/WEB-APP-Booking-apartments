@@ -1,17 +1,17 @@
-Vue.component("administrator-comments",{
+Vue.component("administrator-comments", {
     data() {
         return {
             comments: []
         }
     },
-    template:`
+    template: `
     <div id = "styleForApartmentsView" >
         <h1> Hello from comments </h1>
 
         <ul>
             <li v-for="comment in comments">
-                <h2> Guest username: {{ comment.guestCommentAuthor.userName }} </h2>
-                <h2> ID apartment: {{ comment.apartmentComment.identificator }} </h2>
+                <h2> Author ID: {{ comment.guestAuthorOfCommentID}} </h2>
+                <h2> Apartment ID: {{ comment.commentForApartmentID }} </h2>
                 <h2> Text: {{ comment.txtOfComment }} </h2>
                 <h2> Rating: {{ comment.ratingForApartment }} </h2>
             </li>
@@ -34,12 +34,12 @@ Vue.component("administrator-comments",{
     `,
     mounted() {
         axios
-        .get('rest/comments/getComments')
-        .then( response => {
-        	response.data.forEach(el => {
-        		this.comments.push(el);
-        	});
-        	return this.comments;
-        });
+            .get('rest/comments/getComments')
+            .then(response => {
+                response.data.forEach(el => {
+                    this.comments.push(el);
+                });
+                return this.comments;
+            });
     },
 });

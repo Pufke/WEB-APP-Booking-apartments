@@ -62,8 +62,8 @@ Vue.component("administrator-contents", {
 
         <ul>
             <li v-for="item in amenities">
-                <h2> {{ item.amenitiesID }} </h2>
-                <h2> {{ item.name }} </h2>
+                <h2> {{ item.id }} </h2>
+                <h2> {{ item.itemName }} </h2>
 
                 <button type="button" @click="changeItem(item)"> Change </button>
                 <button type="button" @click="deleteItem(item)"> Delete </button>
@@ -99,8 +99,8 @@ Vue.component("administrator-contents", {
                 <th> name </th> 
             </tr>
             <tr v-for="item in amenities">
-                <td> {{ item.amenitiesID }} </td>
-                <td> {{ item.name}} </td>
+                <td> {{ item.id }} </td>
+                <td> {{ item.itemName}} </td>
 
             </tr>
         </table>
