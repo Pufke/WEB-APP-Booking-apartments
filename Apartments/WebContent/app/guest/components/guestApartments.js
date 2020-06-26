@@ -10,7 +10,9 @@ Vue.component("guest-apartments", {
                 price: 0.0,
                 rooms: 0,
                 maxGuests: 0
-            }
+            },
+            fromDate:null,
+            toDate:null
         }
     },
 
@@ -47,7 +49,11 @@ Vue.component("guest-apartments", {
                 
                 <h2> Lokacija: </h2> 
                 <h3> Geografska duzina: {{ apartment.location.longitude }} </h3>
-                 <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
+                <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
+                 <label for="fromDate">Od datuma:</label>
+                <input type="date" v-model="fromDate" id="fromDate" name="fromDate">
+                 <label for="toDate">Do datuma:</label>
+                <input type="date" v-model="toDate" id="toDate" name="toDate">
                 <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
             </li>
         </ul>
@@ -128,7 +134,7 @@ Vue.component("guest-apartments", {
         },
         makeReseervation2: function (identificator) {
         	var today = new Date();
-        
+        	console.log(fromDate[1]._value);
             axios
                 .post('rest/reservation/makeReservations', {
                     "apartmentIdentificator": identificator,
@@ -137,6 +143,8 @@ Vue.component("guest-apartments", {
                     "messageForHost": "Pooz za HOSTA kiss cmok",
                     "guestID": this.user.id,
                     "statusOfReservation": "CEKANJE NA REZERVACIJU",
+                    "fromDate" : fromDate[1]._value,
+                    "toDate" : toDate[1]._value
                 })
                 .then(response => {
                     filteredApartments = [];

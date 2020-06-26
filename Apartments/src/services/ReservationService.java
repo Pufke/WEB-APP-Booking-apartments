@@ -1,5 +1,6 @@
 package services;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -132,6 +133,7 @@ public class ReservationService {
 		
 		Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator , reservationData.dateOfReservation, reservationData.numberOfNights, totalPrice, reservationData.messageForHost, reservationData.guestID, reservationData.statusOfReservation);  
 		
+	System.out.println("Od datuma " + reservationData.fromDate + " do datuma " + reservationData.toDate);
 		
 		ArrayList<Integer> reservedApartmentList = apartment.getListOfReservationsIDs();
 		reservedApartmentList.add(ReservationUniqueID);
