@@ -118,14 +118,14 @@ public class UsersDAO {
 		return false;
 	}
 
-	public void addHostApartments(User updatedUser, ApartmentDTOJSON newItem) {
+	public void addHostApartments(User updatedUser, Integer id) {
 		// Find user with that name, and change his data.
 		for (User user : users.values()) {
 			if (user.getUserName().equals(updatedUser.getUserName())) {
 
 				// If we are here, then this user does not have this apartman so wee need to add
 				// it
-				user.getApartmentsForRentingHostIDs().add((newItem.addedApartment.getID().intValue()));
+				user.getApartmentsForRentingHostIDs().add(id);
 				saveUsersJSON();
 				return;
 			}

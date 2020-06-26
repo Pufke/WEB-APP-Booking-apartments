@@ -57,7 +57,8 @@ public class ApartmentService {
 		UsersDAO allUsersDAO = getUsers();
 
 		// Add that apartment in list of hosts apartments
-		allUsersDAO.addHostApartments(user, newItem);
+		Integer uniqID = apartmentsDAO.getValues().size() + 1;
+		allUsersDAO.addHostApartments(user, uniqID);
 		
 		
 		

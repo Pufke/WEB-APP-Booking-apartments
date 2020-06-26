@@ -29,12 +29,14 @@ Vue.component("host-ActiveApartments", {
             hideAddDialog: true,
             newItemName: "",
             newApartment: {
-                amentities: null,
-                comments: null,
-                datesForHosting: null,
-                host: null,
-                identificator: 10,
-                images: null,
+                apartmentAmentitiesIDs: [],
+                apartmentCommentsIDs: [],
+                availableDates: [],
+                datesForHosting: [],
+                hostID: 1,
+                id: 98989,
+                imagesPath: "empty",
+                listOfReservationsIDs: [],
                 location: {
                     address: {
                         number: null,
@@ -45,11 +47,10 @@ Vue.component("host-ActiveApartments", {
                     latitude: null,
                     longitude: null
                 },
+                logicalDeleted: 0,
                 numberOfGuests: null,
                 numberOfRooms: null,
                 pricePerNight: null,
-                reservedApartmentList: [],
-                reservedStatus: "Nije rezervisano",
                 status: "INACTIVE",
                 timeForCheckIn: null,
                 timeForCheckOut: null,
@@ -59,7 +60,6 @@ Vue.component("host-ActiveApartments", {
 
         }
     },
-
     template: `
     <div id = "styleForApartmentsView">
 
@@ -140,9 +140,9 @@ Vue.component("host-ActiveApartments", {
                     <!-- End of address -->
 
                     <!-- List of amenities in apartments -->
-                    <select v-model="selected" multiple>
-                        <option v-for="option in amenities" v-bind:value="option.name">
-                            {{ option.name }}
+                    <select v-model="newApartment.apartmentAmentitiesIDs" multiple>
+                        <option v-for="option in amenities" v-bind:value="option.id">
+                            {{ option.itemName }}
                         </option>
                     </select>
                     <!-- End list of amenities in apartments -->
@@ -160,14 +160,24 @@ Vue.component("host-ActiveApartments", {
     `,
 
     /*
-            location:{
-                address:{
-                    number:null,
-                    populatedPlace:null,
-                    street:null,
+    apartmentAmentitiesIDs:Array[2]
+    apartmentCommentsIDs:Array[2]
+    availableDates:Array[2]
+    datesForHosting:Array[2]
+    hostID:1
+    id:1
+    imagesPath:"empty"
+    listOfReservationsIDs:Array[2]
+    location:Object
+    logicalDeleted:0
+    numberOfGuests:5
+    numberOfRooms:11
+    pricePerNight:100
+    status:"ACTIVE"
+    timeForCheckIn:40687000
+    timeForCheckOut:40687000
+    typeOfApartment:"STANDARD"
     */
-    //tip apartmana, broj soba, broj gostiju, lokaciju, itd) 
-    //Napomena: Postoji pregled svih dostupnih sadržaja apartmana koji se mogu dodeliti apartmanu
     methods: {
         changeApartment: function (apartment) {
             this.hideDialog = !this.hideDialog;
@@ -179,11 +189,11 @@ Vue.component("host-ActiveApartments", {
 
             // Check is empty field input
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut 
+            if (!this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut
                 || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests) {
                 toastr["warning"]("All field is required", "Watch out !");
                 return;
-           
+
             }
 
             axios
@@ -214,10 +224,10 @@ Vue.component("host-ActiveApartments", {
             // warning/error if some fields are null or empty
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
             if (!this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut ||
-                 !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms || 
-                 !this.newApartment.numberOfGuests || !this.newApartment.location.address.populatedPlace ||
-                 !this.newApartment.location.address.street || !this.newApartment.location.address.number
-                 ) {
+                !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms ||
+                !this.newApartment.numberOfGuests || !this.newApartment.location.address.populatedPlace ||
+                !this.newApartment.location.address.street || !this.newApartment.location.address.number
+            ) {
 
                 toastr["warning"]("All field is required", "Watch out !");
                 return;
@@ -258,6 +268,10 @@ Vue.component("host-ActiveApartments", {
                 });
                 return this.amenities;
             });
+
+        axios
+            .get('rest/edit/profileUser')
+            .then(response => this.newApartment.hostID = response.data.id)
     }
 
 

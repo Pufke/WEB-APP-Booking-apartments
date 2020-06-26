@@ -144,9 +144,9 @@ public class ApartmentsDAO {
 	public void addNewApartments(ApartmentDTOJSON newItem) {
 
 		Apartment apartment = new Apartment();
-		apartment.setID(newItem.addedApartment.getID());
+		apartment.setID( apartments.size() + 1);
 
-		apartment.setStatus(newItem.addedApartment.getStatus());
+		apartment.setStatus("INACTIVE");
 		apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
 		apartment.setPricePerNight(newItem.addedApartment.getPricePerNight());
 		apartment.setTimeForCheckIn(newItem.addedApartment.getTimeForCheckIn());
@@ -154,7 +154,8 @@ public class ApartmentsDAO {
 		apartment.setNumberOfRooms(newItem.addedApartment.getNumberOfRooms());
 		apartment.setNumberOfGuests(newItem.addedApartment.getNumberOfGuests());
 		apartment.setLocation(newItem.addedApartment.getLocation());
-
+		apartment.setApartmentAmentitiesIDs(newItem.addedApartment.getApartmentAmentitiesIDs());
+		
 		apartments.add(apartment);
 		saveApartmentsJSON();
 	}
@@ -164,7 +165,10 @@ public class ApartmentsDAO {
 		List<Apartment> hostApartments = new ArrayList<Apartment>();
 
 		for (int id : user.getApartmentsForRentingHostIDs()) {
-			hostApartments.add(getApartmentById(id));
+			if(getApartmentById(id) != null) {
+				hostApartments.add(getApartmentById(id));
+			}
+			
 		}
 
 		return hostApartments;
