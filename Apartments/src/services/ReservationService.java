@@ -98,10 +98,13 @@ public class ReservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response makeReservations(ReservationDTO reservationData) {
+		//Prilikom kreiranja rezervacije kreirati rezervaciju dodati u Apartman IdRezervacije 
 		ReservationDAO reservationsCTX = getReservations();
 		UsersDAO usersCTX = getUsers();
 		ApartmentsDAO apartmentsCTX = getApartments();
-
+		
+		System.out.println("Kreiranje rezervacijE");
+		
 		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
 		Collection<User> users = usersCTX.getValues();
 		ArrayList<Reservation> reservations = reservationsCTX.getValues();
@@ -117,31 +120,35 @@ public class ReservationService {
 			}
 		}
 		for (User u : users) {
-			if (u.getUserName().equals(reservationData.guestUserName)) {
+			if (u.getID() ==  reservationData.guestID) {
 				user = u;
 				break;
 			}
 		}
-
-		Integer uniqueID = 191919;
+		
+		//TODO URADI IZRACUNAVANJE TOTAL PRICE NA OSNOVU BROJA NOCI I CENE APARTMANA
+		double totalPrice = 1200;
+		Integer ReservationUniqueID = reservations.size() + 1;
+		
+		Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator , reservationData.dateOfReservation, reservationData.numberOfNights, totalPrice, reservationData.messageForHost, reservationData.guestID, reservationData.statusOfReservation);  
+		
+		
 		ArrayList<Integer> reservedApartmentList = apartment.getListOfReservationsIDs();
-		reservedApartmentList.add(uniqueID);
+		reservedApartmentList.add(ReservationUniqueID);
+		apartment.setListOfReservationsIDs(reservedApartmentList);
+		
+		
+	
+		for (Reservation r : reservations) {
+			if (r.getGuestID() == newReservation.getGuestID()
+					&& r.getIdOfReservedApartment() == newReservation.getIdOfReservedApartment()) {
 
-//		apartment.setListOfReservationsIDs(reservedApartmentList);
-//		Reservation reservation = new Reservation(uniqueID,0 , apartment.getID(),
-//				reservationData.dateOfReservation, reservationData.numberOfNights, 1600.0,
-//				reservationData.messageForHost, user.getID(), reservationData.statusOfReservation);
+				return Response.status(Response.Status.EXPECTATION_FAILED).entity("Ovaj apartman je vec rezervisan")
+						.build();
 
-//		for (Reservation r : reservations) {
-//			if (r.getGuest().getUserName().equals(reservation.getGuest().getUserName())
-//					&& r.getReservedApartment().getID() == reservation.getReservedApartment().getID()) {
-//
-//				return Response.status(Response.Status.EXPECTATION_FAILED).entity("Ovaj apartman je vec rezervisan")
-//						.build();
-//
-//			}
-//		}
-//		reservations.add(reservation);
+			}
+		}
+		reservations.add(newReservation);
 
 		reservationsCTX.saveReservationsJSON();
 		apartmentsCTX.saveApartmentsJSON();

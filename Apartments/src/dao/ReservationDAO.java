@@ -13,7 +13,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.AmenitiesItem;
 import beans.Reservation;
+import dto.AmenitiesItemAddDTO;
+import dto.ReservationDTO;
 
 public class ReservationDAO {
 	private ArrayList<Reservation> reservations;
@@ -75,6 +78,15 @@ public class ReservationDAO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Boolean addItem(Reservation newReservation) {
+
+		reservations.add(newReservation);
+		saveReservationsJSON();
+
+		return true;
+
 	}
 
 	public ArrayList<Reservation> getValues() {

@@ -127,13 +127,15 @@ Vue.component("guest-apartments", {
             });
         },
         makeReseervation2: function (identificator) {
+        	var today = new Date();
+        
             axios
                 .post('rest/reservation/makeReservations', {
                     "apartmentIdentificator": identificator,
-                    "dateOfReservation": "22.05.2020",
-                    "numberOfNights": "3",
+                    "dateOfReservation": today.getDate(),
+                    "numberOfNights": 3,
                     "messageForHost": "Pooz za HOSTA kiss cmok",
-                    "guestUserName": this.user.userName,
+                    "guestID": this.user.id,
                     "statusOfReservation": "CEKANJE NA REZERVACIJU",
                 })
                 .then(response => {
