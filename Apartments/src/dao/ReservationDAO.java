@@ -88,7 +88,29 @@ public class ReservationDAO {
 		return true;
 
 	}
+	
+	public void acceptReservation(Reservation reservation) {
 
+		for (Reservation currReservation : reservations) {
+			if(currReservation.getID().equals(reservation.getID())) {
+				currReservation.setStatusOfReservation("PRIHVACENA");
+			}
+		}
+		saveReservationsJSON();
+		
+	}
+
+	public void declineReservation(Reservation reservation) {
+
+		for (Reservation currReservation : reservations) {
+			if(currReservation.getID().equals(reservation.getID())) {
+				currReservation.setStatusOfReservation("ODBIJENA");
+			}
+		}
+		saveReservationsJSON();
+		
+	}
+	
 	public ArrayList<Reservation> getValues() {
 		return reservations;
 	}
@@ -114,4 +136,6 @@ public class ReservationDAO {
 		}
 
 	}
+
+	
 }

@@ -25,6 +25,7 @@ import dao.UsersDAO;
 import dto.CommentDTO;
 import dto.DeleteReservationDTO;
 import dto.ReservationDTO;
+import dto.ReservationDTOJSON;
 
 @Path("/reservation")
 public class ReservationService {
@@ -34,8 +35,6 @@ public class ReservationService {
 	@Context
 	ServletContext ctx;
 
-	
-	
 	@GET
 	@Path("/getReservations")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -45,17 +44,54 @@ public class ReservationService {
 	}
 
 	@POST
+	@Path("/acceptReservation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> acceptReservation(ReservationDTOJSON param){
+		
+		ReservationDAO reservationsDAO = getReservations();
+		reservationsDAO.acceptReservation(param.reservation);
+		
+		UsersDAO usersDAO = getUsers();
+		// With this, we get user who is logged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+		return usersDAO.getReservationsOfHost(user, reservationsDAO.getValues());
+	}
+
+	@POST
+	@Path("/declineReservation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> declineReservation(ReservationDTOJSON param){
+		
+		ReservationDAO reservationsDAO = getReservations();
+		reservationsDAO.declineReservation(param.reservation);
+		
+		UsersDAO usersDAO = getUsers();
+		// With this, we get user who is logged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+		return usersDAO.getReservationsOfHost(user, reservationsDAO.getValues());
+	}
+	
+	//declineReservation
+	
+	@POST
 	@Path("/makeReservations")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response makeReservations(ReservationDTO reservationData) {
-		//Prilikom kreiranja rezervacije kreirati rezervaciju dodati u Apartman IdRezervacije 
+		// Prilikom kreiranja rezervacije kreirati rezervaciju dodati u Apartman
+		// IdRezervacije
 		ReservationDAO reservationsCTX = getReservations();
 		UsersDAO usersCTX = getUsers();
 		ApartmentsDAO apartmentsCTX = getApartments();
-		
+
 		System.out.println("Kreiranje rezervacijE");
-		
+
 		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
 		Collection<User> users = usersCTX.getValues();
 		ArrayList<Reservation> reservations = reservationsCTX.getValues();
@@ -71,26 +107,26 @@ public class ReservationService {
 			}
 		}
 		for (User u : users) {
-			if (u.getID() ==  reservationData.guestID) {
+			if (u.getID() == reservationData.guestID) {
 				user = u;
 				break;
 			}
 		}
-		
-		//TODO URADI IZRACUNAVANJE TOTAL PRICE NA OSNOVU BROJA NOCI I CENE APARTMANA
+
+		// TODO URADI IZRACUNAVANJE TOTAL PRICE NA OSNOVU BROJA NOCI I CENE APARTMANA
 		double totalPrice = 1200;
 		Integer ReservationUniqueID = reservations.size() + 1;
-		
-		Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator , reservationData.dateOfReservation, reservationData.numberOfNights, totalPrice, reservationData.messageForHost, reservationData.guestID, reservationData.statusOfReservation);  
-		
-	System.out.println("Od datuma " + reservationData.fromDate + " do datuma " + reservationData.toDate);
-		
+
+		Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator,
+				reservationData.dateOfReservation, reservationData.numberOfNights, totalPrice,
+				reservationData.messageForHost, reservationData.guestID, reservationData.statusOfReservation);
+
+		System.out.println("Od datuma " + reservationData.fromDate + " do datuma " + reservationData.toDate);
+
 		ArrayList<Integer> reservedApartmentList = apartment.getListOfReservationsIDs();
 		reservedApartmentList.add(ReservationUniqueID);
 		apartment.setListOfReservationsIDs(reservedApartmentList);
-		
-		
-	
+
 		for (Reservation r : reservations) {
 			if (r.getGuestID() == newReservation.getGuestID()
 					&& r.getIdOfReservedApartment() == newReservation.getIdOfReservedApartment()) {
@@ -191,7 +227,7 @@ public class ReservationService {
 		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
 
 	}
-	
+
 	private ReservationDAO getReservations() {
 		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
 
