@@ -58,6 +58,7 @@ Vue.component("host-ActiveApartments", {
             },
             filterDataForApartment: {
                 typeOfApartment: "",
+                selectedAmenities: [],
                 status: ""
             },
             selected: [] // ovo sam uzeo samo privremeno dok ne sredimo u apartmanu listu sadrzaja koju on ima
@@ -92,6 +93,17 @@ Vue.component("host-ActiveApartments", {
                 <option>INACTIVE</option>
             </select>
 
+            <!-- List of all amenities in apartments -->
+            <select v-model="filterDataForApartment.selectedAmenities" multiple @change="onchangeAmenities()">
+
+                <option value=""> Without filter for amenities </option>
+                <option v-for="option in amenities" v-bind:value="option.id">
+                    {{ option.itemName }}
+                </option>
+
+            </select>
+            <!-- End list of all amenities in apartments -->
+
         </form>
 
         <!-- End of search & filter & sort & adding new apartment -->
@@ -106,6 +118,10 @@ Vue.component("host-ActiveApartments", {
 
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
+
+                <h2 v-for="amenitiesID in apartment.apartmentAmentitiesIDs">
+                    Amenities ID: {{ amenitiesID }}
+                </h2>
 
                 <button type="button" @click="changeApartment(apartment)"> Change </button>
                 <button type="button" @click="deleteApartment(apartment)"> Delete </button>
@@ -132,8 +148,6 @@ Vue.component("host-ActiveApartments", {
             <div class="modal-contents">
         
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
-                <!-- <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt=""> -->
-
 
                 <form method='post'>
 
@@ -164,8 +178,6 @@ Vue.component("host-ActiveApartments", {
             <div class="modal-contents">
         
                 <div class="close" @click="hideAddDialog = !hideAddDialog">+</div>
-                <!-- <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt=""> -->
-
 
                 <form method='post'>
                     <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
@@ -221,6 +233,35 @@ Vue.component("host-ActiveApartments", {
                 this.apartments = tempApartments;
             }
         },
+        onchangeAmenities: function () {
+            if (this.filterDataForApartment.selectedAmenities == "") {
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                    .get('rest/apartments/getMyApartments')
+                    .then(response => {
+                        this.apartments=[];
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE")
+                                this.apartments.push(el);
+                        });
+                        return this.apartments;
+                    });
+
+            } else {
+                /*
+                    Put apartment in list of apartments.
+                    If amenities of selected amenities in filter is subset of amenities of this apartment(which i am adding).
+
+                    ref: https://stackoverflow.com/questions/38811421/how-to-check-if-an-array-is-a-subset-of-another-array-in-javascript/48211214#48211214
+                    author: vaxi
+                */
+                let tempApartments = (this.apartments).filter(apartment => this.filterDataForApartment.selectedAmenities.every(val => apartment.apartmentAmentitiesIDs.includes(val)));
+                this.apartments = tempApartments;
+
+            }
+        },
         onchangeStatus: function () {
             if (this.filterDataForApartment.status == "") {
                 // Reset to all apartments
@@ -229,6 +270,7 @@ Vue.component("host-ActiveApartments", {
                 axios
                     .get('rest/apartments/getMyApartments')
                     .then(response => {
+                        this.apartments=[];
                         response.data.forEach(el => {
                             if (el.status == "ACTIVE")
                                 this.apartments.push(el);
@@ -406,6 +448,7 @@ Vue.component("host-ActiveApartments", {
         axios
             .get('rest/apartments/getMyApartments')
             .then(response => {
+                this.apartments=[];
                 response.data.forEach(el => {
                     if (el.status == "ACTIVE")
                         this.apartments.push(el);
@@ -416,6 +459,7 @@ Vue.component("host-ActiveApartments", {
         axios
             .get('rest/amenities/getAmenities')
             .then(response => {
+                this.amenities=[];
                 response.data.forEach(el => {
                     this.amenities.push(el);
                 });
