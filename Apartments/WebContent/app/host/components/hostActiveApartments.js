@@ -56,6 +56,10 @@ Vue.component("host-ActiveApartments", {
                 timeForCheckOut: null,
                 typeOfApartment: null,
             },
+            filterDataForApartment: {
+                typeOfApartment: "",
+                status: ""
+            },
             selected: [] // ovo sam uzeo samo privremeno dok ne sredimo u apartmanu listu sadrzaja koju on ima
 
         }
@@ -72,6 +76,21 @@ Vue.component("host-ActiveApartments", {
 
             <br>
             <button type="button" @click="addItem()"> Add new item </button>
+            <br><br>
+
+            <!-- If user don't want use filter, check just option: Without filter for type -->
+            <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
+                <option value="">Without filter for type </option>
+                <option>ROOM</option>
+                <option>STANDARD</option>
+            </select>
+
+            <!-- If user don't want use filter, check just option: Without filter for status -->
+            <select v-model="filterDataForApartment.status" @change="onchangeStatus()">
+                <option value="">Without filter for status </option>
+                <option>ACTIVE</option>
+                <option>INACTIVE</option>
+            </select>
 
         </form>
 
@@ -182,6 +201,46 @@ Vue.component("host-ActiveApartments", {
     
     `,
     methods: {
+        onchangeTypeOfApartment: function () {
+            if (this.filterDataForApartment.typeOfApartment == "") {
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                    .get('rest/apartments/getMyApartments')
+                    .then(response => {
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE")
+                                this.apartments.push(el);
+                        });
+                        return this.apartments;
+                    });
+
+            } else {
+                let tempApartments = (this.apartments).filter(apartment => apartment.typeOfApartment == this.filterDataForApartment.typeOfApartment);
+                this.apartments = tempApartments;
+            }
+        },
+        onchangeStatus: function () {
+            if (this.filterDataForApartment.status == "") {
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                    .get('rest/apartments/getMyApartments')
+                    .then(response => {
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE")
+                                this.apartments.push(el);
+                        });
+                        return this.apartments;
+                    });
+
+            } else {
+                let tempApartments = (this.apartments).filter(apartment => apartment.status == this.filterDataForApartment.status);
+                this.apartments = tempApartments;
+            }
+        },
         changeApartment: function (apartment) {
             this.hideDialog = !this.hideDialog;
 
@@ -267,47 +326,47 @@ Vue.component("host-ActiveApartments", {
                     return this.apartments;
                 });
         },
-        sortAsc: function(){
+        sortAsc: function () {
             let tempApartments = [];
 
             (this.apartments).forEach(element => tempApartments.push(element));
-            tempApartments = this.multisort(tempApartments, ['pricePerNight', 'pricePerNight'], ['ASC','DESC']);
+            tempApartments = this.multisort(tempApartments, ['pricePerNight', 'pricePerNight'], ['ASC', 'DESC']);
 
             this.apartments = tempApartments;
 
         },
-        sortDesc: function(){
+        sortDesc: function () {
             let tempApartments = [];
-            
+
             (this.apartments).forEach(element => tempApartments.push(element));
-            tempApartments = this.multisort(tempApartments, ['pricePerNight', 'pricePerNight'], ['DESC','ASC']);
+            tempApartments = this.multisort(tempApartments, ['pricePerNight', 'pricePerNight'], ['DESC', 'ASC']);
 
             this.apartments = tempApartments;
         },
-        multisort: function(arr, columns, order_by) {
-            if(typeof columns == 'undefined') {
+        multisort: function (arr, columns, order_by) {
+            if (typeof columns == 'undefined') {
                 columns = []
-                for(x=0;x<arr[0].length;x++) {
+                for (x = 0; x < arr[0].length; x++) {
                     columns.push(x);
                 }
             }
 
-            if(typeof order_by == 'undefined') {
+            if (typeof order_by == 'undefined') {
                 order_by = []
-                for(x=0;x<arr[0].length;x++) {
+                for (x = 0; x < arr[0].length; x++) {
                     order_by.push('ASC');
                 }
             }
 
-            function multisort_recursive(a,b,columns,order_by,index) {  
+            function multisort_recursive(a, b, columns, order_by, index) {
                 var direction = order_by[index] == 'DESC' ? 1 : 0;
 
-                var is_numeric = !isNaN(a[columns[index]]-b[columns[index]]);
+                var is_numeric = !isNaN(a[columns[index]] - b[columns[index]]);
 
                 var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
                 var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
 
-                if(!is_numeric) {
+                if (!is_numeric) {
                     /*
                     *   If we have string, then convert it to
                     *   array of charachter with .split("")
@@ -317,29 +376,29 @@ Vue.component("host-ActiveApartments", {
                     *   word.
                     *    author: vaxi
                     */
-                    let sum_x=0;
-                    let sum_y=0;
-                    
+                    let sum_x = 0;
+                    let sum_y = 0;
+
                     x.split("").forEach(element => sum_x += element.charCodeAt())
                     y.split("").forEach(element => sum_y += element.charCodeAt())
 
-                    x= sum_x;
-                    y=sum_y;
+                    x = sum_x;
+                    y = sum_y;
                 }
 
-                if(x < y) {
-                        return direction == 0 ? -1 : 1;
+                if (x < y) {
+                    return direction == 0 ? -1 : 1;
                 }
 
-                if(x == y)  {
-                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
+                if (x == y) {
+                    return columns.length - 1 > index ? multisort_recursive(a, b, columns, order_by, index + 1) : 0;
                 }
 
                 return direction == 0 ? 1 : -1;
             }
 
-            return arr.sort(function (a,b) {
-                return multisort_recursive(a,b,columns,order_by,0);
+            return arr.sort(function (a, b) {
+                return multisort_recursive(a, b, columns, order_by, 0);
             });
         },
     },
