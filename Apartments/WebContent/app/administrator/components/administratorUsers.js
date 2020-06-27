@@ -1,8 +1,8 @@
-Vue.component("administrator-users",{
-    data(){
-        return{
+Vue.component("administrator-users", {
+    data() {
+        return {
             users: {},
-            searchData:{
+            searchData: {
                 userName: "",
                 password: "",
                 name: "",
@@ -53,22 +53,22 @@ Vue.component("administrator-users",{
     </div>
     `,
     methods: {
-        searchParam: function(event){
+        searchParam: function (event) {
             event.preventDefault();
-            
+
             axios
-            .post('rest/users/getSearchedUsers',{
-                "username": '' + this.searchData.userName,
-                "password": '' + this.searchData.password,
-                "name": '' + this.searchData.name,
-                "surname": '' + this.searchData.surname,
-                "role": '' + this.searchData.role
-            })
-            .then(response =>{
-                this.users = response.data;
-            })
+                .post('rest/users/getSearchedUsers', {
+                    "username": '' + this.searchData.userName,
+                    "password": '' + this.searchData.password,
+                    "name": '' + this.searchData.name,
+                    "surname": '' + this.searchData.surname,
+                    "role": '' + this.searchData.role
+                })
+                .then(response => {
+                    this.users = response.data;
+                })
         },
-        cancelSearch: function(){
+        cancelSearch: function () {
             this.searchData.userName = "";
             this.searchData.name = "";
             this.searchData.surname = "";
@@ -79,6 +79,7 @@ Vue.component("administrator-users",{
 
     },
     mounted() {
-        axios.get('rest/users/getJustUsers').then(response => (this.users = response.data));
+        axios.get('rest/users/getJustUsers')
+            .then(response => (this.users = response.data));
     },
 });

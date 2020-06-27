@@ -28,7 +28,7 @@ public class AmenitiesDAO {
 		this.amenities = new ArrayList<AmenitiesItem>();
 		
 		// UNCOMMENT IF WANT TO PUT DUMMY DATA IN FILE 
-		addMockupData();
+		// addMockupData();
 	}
 
 	public void readAmenities() {

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Reservation;
 import beans.User;
 
 import dto.ApartmentDTOJSON;
@@ -87,6 +88,31 @@ public class UsersDAO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Collection<User> getGuestsOfHost(User user, ArrayList<Reservation> allReservations) {
+		
+		
+		// Get ID-s of guest which have reservation on Host apartments
+		ArrayList<Integer> guestsID = new ArrayList<Integer>();
+		for (Integer idOfApartment : user.getApartmentsForRentingHostIDs()) {
+			for (Reservation currReservation : allReservations) {
+				if(idOfApartment.equals(currReservation.getIdOfReservedApartment())) {
+					guestsID.add(currReservation.getGuestID());
+					break;
+				}
+			}
+		}
+		
+		// Get real object of those guests (by id ofc)
+		ArrayList<User> guestsOfHost = new ArrayList<User>();
+		for (Integer userID : guestsID) {
+			if(findUserById(userID) != null) {
+				guestsOfHost.add(findUserById(userID));
+			}
+		}
+		
+		return guestsOfHost;
 	}
 
 	public void addUser(User user) {
@@ -215,6 +241,8 @@ public class UsersDAO {
 		}
 
 	}
+
+	
 
 	
 

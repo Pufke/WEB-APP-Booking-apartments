@@ -29,7 +29,7 @@ public class CommentsDAO {
 		this.comments = new ArrayList<Comment>();
 
 		// UNCOMMENT IF WANT TO PUT DUMMY DATA IN FILE
-		addMockupData();
+		// addMockupData();
 	}
 
 	public void readComments() {
