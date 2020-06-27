@@ -124,7 +124,6 @@ public class UsersDAO {
 			for (Reservation currReservation : allReservations) {
 				if(idOfApartment.equals(currReservation.getIdOfReservedApartment())) {
 					reservationsOfHost.add(currReservation);
-					break;
 				}
 			}
 		}

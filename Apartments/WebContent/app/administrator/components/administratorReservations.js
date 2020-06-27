@@ -14,6 +14,7 @@ Vue.component("administrator-reservations",{
     <div id = "styleForApartmentsView">
         <h1> Guten tag {{ user.userName }}, wie geht's ?</h1>
         
+        <!-- Search & filter & sort -- >
         <form method='post'>
 
             <input type="text" v-model="searchData.usernameOfGuest" placeholder="Username of guest..." >
@@ -36,6 +37,7 @@ Vue.component("administrator-reservations",{
             
 
         </form>
+        <!-- End of search & filter & sort -- >
         <br>
 
 
