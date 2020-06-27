@@ -115,6 +115,23 @@ public class UsersDAO {
 		return guestsOfHost;
 	}
 
+	
+	public Collection<Reservation> getReservationsOfHost(User user, ArrayList<Reservation> allReservations) {
+		
+		ArrayList<Reservation> reservationsOfHost = new ArrayList<Reservation>();
+		
+		for (Integer idOfApartment : user.getApartmentsForRentingHostIDs()) {
+			for (Reservation currReservation : allReservations) {
+				if(idOfApartment.equals(currReservation.getIdOfReservedApartment())) {
+					reservationsOfHost.add(currReservation);
+					break;
+				}
+			}
+		}
+		
+		return reservationsOfHost;
+	}
+	
 	public void addUser(User user) {
 		if (!users.containsValue(user)) {
 			System.out.println("DODAO SAM: " + user.getUserName());
@@ -241,6 +258,8 @@ public class UsersDAO {
 		}
 
 	}
+
+	
 
 	
 

@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Reservation;
 import beans.User;
 import dao.ReservationDAO;
 import dao.UsersDAO;
@@ -147,6 +148,25 @@ public class UserService {
 		return allUsersDAO.getGuestsOfHost(user, reservationDAO.getValues());
 	}
 
+	// getHostReservations
+	
+	@GET
+	@Path("/getReservationsOfHost")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> getReservationsOfHost() {
+		System.out.println("\n\n\t\t get reservations of host");
+
+		// With this, we get user who is logged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+		UsersDAO allUsersDAO = getUsers();
+		
+		ReservationDAO reservationDAO = getReservations();
+		
+		return allUsersDAO.getReservationsOfHost(user, reservationDAO.getValues());
+	}
+	
 	@POST
 	@Path("/getSearchedUsers")
 	@Consumes(MediaType.APPLICATION_JSON)

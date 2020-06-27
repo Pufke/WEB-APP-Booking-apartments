@@ -1,6 +1,5 @@
 package services;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -35,63 +34,14 @@ public class ReservationService {
 	@Context
 	ServletContext ctx;
 
+	
+	
 	@GET
 	@Path("/getReservations")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Reservation> getJustApartments() {
 		System.out.println("CALLED GET JUST RESERVATIONS");
 		return getReservations().getValues();
-	}
-
-	private ReservationDAO getReservations() {
-		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
-
-		if (reservations == null) {
-			reservations = new ReservationDAO();
-			reservations.readReservations();
-			ctx.setAttribute("reservations", reservations);
-		}
-		return reservations;
-	}
-
-	private UsersDAO getUsers() {
-		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
-		if (users == null) {
-			users = new UsersDAO();
-			users.readUsers();
-			ctx.setAttribute("users", users);
-
-		}
-
-		return users;
-	}
-
-	private ApartmentsDAO getApartments() {
-		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
-
-		if (apartments == null) {
-			apartments = new ApartmentsDAO();
-			apartments.readApartments();
-
-			ctx.setAttribute("apartments", apartments);
-		}
-
-		return apartments;
-
-	}
-
-	private CommentsDAO getComments() {
-		CommentsDAO comments = (CommentsDAO) ctx.getAttribute("comments");
-
-		if (comments == null) {
-			comments = new CommentsDAO();
-			comments.readComments();
-
-			ctx.setAttribute("comments", comments);
-		}
-
-		return comments;
-
 	}
 
 	@POST
@@ -239,6 +189,57 @@ public class ReservationService {
 		apartmentsCTX.saveApartmentsJSON();
 		commentsCTX.saveCommentJSON();
 		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+
+	}
+	
+	private ReservationDAO getReservations() {
+		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
+
+		if (reservations == null) {
+			reservations = new ReservationDAO();
+			reservations.readReservations();
+			ctx.setAttribute("reservations", reservations);
+		}
+		return reservations;
+	}
+
+	private UsersDAO getUsers() {
+		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
+		if (users == null) {
+			users = new UsersDAO();
+			users.readUsers();
+			ctx.setAttribute("users", users);
+
+		}
+
+		return users;
+	}
+
+	private ApartmentsDAO getApartments() {
+		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
+
+		if (apartments == null) {
+			apartments = new ApartmentsDAO();
+			apartments.readApartments();
+
+			ctx.setAttribute("apartments", apartments);
+		}
+
+		return apartments;
+
+	}
+
+	private CommentsDAO getComments() {
+		CommentsDAO comments = (CommentsDAO) ctx.getAttribute("comments");
+
+		if (comments == null) {
+			comments = new CommentsDAO();
+			comments.readComments();
+
+			ctx.setAttribute("comments", comments);
+		}
+
+		return comments;
 
 	}
 
