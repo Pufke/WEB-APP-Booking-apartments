@@ -61,6 +61,7 @@ Vue.component("host-ActiveApartments", {
                 selectedAmenities: [],
                 status: ""
             },
+            searchField: '',
             selected: [] // ovo sam uzeo samo privremeno dok ne sredimo u apartmanu listu sadrzaja koju on ima
 
         }
@@ -476,7 +477,8 @@ Vue.component("host-ActiveApartments", {
             .then(response => {
                 this.apartmentForChange = response.data
             });
-    }
+    },
+
 
 
 });

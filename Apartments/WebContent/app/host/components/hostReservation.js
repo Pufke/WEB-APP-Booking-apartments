@@ -2,9 +2,11 @@ Vue.component("host-reservation", {
     data() {
         return {
             reservations: [],
+            users: [],
             filterDataForReservation: {
                 status: ""
-            }
+            },
+            searchField: '',
         }
     },
 
@@ -14,7 +16,7 @@ Vue.component("host-reservation", {
         <!-- Search & filter & sort -->
         <form method='post'>
 
-            <input type="text"  placeholder="Username of guest..." >
+            <input type="text" v-model="searchField"  placeholder="Username of guest which make reservation..." >
             <button type="button" @click="sortAsc">SORT ASC</button>
             <button type="button" @click="sortDesc">SORT DESC</button>
 
@@ -36,8 +38,9 @@ Vue.component("host-reservation", {
 
 
         <ul>
-            <li v-for="reservation in reservations">
+            <li v-for="reservation in filteredReservations">
                 <h2> Guest ID: {{ reservation.guestID }} </h2>
+                <h2> Guest userName: {{ getGuestUserNameById(reservation.guestID) }} </h2>
                 <h2> ID of reserved apartment: {{ reservation.idOfReservedApartment }} </h2>
                 
                 <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
@@ -61,7 +64,7 @@ Vue.component("host-reservation", {
                 <th> Guest ID</th>
                 <th> Total price </th>
             </tr>
-            <tr v-for="reservation in reservations">
+            <tr v-for="reservation in filteredReservations">
                 <td> {{ reservation.idOfReservedApartment }} </td>
                 <td> {{ reservation.statusOfReservation }} </td>
                 <td>  {{ reservation.startDateOfReservation }} </td>
@@ -198,6 +201,12 @@ Vue.component("host-reservation", {
                 return multisort_recursive(a, b, columns, order_by, 0);
             });
         },
+        getGuestUserNameById : function(idOfGuest){
+            let UserObj = this.users.find( user => user.id == idOfGuest);
+            if(UserObj)
+                return UserObj.userName;
+            return '';
+        },
     },
     mounted() {
         axios
@@ -209,5 +218,22 @@ Vue.component("host-reservation", {
                 });
                 return this.reservations;
             });
+
+        axios
+            .get('rest/users/getGuestsOfHost')
+            .then(response => {
+                this.users = [];
+                response.data.forEach(el => {
+                    this.users.push(el);
+                });
+                return this.users;
+            });
+    },
+    computed: {
+        filteredReservations: function () {
+            return this.reservations.filter((reservation) => {
+                return this.getGuestUserNameById(reservation.guestID).match(this.searchField);
+            });
+        }
     },
 });
