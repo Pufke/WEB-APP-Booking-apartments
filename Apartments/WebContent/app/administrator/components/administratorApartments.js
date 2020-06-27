@@ -113,8 +113,6 @@ Vue.component("administrator-apartments", {
             <div class="modal-contents">
         
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
-                <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt="">
-
 
                 <form method='post'>
 

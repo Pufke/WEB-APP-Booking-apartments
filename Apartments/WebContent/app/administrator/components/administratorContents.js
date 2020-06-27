@@ -45,8 +45,6 @@ Vue.component("administrator-contents", {
             <div class="modal-contents">
         
                 <div class="close" @click="hideAddDialog = !hideAddDialog">+</div>
-                <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt="">
-
 
                 <form method='post'>
                     <input type="text" v-model="newItemName" placeholder="Name of amenities...">
@@ -77,8 +75,6 @@ Vue.component("administrator-contents", {
             <div class="modal-contents">
         
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
-                <img src="http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/128/ICON-ICX-icon.png" alt="">
-
 
                 <form method='post'>
                     <input type="text" v-model="itemForChange.name" placeholder="Name of amenities...">
