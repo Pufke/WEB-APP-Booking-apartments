@@ -99,7 +99,9 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> activateApartment(ApartmentDTOJSON newItem) {
 
-		// With this, we get user who is loged in.
+		System.out.println("\n\n\t\t AKTIVACIJA \n\n");
+		
+		// With this, we get user who is logged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
@@ -118,7 +120,7 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> changeMyApartment(ApartmentDTOJSON newItem) {
 
-		// With this, we get user who is loged in.
+		// With this, we get user who is logged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");

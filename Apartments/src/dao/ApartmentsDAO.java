@@ -159,6 +159,7 @@ public class ApartmentsDAO {
 		apartment.setHostID(hostID);
 		apartment.setLogicalDeleted(0);
 		
+		
 		apartment.setStatus("INACTIVE");
 		apartment.setTypeOfApartment(newItem.addedApartment.getTypeOfApartment());
 		apartment.setPricePerNight(newItem.addedApartment.getPricePerNight());
@@ -168,6 +169,13 @@ public class ApartmentsDAO {
 		apartment.setNumberOfGuests(newItem.addedApartment.getNumberOfGuests());
 		apartment.setLocation(newItem.addedApartment.getLocation());
 		apartment.setApartmentAmentitiesIDs(newItem.addedApartment.getApartmentAmentitiesIDs());
+		
+		// init to empty, because null is not allowed for deserialization
+		apartment.setDatesForHosting(new ArrayList<DateRange>());
+		apartment.setAvailableDates(new ArrayList<DateRange>());
+		newItem.addedApartment.getLocation().getAddress().setZipCode("");
+		apartment.setImagesPath("withoutPath");
+		apartment.setListOfReservationsIDs(new ArrayList<Integer>());
 		
 		apartments.add(apartment);
 		saveApartmentsJSON();

@@ -9,6 +9,21 @@ Vue.component("host-InactiveApartments", {
 	`
 	<div id = "styleForApartmentsView">
 
+		<!-- Search & filter & sort & adding new apartment-->
+		<form method='post'>
+
+			<input type="text"  placeholder="Username of guest..." >
+			<button type="button" @click="sortAsc">SORT ASC</button>
+			<button type="button" @click="sortDesc">SORT DESC</button>
+
+			<br>
+			<button type="button" @click="addItem()"> Add new item </button>
+
+		</form>
+
+		<!-- End of search & filter & sort & adding new apartment -->
+		<br>
+
 		<ul>
 			<li v-for="apartment in apartments">
 				<h2> {{ apartment.typeOfApartment }} </h2>
@@ -48,7 +63,82 @@ Vue.component("host-InactiveApartments", {
                     toastr["success"]("You make success activation !!", "Success activation!");
                     return this.apartments;
                 });
-		}
+		},
+        sortAsc: function(){
+            let tempApartments = [];
+
+            (this.apartments).forEach(element => tempApartments.push(element));
+            tempApartments = this.multisort(tempApartments, ['pricePerNight', 'pricePerNight'], ['ASC','DESC']);
+
+            this.apartments = tempApartments;
+
+        },
+        sortDesc: function(){
+            let tempApartments = [];
+            
+            (this.apartments).forEach(element => tempApartments.push(element));
+            tempApartments = this.multisort(tempApartments, ['pricePerNight', 'pricePerNight'], ['DESC','ASC']);
+
+            this.apartments = tempApartments;
+        },
+        multisort: function(arr, columns, order_by) {
+            if(typeof columns == 'undefined') {
+                columns = []
+                for(x=0;x<arr[0].length;x++) {
+                    columns.push(x);
+                }
+            }
+
+            if(typeof order_by == 'undefined') {
+                order_by = []
+                for(x=0;x<arr[0].length;x++) {
+                    order_by.push('ASC');
+                }
+            }
+
+            function multisort_recursive(a,b,columns,order_by,index) {  
+                var direction = order_by[index] == 'DESC' ? 1 : 0;
+
+                var is_numeric = !isNaN(a[columns[index]]-b[columns[index]]);
+
+                var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
+                var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
+
+                if(!is_numeric) {
+                    /*
+                    *   If we have string, then convert it to
+                    *   array of charachter with .split("")
+                    *   then go through every ellement and 
+                    *   get ascii value from it and add that to sum
+                    *   of that word, with that, we have uniq value for every
+                    *   word.
+                    *    author: vaxi
+                    */
+                    let sum_x=0;
+                    let sum_y=0;
+                    
+                    x.split("").forEach(element => sum_x += element.charCodeAt())
+                    y.split("").forEach(element => sum_y += element.charCodeAt())
+
+                    x= sum_x;
+                    y=sum_y;
+                }
+
+                if(x < y) {
+                        return direction == 0 ? -1 : 1;
+                }
+
+                if(x == y)  {
+                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
+                }
+
+                return direction == 0 ? 1 : -1;
+            }
+
+            return arr.sort(function (a,b) {
+                return multisort_recursive(a,b,columns,order_by,0);
+            });
+        },
 	},
 	mounted() {
 		axios
