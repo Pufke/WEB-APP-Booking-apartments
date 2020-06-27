@@ -12,12 +12,10 @@ Vue.component("host-InactiveApartments", {
 		<!-- Search & filter & sort & adding new apartment-->
 		<form method='post'>
 
-			<input type="text"  placeholder="Username of guest..." >
 			<button type="button" @click="sortAsc">SORT ASC</button>
 			<button type="button" @click="sortDesc">SORT DESC</button>
 
 			<br>
-			<button type="button" @click="addItem()"> Add new item </button>
 
 		</form>
 
