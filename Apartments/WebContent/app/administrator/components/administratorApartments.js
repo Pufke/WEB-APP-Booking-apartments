@@ -30,7 +30,7 @@ Vue.component("administrator-apartments", {
                 status: ""
             },
             searchField: {
-                populatedPlace : '',
+                populatedPlace: '',
                 maxGuests: '',
                 minPrice: '',
                 maxPrice: '',
@@ -203,7 +203,7 @@ Vue.component("administrator-apartments", {
 
             // Check is empty field input
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if( !this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests){
+            if (!this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests) {
                 toastr["warning"]("All field is required", "Watch out !");
                 return;
             }
@@ -318,31 +318,31 @@ Vue.component("administrator-apartments", {
                 return multisort_recursive(a, b, columns, order_by, 0);
             });
         },
-        isMatchSearch: function(apartment){
+        isMatchSearch: function (apartment) {
             // Check for location
-            if(!apartment.location.address.populatedPlace.match(this.searchField.populatedPlace))
+            if (!apartment.location.address.populatedPlace.match(this.searchField.populatedPlace))
                 return false;
 
             // Check for max guests
-            if(! (apartment.numberOfGuests).toString().match(this.searchField.maxGuests))
+            if (!(apartment.numberOfGuests).toString().match(this.searchField.maxGuests))
                 return false;
-            
+
             // Check for price
-            if( apartment.pricePerNight < parseInt(this.searchField.minPrice, 10) )
+            if (apartment.pricePerNight < parseInt(this.searchField.minPrice, 10))
                 return false;
-            if( apartment.pricePerNight > parseInt(this.searchField.maxPrice, 10))
+            if (apartment.pricePerNight > parseInt(this.searchField.maxPrice, 10))
                 return false;
 
             // Check for number of rooms
-            if( apartment.numberOfRooms < parseInt(this.searchField.minNumberOfRooms, 10) )
+            if (apartment.numberOfRooms < parseInt(this.searchField.minNumberOfRooms, 10))
                 return false;
-            if( apartment.numberOfRooms > parseInt(this.searchField.maxNumberOfRooms, 10))
+            if (apartment.numberOfRooms > parseInt(this.searchField.maxNumberOfRooms, 10))
                 return false;
 
             // Check for number of guests in room
-            if( apartment.numberOfGuests < parseInt(this.searchField.minNumberOfGuests, 10) )
+            if (apartment.numberOfGuests < parseInt(this.searchField.minNumberOfGuests, 10))
                 return false;
-            if( apartment.numberOfGuests > parseInt(this.searchField.maxNumberOfGuests, 10))
+            if (apartment.numberOfGuests > parseInt(this.searchField.maxNumberOfGuests, 10))
                 return false;
 
 

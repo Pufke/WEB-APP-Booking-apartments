@@ -2,7 +2,11 @@ Vue.component("host-users", {
     data() {
         return {
             users: [],
-            searchField: '',
+            searchField: {
+                role: '',
+                userName: '',
+                gender: '',
+            },
         }
     },
     template: `
@@ -10,7 +14,10 @@ Vue.component("host-users", {
         
     <!-- Table of users -->
 
-        <input type="text" v-model="searchField"  placeholder="Role, username, gender... " >
+        <input type="text" v-model="searchField.role"  placeholder="Guest role..." >
+        <input type="text" v-model="searchField.userName"  placeholder="Guest username..." >
+        <input type="text" v-model="searchField.gender"  placeholder="Guest gender..." >
+        <br><br>
 
         <table border="1">
             <tr bgcolor="lightgrey">
@@ -35,7 +42,20 @@ Vue.component("host-users", {
     </div>
     `,
     methods: {
-        
+        isMatchSearch: function (user) {
+
+            if(!user.role.match(this.searchField.role))
+                return false;
+
+            if(!user.userName.match(this.searchField.userName))
+                return false;
+            
+            if(!user.gender.match(this.searchField.gender))
+                return false;
+
+            // If i survive all if's now i am matched search
+            return true;
+        },
     },
     mounted() {
         axios
@@ -51,7 +71,7 @@ Vue.component("host-users", {
     computed: {
         filteredUsers: function () {
             return this.users.filter((user) => {
-                return ( user.role.match(this.searchField) || user.userName.match(this.searchField) || user.gender.match(this.searchField) );
+                return this.isMatchSearch(user);
             });
         }
     },
