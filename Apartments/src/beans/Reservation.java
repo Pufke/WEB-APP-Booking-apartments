@@ -1,6 +1,6 @@
 package beans;
 
-import java.util.Date;
+import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -10,7 +10,7 @@ public class Reservation {
 	private Integer logicalDeleted; 							// 1 - deleted, 0 - not deleted
 	
 	private Integer idOfReservedApartment;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date startDateOfReservation;					// date of when reservation is started
 	private Integer numberOfNights; 							// num of nights 
 	private Double totalPrice;									// total price for reservation

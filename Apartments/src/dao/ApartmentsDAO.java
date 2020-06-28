@@ -221,12 +221,15 @@ public class ApartmentsDAO {
 		Location location = new Location("41", "42", new Address("Danila Kisa", "33", "Novi Sad", "21000"));
 
 		ArrayList<DateRange> datesForHosting = new ArrayList<DateRange>();
-		datesForHosting.add(new DateRange( new Date(), new Date()));
-		datesForHosting.add(new DateRange(new Date(), new Date()));
+		
+		 datesForHosting.add(new DateRange( new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+		 datesForHosting.add(new DateRange(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+		
 
 		ArrayList<DateRange> availableDates = new ArrayList<DateRange>();
-		availableDates.add(new DateRange(new Date(), new Date()));
-		availableDates.add(new DateRange(new Date(), new Date()));
+		  availableDates.add(new DateRange(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+		  availableDates.add(new DateRange(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+		 
 
 		Integer hostID = 1;
 		ArrayList<Integer> apartmentCommentsIDs = new ArrayList<Integer>();
@@ -237,8 +240,8 @@ public class ApartmentsDAO {
 
 		Double pricePerNight = 100.0;
 
-		Date timeForCheckIn = new Date();
-		Date timeForCheckOut = new Date();
+		Date timeForCheckIn = new Date(System.currentTimeMillis());
+		Date timeForCheckOut = new Date(System.currentTimeMillis());
 		String status = "ACTIVE";
 
 		ArrayList<Integer> apartmentAmentitiesIDs = new ArrayList<Integer>();

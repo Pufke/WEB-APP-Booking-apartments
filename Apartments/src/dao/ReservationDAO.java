@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 
@@ -123,8 +123,8 @@ public class ReservationDAO {
 
 		// Make all reservations
 		List<Reservation> allReservations = new ArrayList<Reservation>();
-		allReservations.add(new Reservation(1,0, 1, new Date(), 3, 100.0, "Brate, da me klima ceka, nemoj se igras sa vatrom", 2, "Kreirana"));
-		allReservations.add(new Reservation(2,0, 2, new Date(), 2, 99.0, "Ako moze samo da me docekaju otvoreni prozori", 2, "Kreirana"));
+		allReservations.add(new Reservation(1,0, 1, new Date(System.currentTimeMillis()), 3, 100.0, "Brate, da me klima ceka, nemoj se igras sa vatrom", 2, "Kreirana"));
+		allReservations.add(new Reservation(2,0, 2, new Date(System.currentTimeMillis()), 2, 99.0, "Ako moze samo da me docekaju otvoreni prozori", 2, "Kreirana"));
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
