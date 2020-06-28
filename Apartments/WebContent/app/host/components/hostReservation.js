@@ -50,6 +50,7 @@ Vue.component("host-reservation", {
 
                 <button v-if="reservation.statusOfReservation == 'Kreirana' " type="button" @click="acceptReservation(reservation)"> Accept </button>
                 <button v-if="reservation.statusOfReservation == 'Kreirana' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="declineReservation(reservation)"> Decline </button>
+                <button v-if="reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="endReservation(reservation)"> End </button>
 
 
             </li>
@@ -102,6 +103,21 @@ Vue.component("host-reservation", {
                         this.reservations.push(el);
                     });
                     toastr["success"]("You make success decline for reservation !!", "Success decline!");
+
+                    return this.reservations;
+                });
+        },
+        endReservation: function (reservationParam) {
+            axios
+                .post('rest/reservation/endReservation', {
+                    reservation: reservationParam
+                })
+                .then(response => {
+                    this.reservations = [];
+                    response.data.forEach(el => {
+                        this.reservations.push(el);
+                    });
+                    toastr["success"]("You make success end for reservation !!", "Success end of Reservation!");
 
                     return this.reservations;
                 });

@@ -77,6 +77,24 @@ public class ReservationService {
 		return usersDAO.getReservationsOfHost(user, reservationsDAO.getValues());
 	}
 	
+	@POST
+	@Path("/endReservation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> endReservation(ReservationDTOJSON param){
+		
+		ReservationDAO reservationsDAO = getReservations();
+		reservationsDAO.endReservation(param.reservation);
+		
+		UsersDAO usersDAO = getUsers();
+		// With this, we get user who is logged in.
+		// We are in UserService method login() tie user for session.
+		// And now we can get him.
+		User user = (User) request.getSession().getAttribute("loginUser");
+		return usersDAO.getReservationsOfHost(user, reservationsDAO.getValues());
+	}
+	
+	
 	//declineReservation
 	
 	@POST

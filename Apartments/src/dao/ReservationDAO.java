@@ -111,6 +111,17 @@ public class ReservationDAO {
 		
 	}
 	
+	public void endReservation(Reservation reservation) {
+
+		for (Reservation currReservation : reservations) {
+			if(currReservation.getID().equals(reservation.getID())) {
+				currReservation.setStatusOfReservation("ZAVRSENA");
+			}
+		}
+		saveReservationsJSON();
+		
+	}
+	
 	public ArrayList<Reservation> getValues() {
 		return reservations;
 	}
