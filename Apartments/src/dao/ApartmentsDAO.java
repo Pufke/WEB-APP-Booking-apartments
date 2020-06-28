@@ -3,10 +3,11 @@ package dao;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -101,6 +102,7 @@ public class ApartmentsDAO {
 	/*
 	 * Izmena podataka prosledjenog apartmana.
 	 */
+
 	public Boolean changeApartment(Apartment updatedApartment) {
 
 		for (Apartment apartment : apartments) {
@@ -108,8 +110,8 @@ public class ApartmentsDAO {
 				System.out.println(
 						"NASAO SAM APARTMAN " + updatedApartment.getID() + " i sad cu mu izmeniti podatke");
 				apartment.setPricePerNight((updatedApartment.getPricePerNight()).doubleValue());
-				apartment.setTimeForCheckIn(new Date());
-				apartment.setTimeForCheckOut(new Date());
+				apartment.setTimeForCheckIn(updatedApartment.getTimeForCheckIn());
+				apartment.setTimeForCheckOut(updatedApartment.getTimeForCheckOut());
 				apartment.setNumberOfRooms(updatedApartment.getNumberOfRooms());
 				apartment.setNumberOfGuests(updatedApartment.getNumberOfGuests());
 				apartment.setApartmentAmentitiesIDs(updatedApartment.getApartmentAmentitiesIDs());

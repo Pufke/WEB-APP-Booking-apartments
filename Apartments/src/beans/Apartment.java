@@ -1,9 +1,14 @@
 package beans;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+
+
+
 
 public class Apartment {
 
@@ -23,9 +28,9 @@ public class Apartment {
 
 	private Double pricePerNight;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
 	private Date timeForCheckIn;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
 	private Date timeForCheckOut;
 	
 	private String status; // ACTIVE or INACTIVE

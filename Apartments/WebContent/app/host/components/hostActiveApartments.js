@@ -150,8 +150,7 @@ Vue.component("host-ActiveApartments", {
         
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
 
-                <form method='post'>
-
+                <form method='post'>     
                     <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
                     <input  type="date" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
                     <input  type="date" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
