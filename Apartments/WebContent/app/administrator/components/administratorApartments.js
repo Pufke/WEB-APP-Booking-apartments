@@ -23,19 +23,21 @@ Vue.component("administrator-apartments", {
     data() {
         return {
             apartments: [],
-            searchData: {
-                location: "",
-                checkIn: "",
-                checkOut: "",
-                price: 0.0,
-                rooms: 0,
-                maxGuests: 0
-            },
             apartmentForChange: {},
             hideDialog: true,
             filterDataForApartment: {
                 typeOfApartment: "",
                 status: ""
+            },
+            searchField: {
+                populatedPlace : '',
+                maxGuests: '',
+                minPrice: '',
+                maxPrice: '',
+                minNumberOfRooms: '',
+                maxNumberOfRooms: '',
+                minNumberOfGuests: '',
+                maxNumberOfGuests: '',
             }
         }
     },
@@ -46,15 +48,29 @@ Vue.component("administrator-apartments", {
 
         <form method='post'>
 
-            <input type="text" v-model="searchData.location" placeholder="Location..." >
+            <input type="text" v-model="searchField.populatedPlace" placeholder="City..." >
+            <input type="text" v-model="searchField.maxGuests" placeholder="Max guests in room..." >
+            <br><br>
+
+            <input type="text" v-model="searchField.minPrice" placeholder="Min price..." >
+            <input type="text" v-model="searchField.maxPrice" placeholder="Max price..." >
+            <br><br>
+
+            <input type="text" v-model="searchField.minNumberOfRooms" placeholder="Min rooms..." >
+            <input type="text" v-model="searchField.maxNumberOfRooms" placeholder="Max rooms..." >
+            <br><br>
+
+            <input type="text" v-model="searchField.minNumberOfGuests" placeholder="Min guests..." >
+            <input type="text" v-model="searchField.maxNumberOfGuests" placeholder="Max guests..." >
+            <br><br>
+
+            <!--
             <input type="date" v-model="searchData.checkIn" placeholder="Check in...">
             <input type="date" v-model="searchData.checkOut" placeholder="Check out...">
             <input type="number" v-model="searchData.price" placeholder="Price per night..." >
             <input type="number" v-model="searchData.rooms" placeholder="Number of rooms ..." >
             <input type="number" v-model="searchData.maxGuests" placeholder="Max guests in room..." >
-
-            <button type="button" @click="searchParam" >Search</button>
-            <button type="button" @click="cancelSearch">Cancel search</button>
+            -->
             <br><br>
 
             <!-- If user don't want use filter, check just option: Without filter for type -->
@@ -80,7 +96,7 @@ Vue.component("administrator-apartments", {
 
 
         <ul>
-            <li v-for="apartment in apartments">
+            <li v-for="apartment in filteredApartments">
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
 
@@ -95,7 +111,7 @@ Vue.component("administrator-apartments", {
         <table border="1">
         <tr bgcolor="lightgrey">
             <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th> </tr>
-            <tr v-for="apartment in apartments">
+            <tr v-for="apartment in filteredApartments">
                 <td> {{ apartment.status }} </td>
                 <td> {{ apartment.typeOfApartment }} </td>
                 <td> {{ apartment.pricePerNight}} </td>
@@ -302,46 +318,36 @@ Vue.component("administrator-apartments", {
                 return multisort_recursive(a, b, columns, order_by, 0);
             });
         },
-        searchParam: function (event) {
-            event.preventDefault();
+        isMatchSearch: function(apartment){
+            // Check for location
+            if(!apartment.location.address.populatedPlace.match(this.searchField.populatedPlace))
+                return false;
 
-            axios
-                .post('rest/search/apartments', {
-                    "location": '' + this.searchData.location,
-                    "checkIn": '' + this.searchData.checkIn,
-                    "checkOut": this.searchData.checkOut,
-                    "price": this.searchData.price,
-                    "rooms": this.searchData.rooms,
-                    "maxGuests": this.searchData.maxGuests
-                })
-                .then(response => {
-                    this.apartments = [];
-                    response.data.forEach(el => {
-                        if (el.status == "ACTIVE")
-                            this.apartments.push(el);
-                    });
-                    return this.apartments;
-                })
-        },
-        cancelSearch: function () {
-            this.searchData.location = "";
-            this.searchData.checkIn = "";
-            this.searchData.checkOut = "";
-            this.searchData.price = 0.0;
-            this.searchData.rooms = 0;
-            this.searchData.maxGuests = 0;
+            // Check for max guests
+            if(! (apartment.numberOfGuests).toString().match(this.searchField.maxGuests))
+                return false;
+            
+            // Check for price
+            if( apartment.pricePerNight < parseInt(this.searchField.minPrice, 10) )
+                return false;
+            if( apartment.pricePerNight > parseInt(this.searchField.maxPrice, 10))
+                return false;
 
-            axios
-                .get('rest/apartments/getApartments')
-                .then(response => {
-                    this.apartments = [];
-                    response.data.forEach(el => {
-                        if (el.status == "ACTIVE")
-                            this.apartments.push(el);
-                    });
-                    return this.apartments;
-                });
+            // Check for number of rooms
+            if( apartment.numberOfRooms < parseInt(this.searchField.minNumberOfRooms, 10) )
+                return false;
+            if( apartment.numberOfRooms > parseInt(this.searchField.maxNumberOfRooms, 10))
+                return false;
 
+            // Check for number of guests in room
+            if( apartment.numberOfGuests < parseInt(this.searchField.minNumberOfGuests, 10) )
+                return false;
+            if( apartment.numberOfGuests > parseInt(this.searchField.maxNumberOfGuests, 10))
+                return false;
+
+
+            // If i survive all if's now i am matched search
+            return true;
         }
     },
     mounted() {
@@ -354,5 +360,12 @@ Vue.component("administrator-apartments", {
                 });
                 return this.apartments;
             });
+    },
+    computed: {
+        filteredApartments: function () {
+            return this.apartments.filter((apartment) => {
+                return this.isMatchSearch(apartment);
+            });
+        }
     },
 })

@@ -35,10 +35,7 @@ Vue.component("host-users", {
     </div>
     `,
     methods: {
-        isMatchSearch: function(user){
-            
-        },
-
+        
     },
     mounted() {
         axios
