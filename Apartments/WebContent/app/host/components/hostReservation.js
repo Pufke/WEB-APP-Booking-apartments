@@ -48,8 +48,8 @@ Vue.component("host-reservation", {
                 <h2> Total price: {{ reservation.totalPrice }} </h2>
                 <h2> Status : {{ reservation.statusOfReservation }} </h2>
 
-                <button v-if="reservation.statusOfReservation == 'KREIRANA' " type="button" @click="acceptReservation(reservation)"> Accept </button>
-                <button v-if="reservation.statusOfReservation == 'KREIRANA' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="declineReservation(reservation)"> Decline </button>
+                <button v-if="reservation.statusOfReservation == 'Kreirana' " type="button" @click="acceptReservation(reservation)"> Accept </button>
+                <button v-if="reservation.statusOfReservation == 'Kreirana' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="declineReservation(reservation)"> Decline </button>
 
 
             </li>
