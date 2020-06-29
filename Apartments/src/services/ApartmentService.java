@@ -113,6 +113,22 @@ public class ApartmentService {
 		return apartmentsDAO.getHostApartments(user);
 
 	}
+	
+	@POST
+	@Path("/adminActivationApartment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> adminActivationApartment(ApartmentDTOJSON newItem) {
+
+		System.out.println("\n\n\t\t AKTIVACIJA OD STRANE ADMINA \n\n");
+
+		// Update that apartment in list of all apartments
+		ApartmentsDAO apartmentsDAO = getApartments();
+		apartmentsDAO.activateApartment(newItem.addedApartment.getID());
+
+		return getApartments().getValues();
+
+	}
 
 	@POST
 	@Path("/changeMyApartment")
@@ -170,7 +186,7 @@ public class ApartmentService {
 		ApartmentsDAO apartmentsDAO = getApartments();
 		apartmentsDAO.deleteApartment(updatedApartment.identificator);
 
-		// With this, we get user who is loged in.
+		// With this, we get user who is logged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
@@ -189,8 +205,10 @@ public class ApartmentService {
 		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + updatedApartment.identificator + "\n\n");
 
 		ApartmentsDAO apartments = getApartments();
-
 		apartments.deleteApartment(updatedApartment.identificator);
+		
+		UsersDAO allUsersDAO = getUsers();
+		allUsersDAO.deleteHostApartment(updatedApartment.hostID, updatedApartment.identificator);
 
 		return getApartments().getValues();
 	}

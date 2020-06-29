@@ -140,6 +140,11 @@ public class ApartmentsDAO {
 		return apartments;
 	}
 
+	/**
+	 * Logical delete of apartment with forwarded ID.
+	 * 
+	 * @param identificator : unique represent of apartment
+	 */
 	public void deleteApartment(Integer identificator) {
 
 		for (Apartment apartment : apartments) {

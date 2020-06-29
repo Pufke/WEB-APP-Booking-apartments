@@ -97,12 +97,13 @@ Vue.component("administrator-apartments", {
 
         <ul>
             <li v-for="apartment in filteredApartments">
-                <h2> {{ apartment.typeOfApartment }} </h2>
-                <h2> {{ apartment.pricePerNight}} </h2>
+                <h2> Type of apartment: {{ apartment.typeOfApartment }} </h2>
+                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
+                <h2> ID of apartment: {{apartment.id }}  </h2>
 
                 <button type="button" @click="changeApartment(apartment)"> Change </button>
-                <button type="button" v-if="apartment.status == 'INACTIVE' "> Activate </button>
-                <button type="button" @click="deleteApartment(apartment)"> Delete </button>
+                <button type="button" v-if="apartment.status == 'INACTIVE' " @click="activateApartment(apartment)"> Activate </button>
+                <button type="button" v-if=" apartment.logicalDeleted == '0' " @click="deleteApartment(apartment)"> Delete </button>
             
             </li>
         </ul>
@@ -151,6 +152,21 @@ Vue.component("administrator-apartments", {
 
     `,
     methods: {
+        activateApartment(apartment){
+			axios
+                .post('rest/apartments/adminActivationApartment', {
+                    addedApartment: apartment
+                })
+                .then(response => {
+                    this.apartments = [];
+                    response.data.forEach(el => {
+                        if (el.status == "ACTIVE" || el.status == "INACTIVE")
+                            this.apartments.push(el);
+                    });
+                    toastr["success"]("You make success activation !!", "Success activation!");
+                    return this.apartments;
+                });
+		},
         onchangeTypeOfApartment: function () {
             if (this.filterDataForApartment.typeOfApartment == "") {
                 // Reset to all apartments
@@ -236,7 +252,7 @@ Vue.component("administrator-apartments", {
             axios
                 .delete('rest/apartments/deleteApartment', {
                     data: {
-                        "hostID": 1,
+                        "hostID": this.apartmentForChange.hostID,
                         "identificator": this.apartmentForChange.id
                     }
 
@@ -354,6 +370,7 @@ Vue.component("administrator-apartments", {
         axios
             .get('rest/apartments/getApartments')
             .then(response => {
+                this.apartments = [];
                 response.data.forEach(el => {
                     if (el.status == "ACTIVE" || el.status == "INACTIVE")
                         this.apartments.push(el);

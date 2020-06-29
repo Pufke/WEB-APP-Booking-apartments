@@ -175,6 +175,12 @@ public class UsersDAO {
 
 	}
 	
+	/**
+	 * Physical delete of apartmentID in host list of apartments.
+	 * 
+	 * @param hostID : ID of host to whom we want to remove apartment
+	 * @param apartmentID : ID of apartment which we want to remove from host
+	 */
 	public void deleteHostApartment(Integer hostID, Integer apartmentID) {
 
 		System.out.println("\n\n hostu sa id-em: " + hostID + " smo obrisali apartman sa id-em: " + apartmentID);
