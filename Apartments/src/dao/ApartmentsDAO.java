@@ -240,8 +240,8 @@ public class ApartmentsDAO {
 
 		Double pricePerNight = 100.0;
 
-		Date timeForCheckIn = new Date(System.currentTimeMillis());
-		Date timeForCheckOut = new Date(System.currentTimeMillis());
+		//Date timeForCheckIn = new Date(System.currentTimeMillis());
+		//Date timeForCheckOut = new Date(System.currentTimeMillis());
 		String status = "ACTIVE";
 
 		ArrayList<Integer> apartmentAmentitiesIDs = new ArrayList<Integer>();
@@ -253,11 +253,11 @@ public class ApartmentsDAO {
 		listOfReservationsIDs.add(2);
 
 		Apartment a1 = new Apartment(ID, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
-				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn,
-				timeForCheckOut, status, apartmentAmentitiesIDs, listOfReservationsIDs);
+				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, "14:00",
+				"10:00", status, apartmentAmentitiesIDs, listOfReservationsIDs);
 		Apartment a2 = new Apartment(2, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
-				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, timeForCheckIn,
-				timeForCheckOut, status, apartmentAmentitiesIDs, listOfReservationsIDs);
+				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, "14:00",
+				"10:00", status, apartmentAmentitiesIDs, listOfReservationsIDs);
 
 		allApartments.add(a1);
 		allApartments.add(a2);

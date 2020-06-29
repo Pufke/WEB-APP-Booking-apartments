@@ -1,14 +1,7 @@
 package beans;
 
-import java.sql.Date;
 import java.util.ArrayList;
-
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-
-
-
 
 public class Apartment {
 
@@ -28,10 +21,10 @@ public class Apartment {
 
 	private Double pricePerNight;
 
-	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
-	private Date timeForCheckIn;
-	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
-	private Date timeForCheckOut;
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
+	private String timeForCheckIn;
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
+	private String timeForCheckOut;
 	
 	private String status; // ACTIVE or INACTIVE
 
@@ -45,7 +38,7 @@ public class Apartment {
 	public Apartment(Integer iD, Integer logicalDeleted, String typeOfApartment, Integer numberOfRooms,
 			Integer numberOfGuests, Location location, ArrayList<DateRange> datesForHosting,
 			ArrayList<DateRange> availableDates, Integer hostID, ArrayList<Integer> apartmentCommentsIDs,
-			String imagesPath, Double pricePerNight, Date timeForCheckIn, Date timeForCheckOut, String status,
+			String imagesPath, Double pricePerNight, String timeForCheckIn, String timeForCheckOut, String status,
 			ArrayList<Integer> apartmentAmentitiesIDs, ArrayList<Integer> listOfReservationsIDs) {
 		super();
 		ID = iD;
@@ -165,19 +158,19 @@ public class Apartment {
 		this.pricePerNight = pricePerNight;
 	}
 
-	public Date getTimeForCheckIn() {
+	public String getTimeForCheckIn() {
 		return timeForCheckIn;
 	}
 
-	public void setTimeForCheckIn(Date timeForCheckIn) {
+	public void setTimeForCheckIn(String timeForCheckIn) {
 		this.timeForCheckIn = timeForCheckIn;
 	}
 
-	public Date getTimeForCheckOut() {
+	public String getTimeForCheckOut() {
 		return timeForCheckOut;
 	}
 
-	public void setTimeForCheckOut(Date timeForCheckOut) {
+	public void setTimeForCheckOut(String timeForCheckOut) {
 		this.timeForCheckOut = timeForCheckOut;
 	}
 

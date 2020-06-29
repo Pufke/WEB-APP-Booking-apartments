@@ -152,8 +152,13 @@ Vue.component("host-ActiveApartments", {
 
                 <form method='post'>     
                     <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
-                    <input  type="date" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
-                    <input  type="date" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
+                    
+                    <label for="checkIn">Check in time:</label>
+                    <input  name="checkIn" type="time" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
+                   
+                    <label for="checkOut">Check out time:</label>
+                    <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
+                    
                     <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
                     <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
                     <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >    
@@ -181,8 +186,13 @@ Vue.component("host-ActiveApartments", {
 
                 <form method='post'>
                     <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
-                    <input  type="date" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
-                    <input  type="date" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
+                   
+                    <label for="checkIn">Check in time:</label>
+                    <input  name="checkIn" type="time" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
+                   
+                    <label for="checkOut">Check out time:</label>
+                    <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
+                   
                     <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
                     <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
                     <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >
