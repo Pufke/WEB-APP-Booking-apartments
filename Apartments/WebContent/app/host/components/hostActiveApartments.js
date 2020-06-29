@@ -117,8 +117,9 @@ Vue.component("host-ActiveApartments", {
         <ul>
             <li v-for="apartment in apartments">
 
-                <h2> {{ apartment.typeOfApartment }} </h2>
-                <h2> {{ apartment.pricePerNight}} </h2>
+                <h2> Type of apartment: {{ apartment.typeOfApartment }} </h2>
+                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
+                <h2> ID of apartment: {{apartment.id }}  </h2>
 
                 <h2 v-for="amenitiesID in apartment.apartmentAmentitiesIDs">
                     Amenities ID: {{ amenitiesID }}
@@ -231,6 +232,7 @@ Vue.component("host-ActiveApartments", {
                 axios
                     .get('rest/apartments/getMyApartments')
                     .then(response => {
+                        this.apartments=[];
                         response.data.forEach(el => {
                             if (el.status == "ACTIVE")
                                 this.apartments.push(el);
