@@ -52,8 +52,8 @@ Vue.component("host-ActiveApartments", {
                 numberOfRooms: null,
                 pricePerNight: null,
                 status: "INACTIVE",
-                timeForCheckIn: null,
-                timeForCheckOut: null,
+                timeForCheckIn: "14:00",
+                timeForCheckOut:  "10:00",
                 typeOfApartment: null,
             },
             filterDataForApartment: {
