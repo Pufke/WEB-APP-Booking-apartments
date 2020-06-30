@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -15,13 +16,16 @@ import javax.ws.rs.core.MediaType;
 
 import beans.Address;
 import beans.Apartment;
+import beans.Comment;
 import beans.Location;
 import beans.User;
 
 import dao.ApartmentsDAO;
+import dao.CommentsDAO;
 import dao.UsersDAO;
 
 import dto.ApartmentChangeDTO;
+import dto.ApartmentCommentJsonDTO;
 import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
 
@@ -64,6 +68,8 @@ public class ApartmentService {
 		return apartmentsDAO.getHostApartments(user);
 	}
 
+	
+	
 	@GET
 	@Path("/getDummyApartments")
 	@Produces(MediaType.APPLICATION_JSON)

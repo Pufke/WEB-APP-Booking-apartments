@@ -2,6 +2,7 @@ Vue.component("guest-apartments", {
     data() {
         return {
             apartments: [],
+            comments: [],
             user: {},
             searchData: {
                 location: "",
@@ -54,9 +55,27 @@ Vue.component("guest-apartments", {
                 <input type="date" v-model="fromDate" id="fromDate" name="fromDate">
                  <label for="toDate">Do datuma:</label>
                 <input type="date" v-model="toDate" id="toDate" name="toDate">
+                
                 <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
+                
+                <button @click="viewComments(apartment.id)">VIRW COMMENTS</button>
+                
+
+                
             </li>
         </ul>
+        
+         <table border="1">
+        	<tr bgcolor="lightgrey">
+        <th> ID </th> <th> Comment </th> <th> Rating for apartment </th><th> Author </th></tr>
+            <tr v-for="comment in comments">
+                <td> {{ comment.id }} </td>
+                <td> {{ comment.txtOfComment }} </td>
+                <td> {{ comment.ratingForApartment }} </td>
+    		    <td> {{ comment.guestAuthorOfCommentID }} </td>
+            </tr>
+        </table>
+        
         
         <br>
         <table border="1">
@@ -79,6 +98,7 @@ Vue.component("guest-apartments", {
         <button type="button" @click="sortAsc">SORT ASC</button>
         <button type="button" @click="sortDesc">SORT ASC</button>
 
+    	
     </div>
     
     `,
@@ -159,6 +179,23 @@ Vue.component("guest-apartments", {
                 .catch(err => {
                     toastr["error"]("Ovaj apartman je vec rezervisan!!", "Fail");
                 })
+        },
+        viewComments: function(apartmentCommentsIDs) {
+        	console.log(apartmentCommentsIDs);
+            axios
+                .post('rest/comments/getCommentsForApartment',{
+                	"apartmentID" : apartmentCommentsIDs
+                })
+                .then(response => {
+                    this.comments = [];
+                    response.data.forEach(el => {
+                        if (el.isAvailableToSee == "1")
+                            this.comments.push(el);
+                    });
+                    return this.comments;
+                });
+
+        	
         },
         searchParam: function (event) {
             event.preventDefault();
