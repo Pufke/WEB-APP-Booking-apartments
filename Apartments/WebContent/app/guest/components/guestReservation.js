@@ -162,10 +162,10 @@ totalPrice:99
                 })
                 .then(response => {
 
-                    toastr["success"]("Success changes!!", "Success!");
+                    toastr["success"]("Success commented!!", "Success!");
                 })
                 .catch(err => {
-                    toastr["error"]("Failed during changes :(", "Fail");
+                    toastr["error"]("Failed during commenting :(", "Fail");
                 })
         },
         deleteReservation: function (identificator, apartmentID) {
