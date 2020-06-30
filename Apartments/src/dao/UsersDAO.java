@@ -90,6 +90,17 @@ public class UsersDAO {
 		}
 	}
 	
+	
+	/**
+	 * Add new user to files.
+	 * @param user : user data from form
+	 */
+	public void addNewUser(UserDTO user) {
+		User newUser = new User(getValues().size() + 1, 0, 0, user.username, user.password, user.name, user.surname, user.role,"", new ArrayList<Integer>(), new ArrayList<Integer>(), new ArrayList<Integer>());		
+		addUser(newUser);
+		saveUsersJSON();
+	}
+	
 	public Collection<User> getGuestsOfHost(User user, ArrayList<Reservation> allReservations) {
 		
 		
@@ -200,6 +211,44 @@ public class UsersDAO {
 		return null;
 	}
 	
+	/**
+	 * Block user with forwarded id [ set property blocked to 1 ]
+	 * @param id : unique represent of user
+	 */
+	public void blockUserById(Integer id) {
+
+		User tempUser = findUserById(id);
+		if( tempUser != null) {
+			tempUser.setBlocked(1);
+		}
+		
+		saveUsersJSON();
+	}
+	
+	/**
+	 * Unblock user with forwarded id [ set property blocked to 0 ]
+	 * @param id : unique represent of user
+	 */
+	public void unblockUserById(Integer id) {
+
+		User tempUser = findUserById(id);
+		if( tempUser != null) {
+			tempUser.setBlocked(0);
+		}
+		
+		saveUsersJSON();
+	}
+	
+	/**
+	 * Check is user blocked by user name
+	 * @param username : user name of user which try login
+	 * @return true: blocked & false: not blocked
+	 */
+	public boolean isBlocked(String username) {
+		
+		return ( getUserByUsername(username).getBlocked() == 1 ) ? true : false;
+	}
+	
 	public LinkedHashMap<String, User> getUsers() {
 		return users;
 	}
@@ -216,7 +265,7 @@ public class UsersDAO {
 		return users.values();
 	}
 
-	public User getUser(String username) {
+	public User getUserByUsername(String username) {
 		if (users.containsKey(username)) {
 			return users.get(username);
 		}
@@ -263,6 +312,12 @@ public class UsersDAO {
 		}
 
 	}
+
+
+
+
+
+
 
 	
 

@@ -105,7 +105,7 @@ Vue.component("app-login",{
                 .catch(err =>{ 
                     console.log("\n\n ------- ERROR -------\n");
                     console.log(err);
-                    toastr["error"]("Password or username are incorrect, try again!", "Fail");
+                    toastr["error"]("Password, username are incorrect, or your account is blocked!", "Fail");
                     console.log("\n\n ----------------------\n\n");
                 })
                 return true;

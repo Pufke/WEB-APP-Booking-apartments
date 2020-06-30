@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -19,6 +18,7 @@ import beans.User;
 import dao.ReservationDAO;
 import dao.UsersDAO;
 import dto.UserDTO;
+import dto.UserDTOJSON;
 import dto.UserLoginDTO;
 
 @Path("/users")
@@ -29,29 +29,32 @@ public class UserService {
 	@Context
 	ServletContext ctx;
 
-	@GET
-	@Path("/test")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String test() {
-		return "Hello Jersey";
-	}
-
 	@POST
 	@Path("/login")
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(UserLoginDTO user) {
-		UsersDAO users = getUsers();
+		UsersDAO allUsersDAO = getUsers();
 
-		User userForLogin = users.getUser(user.username);
+		User userForLogin = allUsersDAO.getUserByUsername(user.username);
 
 		if (userForLogin == null) {
 			System.out.println("Nema takvog usera");
 			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again")
 					.build();
-		} else if (!userForLogin.getPassword().equals(user.password)) {
+		}	
+		
+		
+		
+		if (!userForLogin.getPassword().equals(user.password)) {
 			System.out.println("SIFRE NISU JEDNAKE");
 			return Response.status(Response.Status.BAD_REQUEST).entity("Password or username are incorrect, try again")
+					.build();
+		}
+		
+		if(allUsersDAO.isBlocked(user.username)) {
+			System.out.println("blokiran je");
+			return Response.status(Response.Status.BAD_REQUEST).entity("You are blocked from this application!")
 					.build();
 		}
 
@@ -78,6 +81,32 @@ public class UserService {
 	}
 
 	@POST
+	@Path("/blockUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<User> blockUser(UserDTOJSON param){
+		System.out.println("blokiram usera: " + param.user.getUserName() + " ID: " + param.user.getID());
+		
+		UsersDAO allUsersDAO = getUsers();
+		allUsersDAO.blockUserById(param.user.getID());
+		
+		return getUsers().getValues();
+	}
+	
+	@POST
+	@Path("/unblockUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<User> unblockUser(UserDTOJSON param){
+		System.out.println("blokiram usera: " + param.user.getUserName() + " ID: " + param.user.getID());
+		
+		UsersDAO allUsersDAO = getUsers();
+		allUsersDAO.unblockUserById(param.user.getID());
+		
+		return getUsers().getValues();
+	}
+	
+	@POST
 	@Path("/registration")
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -85,24 +114,16 @@ public class UserService {
 		System.out.println("DODAJEM USERA" + user.username + "\nSa sifrom: " + user.password + "OVDE ZAPRAVO");
 		System.out.println("Imena: " + user.name + "\nPrezimena: " + user.surname);
 
-		UsersDAO users = getUsers();
+		UsersDAO allUsersDAO = getUsers();
 
 		/* If we have already that user, we can't register him */
-		if (users.getUser(user.username) != null) {
+		if (allUsersDAO.getUserByUsername(user.username) != null) {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("We have alredy user with same username. Please try another one").build();
 		}
 
-		User newUser = new User();
-		newUser.setID(1111);
-		newUser.setUserName(user.username);
-		newUser.setPassword(user.password);
-		newUser.setName(user.name);
-		newUser.setSurname(user.surname);
-		newUser.setRole(user.role);
-
-		users.addUser(newUser);
-		users.saveUsersJSON();
+		
+		allUsersDAO.addNewUser(user);
 
 		System.out.println("\n\n\t\t USPESNO \n\n");
 		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/login").build(); // redirect to login
@@ -147,8 +168,6 @@ public class UserService {
 		
 		return allUsersDAO.getGuestsOfHost(user, reservationDAO.getValues());
 	}
-
-	// getHostReservations
 	
 	@GET
 	@Path("/getReservationsOfHost")
@@ -167,30 +186,7 @@ public class UserService {
 		return allUsersDAO.getReservationsOfHost(user, reservationDAO.getValues());
 	}
 	
-	@POST
-	@Path("/getSearchedUsers")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getSearchedUsers(UserDTO userSearchParam) {
-		System.out.println("\n\n\t\t PRETRAGA KORISNIKA \n\n");
-
-		Collection<User> allUsers = getUsers().getValues();
-		ArrayList<User> searchedUsers = new ArrayList<User>();
-
-		for (User user : allUsers) {
-			if ((userSearchParam.username.equals("") ? true : user.getUserName().equals(userSearchParam.username))
-					&& (userSearchParam.surname.equals("") ? true : user.getSurname().equals(userSearchParam.surname))
-					&& (userSearchParam.name.equals("") ? true : user.getName().equals(userSearchParam.name))
-					&& (userSearchParam.role.equals("") ? true : user.getRole().equals(userSearchParam.role))) {
-				System.out.println("DODAJEM");
-				searchedUsers.add(user);
-			} else {
-				System.out.println("NISAM DODAO: " + user.getName() + "\n");
-			}
-		}
-
-		return searchedUsers;
-	}
+	
 
 	private UsersDAO getUsers() {
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");

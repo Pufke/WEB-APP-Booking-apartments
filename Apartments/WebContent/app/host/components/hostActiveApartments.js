@@ -357,7 +357,6 @@ Vue.component("host-ActiveApartments", {
                     return this.apartments;
                 });
 
-            alert("potvrda");
         },
         deleteApartment: function (apartment) {
             axios
