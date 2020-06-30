@@ -44,12 +44,15 @@ Vue.component("guest-reservation", {
                 <h2> Guest ID: {{ reservation.guestID }} </h2>
                 <h2> Message for Host: {{ reservation.messageForHost }} </h2>
                 <h2> Status of reservation: {{ reservation.statusOfReservation }} </h2>
-                <button @click="deleteReservation(reservation.reservationID, reservation.reservedApartment.identificator)">DELETE RESERVATION</button>
+                <button @click="deleteReservation(reservation.id, reservation.idOfReservedApartment)">DELETE RESERVATION</button>
     	       
-    	        <input v-model="komentar" placeholder="Vas komentar o apartmanu">
-    	        <input v-model="ocena" placeholder="Vasa ocena o apartmanu">
+    	        <input  v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" v-model="komentar" placeholder="Vas komentar o apartmanu">
+    	        <input  v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" v-model="ocena" placeholder="Vasa ocena o apartmanu">
     	        
-    	        <button @click="submitKomentar(reservation.reservedApartment.identificator,komentar,ocena)">SUBMIT</button>
+    	       
+          
+            	    <button v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" type="button" @click="submitKomentar(reservation.idOfReservedApartment,komentar,ocena)">SUBMIT</button>
+            
             </li>
         </ul>
         
