@@ -18,6 +18,7 @@ import beans.Comment;
 import beans.User;
 import dao.ApartmentsDAO;
 import dao.CommentsDAO;
+import dto.ApartmentCommentJsonDTO;
 import dto.CommentDTOJSON;
 
 @Path("/comments")
@@ -72,6 +73,27 @@ public class CommentsService {
 		return commentsDAO.getCommentsForHostApartments(user);
 	}
 
+	@POST
+	@Path("/getCommentsForApartment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Comment> getCommentsForApartment(ApartmentCommentJsonDTO apartmentCommentJsonDTO) {
+		ArrayList<Comment> commentsForApartment = new ArrayList<Comment>();
+		
+		CommentsDAO commentsDAO = getComments();
+		ArrayList<Comment> allComments = commentsDAO.getValues();
+		
+		for (Comment c: allComments) {
+			if(c.getCommentForApartmentID() == apartmentCommentJsonDTO.apartmentID) {
+				commentsForApartment.add(c);
+			}
+		}
+	
+		return commentsForApartment;
+	}
+	
+	
+	
 	@POST
 	@Path("/showComment")
 	@Consumes(MediaType.APPLICATION_JSON)

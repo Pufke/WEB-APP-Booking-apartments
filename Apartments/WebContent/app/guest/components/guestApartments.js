@@ -1,7 +1,11 @@
 Vue.component("guest-apartments", {
     data() {
         return {
-            apartments: [],
+        	startDateForReservation:null,
+        	commentForHost:"",
+            numberOfNights:"",
+        	apartments: [],
+            comments: [],
             user: {},
             searchData: {
                 location: "",
@@ -10,9 +14,8 @@ Vue.component("guest-apartments", {
                 price: 0.0,
                 rooms: 0,
                 maxGuests: 0
-            },
-            fromDate:null,
-            toDate:null
+            }
+            
         }
     },
 
@@ -50,13 +53,33 @@ Vue.component("guest-apartments", {
                 <h2> Lokacija: </h2> 
                 <h3> Geografska duzina: {{ apartment.location.longitude }} </h3>
                 <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
-                 <label for="fromDate">Od datuma:</label>
-                <input type="date" v-model="fromDate" id="fromDate" name="fromDate">
-                 <label for="toDate">Do datuma:</label>
-                <input type="date" v-model="toDate" id="toDate" name="toDate">
+                
+                <label for="fromDate">Pocetni datum rezervacije:</label>
+                <input type="date" v-model="startDateForReservation" id="fromDate" name="fromDate">
+                <input type="number" v-model="numberOfNights" placeholder="Number of nights..." >
+                
+                 <input type="text" v-model="commentForHost" placeholder="Comment for host..." >
+                 
                 <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
+                
+                <button @click="viewComments(apartment.id)">VIRW COMMENTS</button>
+                
+
+                
             </li>
         </ul>
+        
+         <table border="1">
+        	<tr bgcolor="lightgrey">
+        <th> ID </th> <th> Comment </th> <th> Rating for apartment </th><th> Author </th></tr>
+            <tr v-for="comment in comments">
+                <td> {{ comment.id }} </td>
+                <td> {{ comment.txtOfComment }} </td>
+                <td> {{ comment.ratingForApartment }} </td>
+    		    <td> {{ comment.guestAuthorOfCommentID }} </td>
+            </tr>
+        </table>
+        
         
         <br>
         <table border="1">
@@ -79,6 +102,7 @@ Vue.component("guest-apartments", {
         <button type="button" @click="sortAsc">SORT ASC</button>
         <button type="button" @click="sortDesc">SORT ASC</button>
 
+    	
     </div>
     
     `,
@@ -133,32 +157,52 @@ Vue.component("guest-apartments", {
             });
         },
         makeReseervation2: function (identificator) {
-        	var today = new Date();
-        	console.log(fromDate[1]._value);
+            if (!this.startDateForReservation || !this.numberOfNights ) {
+                    toastr["warning"]("All field is required", "Watch out !");
+                    return;
+
+                }
             axios
                 .post('rest/reservation/makeReservations', {
                     "apartmentIdentificator": identificator,
-                    "dateOfReservation": today.getDate(),
-                    "numberOfNights": 3,
-                    "messageForHost": "Pooz za HOSTA kiss cmok",
+                    "dateOfReservation": this.startDateForReservation,
+                    "numberOfNights": this.numberOfNights,
+                    "messageForHost": this.commentForHost,
                     "guestID": this.user.id,
-                    "statusOfReservation": "CEKANJE NA REZERVACIJU",
-                    "fromDate" : fromDate[1]._value,
-                    "toDate" : toDate[1]._value
+                    "statusOfReservation": "KREIRANA",
                 })
                 .then(response => {
                     filteredApartments = [];
+                   	this.startDateForReservation = null;
+                    this.numberOfNights = "";
                     this.apartments.forEach(el => {
                         if (el.identificator != identificator) {
                             filteredApartments.push(el);
                         }
                     });
                     this.apartments = filteredApartments;
-                    toastr["success"]("Uspesno rezervisan apartman! Mozete pogledati sve rezervacije u Reservations sekciji ", "Success!");
+                    toastr["success"]("Apartment is reserved! ", "Success!");
                 })
                 .catch(err => {
-                    toastr["error"]("Ovaj apartman je vec rezervisan!!", "Fail");
+                    toastr["error"]("Apartment is not free in that data interval!", "Fail");
                 })
+        },
+        viewComments: function(apartmentCommentsIDs) {
+        	console.log(apartmentCommentsIDs);
+            axios
+                .post('rest/comments/getCommentsForApartment',{
+                	"apartmentID" : apartmentCommentsIDs
+                })
+                .then(response => {
+                    this.comments = [];
+                    response.data.forEach(el => {
+                        if (el.isAvailableToSee == "1")
+                            this.comments.push(el);
+                    });
+                    return this.comments;
+                });
+
+        	
         },
         searchParam: function (event) {
             event.preventDefault();

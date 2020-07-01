@@ -222,7 +222,7 @@ table{
 /* Style for dialog of adding apartments of HOST */
 
 #addDialogForApartments .modal-contents {
-	height: 650px;
+	height: 800px;
 	width: 500px;
 	background-color: white;
 	text-align: center;

@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
@@ -15,13 +16,16 @@ import javax.ws.rs.core.MediaType;
 
 import beans.Address;
 import beans.Apartment;
+import beans.Comment;
 import beans.Location;
 import beans.User;
 
 import dao.ApartmentsDAO;
+import dao.CommentsDAO;
 import dao.UsersDAO;
 
 import dto.ApartmentChangeDTO;
+import dto.ApartmentCommentJsonDTO;
 import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
 
@@ -46,14 +50,13 @@ public class ApartmentService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> addItem(ApartmentDTOJSON newItem) {
-		System.out.println("\n stigao je NOVI APARTMAN sa statusom: " + newItem.addedApartment.getStatus());
-
 		// With this, we get user who is loged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
 		User user = (User) request.getSession().getAttribute("loginUser");
 
 		ApartmentsDAO apartmentsDAO = getApartments();
+		
 		apartmentsDAO.addNewApartments(newItem, user.getID());
 
 		// Add that apartment in list of hosts apartments
@@ -64,6 +67,8 @@ public class ApartmentService {
 		return apartmentsDAO.getHostApartments(user);
 	}
 
+	
+	
 	@GET
 	@Path("/getDummyApartments")
 	@Produces(MediaType.APPLICATION_JSON)
