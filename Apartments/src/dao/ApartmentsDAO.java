@@ -184,7 +184,7 @@ public class ApartmentsDAO {
 		
 		
 	    while (newItem.startDateForReservation.before(newItem.endDateForReservation)) {
-	        processDate(newItem.startDateForReservation);
+	       // processDate(newItem.startDateForReservation);
 	    	dataRangeForHosting.add(newItem.startDateForReservation);
 	        Calendar calendar = Calendar.getInstance();
 	        calendar.setTime(newItem.startDateForReservation);
@@ -207,10 +207,6 @@ public class ApartmentsDAO {
 		saveApartmentsJSON();
 	}
 
-	private void processDate(java.util.Date startDateForReservation) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public Collection<Apartment> getHostApartments(User user) {
 

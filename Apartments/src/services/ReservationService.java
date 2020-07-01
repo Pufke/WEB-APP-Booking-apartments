@@ -16,6 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
+
 import beans.Apartment;
 import beans.Comment;
 import beans.Reservation;
@@ -140,16 +142,18 @@ public class ReservationService {
 
 		
 		for(int i = 0; i < reservationData.numberOfNights; i++) {
-			if(listaSlobodnihDatuma.contains(reservationData.dateOfReservation)) {
-				listaSlobodnihDatuma.remove(reservationData.dateOfReservation);
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(reservationData.dateOfReservation);
-				calendar.add(Calendar.DATE, 1);
-				reservationData.dateOfReservation =  calendar.getTime();
-				
-			}else {
-				return Response.status(Response.Status.EXPECTATION_FAILED).entity("APARTMENT IS NOT FREE").build();
-			}
+			System.out.println("Uporedjivanje");
+				if(isContains(listaSlobodnihDatuma, reservationData.dateOfReservation)){
+					listaSlobodnihDatuma.remove(reservationData.dateOfReservation);
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(reservationData.dateOfReservation);
+					calendar.add(Calendar.DATE, 1);
+					System.out.println("Povecava datum");
+					reservationData.dateOfReservation =  calendar.getTime();
+				}else {
+					return Response.status(Response.Status.EXPECTATION_FAILED).entity("APARTMENT IS NOT FREE").build();
+				}
+			
 		}
 		
 		
@@ -309,5 +313,15 @@ public class ReservationService {
 
 	}
 
+
+	private boolean isContains(ArrayList<Date> listaDatuma, Date datum) {
+		for(Date d : listaDatuma) {
+			//System.out.println("VREME " + d.toString().substring(0, 10) + " " +  datum.toString().substring(0, 10));
+			if(d.toString().substring(0, 10).equals(datum.toString().substring(0, 10))) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 //reservation/makeReservations
