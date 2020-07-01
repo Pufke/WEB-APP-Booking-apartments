@@ -246,7 +246,7 @@ Vue.component("host-ActiveApartments", {
         chooseWithMap: function () {
             //alert("izbor preko mape");
             // Simulate a mouse click:
-            window.location.href = "http://localhost:8080/Apartments/hostDashboard.html#/mapChoose";
+            window.location.href = "http://localhost:8181/Apartments/hostDashboard.html#/mapChoose";
 
         },
         onchangeTypeOfApartment: function () {
@@ -358,19 +358,14 @@ Vue.component("host-ActiveApartments", {
             this.hideAddDialog = !this.hideAddDialog;
         },
         confirmAdding: function () {
-        	console.log("<<<<" , this.startDateForReservation);
-        	console.log(">>>>>", this.endDateForReservation);
             // warning/error if some fields are null or empty
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut || 
-                !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms ||
-                !this.newApartment.numberOfGuests || !this.newApartment.location.address.populatedPlace ||
-                !this.newApartment.location.address.street || !this.newApartment.location.address.number
-            ) {
+        	if (!this.newApartment.id || !this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut
+                    || !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms || !this.newApartment.numberOfGuests) {
+                    toastr["warning"]("All field is required", "Watch out !");
+                    return;
 
-                toastr["warning"]("All field is required", "Watch out !");
-                return;
-            }
+                }
             axios
                 .post('rest/apartments/addNewApartments', {
                     addedApartment: this.newApartment,
