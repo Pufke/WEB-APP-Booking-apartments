@@ -2,6 +2,7 @@ Vue.component("guest-apartments", {
     data() {
         return {
         	startDateForReservation:null,
+        	commentForHost:"",
             numberOfNights:"",
         	apartments: [],
             comments: [],
@@ -55,9 +56,10 @@ Vue.component("guest-apartments", {
                 
                 <label for="fromDate">Pocetni datum rezervacije:</label>
                 <input type="date" v-model="startDateForReservation" id="fromDate" name="fromDate">
-                 <input type="number" v-model="numberOfNights" placeholder="Number of nights..." >
+                <input type="number" v-model="numberOfNights" placeholder="Number of nights..." >
                 
-                
+                 <input type="text" v-model="commentForHost" placeholder="Comment for host..." >
+                 
                 <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
                 
                 <button @click="viewComments(apartment.id)">VIRW COMMENTS</button>
@@ -165,7 +167,7 @@ Vue.component("guest-apartments", {
                     "apartmentIdentificator": identificator,
                     "dateOfReservation": this.startDateForReservation,
                     "numberOfNights": this.numberOfNights,
-                    "messageForHost": "Pooz za HOSTA kiss cmok",
+                    "messageForHost": this.commentForHost,
                     "guestID": this.user.id,
                     "statusOfReservation": "KREIRANA",
                 })
