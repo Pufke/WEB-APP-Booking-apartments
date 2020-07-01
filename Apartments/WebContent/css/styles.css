@@ -265,3 +265,34 @@ table{
 }
 
 /* End of style for map chosing location */
+
+/* Style for dialog of adding NEW USER - HOST */
+
+#addDialogForUsers .modal-contents {
+	height: 330px;
+	width: 500px;
+	background-color: white;
+	text-align: center;
+	padding: 20px;
+	position: relative;
+	border-radius: 4px;
+}
+
+#addDialogForUsers input {
+	margin: 15px auto;
+	display: block;
+	width: 50%;
+	padding: 8px;
+	border: 1px solid gray;
+}
+
+#addDialogForUsers .close {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	font-size: 42px;
+	color: #333;
+	transform: rotate(45deg);
+	cursor: pointer;
+}
+/* End of style for dialog of adding NEW HOST */
