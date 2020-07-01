@@ -1,7 +1,9 @@
 Vue.component("guest-apartments", {
     data() {
         return {
-            apartments: [],
+        	startDateForReservation:null,
+            numberOfNights:"",
+        	apartments: [],
             comments: [],
             user: {},
             searchData: {
@@ -11,9 +13,8 @@ Vue.component("guest-apartments", {
                 price: 0.0,
                 rooms: 0,
                 maxGuests: 0
-            },
-            fromDate:null,
-            toDate:null
+            }
+            
         }
     },
 
@@ -51,10 +52,11 @@ Vue.component("guest-apartments", {
                 <h2> Lokacija: </h2> 
                 <h3> Geografska duzina: {{ apartment.location.longitude }} </h3>
                 <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
-                 <label for="fromDate">Od datuma:</label>
-                <input type="date" v-model="fromDate" id="fromDate" name="fromDate">
-                 <label for="toDate">Do datuma:</label>
-                <input type="date" v-model="toDate" id="toDate" name="toDate">
+                
+                <label for="fromDate">Pocetni datum rezervacije:</label>
+                <input type="date" v-model="startDateForReservation" id="fromDate" name="fromDate">
+                 <input type="number" v-model="numberOfNights" placeholder="Number of nights..." >
+                
                 
                 <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
                 
@@ -153,31 +155,34 @@ Vue.component("guest-apartments", {
             });
         },
         makeReseervation2: function (identificator) {
-        	var today = new Date();
-        	console.log(fromDate[1]._value);
+            if (!this.startDateForReservation || !this.numberOfNights ) {
+                    toastr["warning"]("All field is required", "Watch out !");
+                    return;
+
+                }
             axios
                 .post('rest/reservation/makeReservations', {
                     "apartmentIdentificator": identificator,
-                    "dateOfReservation": today.getDate(),
-                    "numberOfNights": 3,
+                    "dateOfReservation": this.startDateForReservation,
+                    "numberOfNights": this.numberOfNights,
                     "messageForHost": "Pooz za HOSTA kiss cmok",
                     "guestID": this.user.id,
-                    "statusOfReservation": "CEKANJE NA REZERVACIJU",
-                    "fromDate" : fromDate[1]._value,
-                    "toDate" : toDate[1]._value
+                    "statusOfReservation": "KREIRANA",
                 })
                 .then(response => {
                     filteredApartments = [];
+                   	this.startDateForReservation = null;
+                    this.numberOfNights = "";
                     this.apartments.forEach(el => {
                         if (el.identificator != identificator) {
                             filteredApartments.push(el);
                         }
                     });
                     this.apartments = filteredApartments;
-                    toastr["success"]("Uspesno rezervisan apartman! Mozete pogledati sve rezervacije u Reservations sekciji ", "Success!");
+                    toastr["success"]("Apartment is reserved! ", "Success!");
                 })
                 .catch(err => {
-                    toastr["error"]("Ovaj apartman je vec rezervisan!!", "Fail");
+                    toastr["error"]("Apartment is not free in that data interval!", "Fail");
                 })
         },
         viewComments: function(apartmentCommentsIDs) {

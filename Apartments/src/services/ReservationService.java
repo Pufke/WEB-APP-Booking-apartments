@@ -1,7 +1,9 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -130,30 +132,40 @@ public class ReservationService {
 				break;
 			}
 		}
+	//Convert java.util.Date to java.Sql.date, reason why i do this i beacuse frontend doesnt format well 
+   // java.util.Date format 
+		java.sql.Date sd = new java.sql.Date(reservationData.dateOfReservation.getTime());
 
-		// TODO URADI IZRACUNAVANJE TOTAL PRICE NA OSNOVU BROJA NOCI I CENE APARTMANA
-		double totalPrice = 1200;
+		ArrayList<Date> listaSlobodnihDatuma = apartment.getAvailableDates();
+
+		
+		for(int i = 0; i < reservationData.numberOfNights; i++) {
+			if(listaSlobodnihDatuma.contains(reservationData.dateOfReservation)) {
+				listaSlobodnihDatuma.remove(reservationData.dateOfReservation);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(reservationData.dateOfReservation);
+				calendar.add(Calendar.DATE, 1);
+				reservationData.dateOfReservation =  calendar.getTime();
+				
+			}else {
+				return Response.status(Response.Status.EXPECTATION_FAILED).entity("APARTMENT IS NOT FREE").build();
+			}
+		}
+		
+		
+		double totalPrice =  reservationData.numberOfNights * apartment.getPricePerNight();
 		Integer ReservationUniqueID = reservations.size() + 1;
 
+		
 		Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator,
-				reservationData.dateOfReservation, reservationData.numberOfNights, totalPrice,
+				sd, reservationData.numberOfNights, totalPrice,
 				reservationData.messageForHost, reservationData.guestID, reservationData.statusOfReservation);
-
-		System.out.println("Od datuma " + reservationData.fromDate + " do datuma " + reservationData.toDate);
-
+		
 		ArrayList<Integer> reservedApartmentList = apartment.getListOfReservationsIDs();
 		reservedApartmentList.add(ReservationUniqueID);
 		apartment.setListOfReservationsIDs(reservedApartmentList);
-
-		for (Reservation r : reservations) {
-			if (r.getGuestID() == newReservation.getGuestID()
-					&& r.getIdOfReservedApartment() == newReservation.getIdOfReservedApartment()) {
-
-				return Response.status(Response.Status.EXPECTATION_FAILED).entity("Ovaj apartman je vec rezervisan")
-						.build();
-
-			}
-		}
+		apartment.setAvailableDates(listaSlobodnihDatuma);
+		
 		reservations.add(newReservation);
 
 		reservationsCTX.saveReservationsJSON();

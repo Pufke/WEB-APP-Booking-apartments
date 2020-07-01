@@ -1,6 +1,9 @@
 package beans;
 
+
 import java.util.ArrayList;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Apartment {
@@ -12,8 +15,8 @@ public class Apartment {
 	private Integer numberOfGuests;
 	private Location location;
 
-	private ArrayList<DateRange> datesForHosting; // host set those dates
-	private ArrayList<DateRange> availableDates;
+	private ArrayList<Date> datesForHosting; // host set those dates
+	private ArrayList<Date> availableDates;
 
 	private Integer hostID;
 	private ArrayList<Integer> apartmentCommentsIDs;
@@ -36,8 +39,8 @@ public class Apartment {
 	}
 	
 	public Apartment(Integer iD, Integer logicalDeleted, String typeOfApartment, Integer numberOfRooms,
-			Integer numberOfGuests, Location location, ArrayList<DateRange> datesForHosting,
-			ArrayList<DateRange> availableDates, Integer hostID, ArrayList<Integer> apartmentCommentsIDs,
+			Integer numberOfGuests, Location location, ArrayList<Date> datesForHosting,
+			ArrayList<Date> availableDates, Integer hostID, ArrayList<Integer> apartmentCommentsIDs,
 			String imagesPath, Double pricePerNight, String timeForCheckIn, String timeForCheckOut, String status,
 			ArrayList<Integer> apartmentAmentitiesIDs, ArrayList<Integer> listOfReservationsIDs) {
 		super();
@@ -110,19 +113,19 @@ public class Apartment {
 		this.location = location;
 	}
 
-	public ArrayList<DateRange> getDatesForHosting() {
+	public ArrayList<Date> getDatesForHosting() {
 		return datesForHosting;
 	}
 
-	public void setDatesForHosting(ArrayList<DateRange> datesForHosting) {
+	public void setDatesForHosting(ArrayList<Date> datesForHosting) {
 		this.datesForHosting = datesForHosting;
 	}
 
-	public ArrayList<DateRange> getAvailableDates() {
+	public ArrayList<Date> getAvailableDates() {
 		return availableDates;
 	}
 
-	public void setAvailableDates(ArrayList<DateRange> availableDates) {
+	public void setAvailableDates(ArrayList<Date> availableDates) {
 		this.availableDates = availableDates;
 	}
 

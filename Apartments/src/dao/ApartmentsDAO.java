@@ -3,9 +3,10 @@ package dao;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 
 import java.util.List;
@@ -68,11 +69,12 @@ public class ApartmentsDAO {
 
 		System.out.println("\n\n ucitavam preko object mapera \n\n");
 		for (Apartment a : loadedApartments) {
-			System.out.println("ID APARTMANA: " + a.getID());
-			for (DateRange dateRange : a.getDatesForHosting()) {
-				System.out.println("from date: "+ dateRange.getFromDate());
-				System.out.println("to date: " + dateRange.getToDate());
-			}
+			/*
+			 * System.out.println("ID APARTMANA: " + a.getID()); for (DateRange dateRange :
+			 * a.getDatesForHosting()) { System.out.println("from date: "+
+			 * dateRange.getFromDate()); System.out.println("to date: " +
+			 * dateRange.getToDate()); }
+			 */
 			apartments.add(a);
 		}
 		System.out.println("\n\n");
@@ -178,14 +180,36 @@ public class ApartmentsDAO {
 		apartment.setApartmentAmentitiesIDs(newItem.addedApartment.getApartmentAmentitiesIDs());
 		
 		// init to empty, because null is not allowed for deserialization
-		apartment.setDatesForHosting(new ArrayList<DateRange>());
-		apartment.setAvailableDates(new ArrayList<DateRange>());
+		ArrayList<Date> dataRangeForHosting = new ArrayList<Date>();
+		
+		
+	    while (newItem.startDateForReservation.before(newItem.endDateForReservation)) {
+	        processDate(newItem.startDateForReservation);
+	    	dataRangeForHosting.add(newItem.startDateForReservation);
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(newItem.startDateForReservation);
+	        calendar.add(Calendar.DATE, 1);
+	        newItem.startDateForReservation =  calendar.getTime();
+	    }
+		
+		apartment.setDatesForHosting(dataRangeForHosting);
+		ArrayList<Date> freeData = new ArrayList<Date>();
+		for(Date d : dataRangeForHosting) {
+			freeData.add(d);
+		}
+		apartment.setAvailableDates(freeData);
+		
 		newItem.addedApartment.getLocation().getAddress().setZipCode("");
 		apartment.setImagesPath("withoutPath");
 		apartment.setListOfReservationsIDs(new ArrayList<Integer>());
 		
 		apartments.add(apartment);
 		saveApartmentsJSON();
+	}
+
+	private void processDate(java.util.Date startDateForReservation) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public Collection<Apartment> getHostApartments(User user) {
@@ -256,16 +280,20 @@ public class ApartmentsDAO {
 		ArrayList<Integer> listOfReservationsIDs = new ArrayList<Integer>();
 		listOfReservationsIDs.add(1);
 		listOfReservationsIDs.add(2);
+		/*
+		 * Apartment a1 = new Apartment(ID, logicalDeleted, typeOfApartment,
+		 * numberOfRooms, numberOfGuests, location, datesForHosting, availableDates,
+		 * hostID, apartmentCommentsIDs, images, pricePerNight, "14:00", "10:00",
+		 * status, apartmentAmentitiesIDs, listOfReservationsIDs); Apartment a2 = new
+		 * Apartment(2, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests,
+		 * location, datesForHosting, availableDates, hostID, apartmentCommentsIDs,
+		 * images, pricePerNight, "14:00", "10:00", status, apartmentAmentitiesIDs,
+		 * listOfReservationsIDs);
+		 */
 
-		Apartment a1 = new Apartment(ID, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
-				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, "14:00",
-				"10:00", status, apartmentAmentitiesIDs, listOfReservationsIDs);
-		Apartment a2 = new Apartment(2, logicalDeleted, typeOfApartment, numberOfRooms, numberOfGuests, location,
-				datesForHosting, availableDates, hostID, apartmentCommentsIDs, images, pricePerNight, "14:00",
-				"10:00", status, apartmentAmentitiesIDs, listOfReservationsIDs);
-
-		allApartments.add(a1);
-		allApartments.add(a2);
+		/*
+		 * allApartments.add(a1); allApartments.add(a2);
+		 */
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		ObjectMapper objectMapper = new ObjectMapper();

@@ -4,8 +4,8 @@ Vue.component("guest-reservation", {
         return {
             reservations: [],
             user: {},
-            ocena: "ocena od 1 do 5",
-            komentar: "",
+            ocena : "",
+            komentar : "",
             searchData: {
                 location: "",
                 checkIn: "",

@@ -22,6 +22,8 @@ toastr.options = {
 Vue.component("host-ActiveApartments", {
     data() {
         return {
+        	startDateForHost: null,
+        	endDateForHost: null,
             apartments: [],
             amenities: [],          // need it for adding form of new apartment ( we need available amenities )
             apartmentForChange: {},
@@ -160,6 +162,13 @@ Vue.component("host-ActiveApartments", {
                     <label for="checkOut">Check out time:</label>
                     <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
                     
+                    
+                    <label for="startDate">Start date for host:</label>
+                    <input name="startDate" type="date" v-model="startDateForHost" >
+                
+                    <label for="endDate">End date for host:</label>
+    	            <input name="endDate" type="date" v-model="endDateForHost">
+    	            
                     <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
                     <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
                     <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >    
@@ -194,6 +203,13 @@ Vue.component("host-ActiveApartments", {
                     <label for="checkOut">Check out time:</label>
                     <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
                    
+                    <label for="startDate">Start date for host:</label>
+                    <input name="startDate" type="date" v-model="startDateForHost" >
+                
+                    <label for="endDate">End date for host:</label>
+    	            <input name="endDate" type="date" v-model="endDateForHost">
+                
+                
                     <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
                     <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
                     <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >
@@ -302,7 +318,7 @@ Vue.component("host-ActiveApartments", {
 
         },
         confirmChanging: function () {
-
+        
             // Check is empty field input
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
             if (!this.newApartment.id || !this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut
@@ -314,7 +330,9 @@ Vue.component("host-ActiveApartments", {
 
             axios
                 .post('rest/apartments/changeMyApartment', {
-                    addedApartment: this.newApartment
+                    addedApartment: this.newApartment,
+                    "startDateForReservation": this.startDateForHost,
+                    "endDateForReservation" : this.endDateForHost
                 })
                 .then(response => {
                     this.apartments = [];
@@ -331,10 +349,11 @@ Vue.component("host-ActiveApartments", {
             this.hideAddDialog = !this.hideAddDialog;
         },
         confirmAdding: function () {
-
+        	console.log("<<<<" , this.startDateForReservation);
+        	console.log(">>>>>", this.endDateForReservation);
             // warning/error if some fields are null or empty
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut ||
+            if (!this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut || 
                 !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms ||
                 !this.newApartment.numberOfGuests || !this.newApartment.location.address.populatedPlace ||
                 !this.newApartment.location.address.street || !this.newApartment.location.address.number
@@ -345,7 +364,9 @@ Vue.component("host-ActiveApartments", {
             }
             axios
                 .post('rest/apartments/addNewApartments', {
-                    addedApartment: this.newApartment
+                    addedApartment: this.newApartment,
+                    "startDateForReservation": this.startDateForHost,
+                    "endDateForReservation" : this.endDateForHost
                 })
                 .then(response => {
                     this.apartments = [];
