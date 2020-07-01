@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import beans.Address;
 import beans.Apartment;
@@ -28,6 +32,7 @@ import dto.ApartmentChangeDTO;
 import dto.ApartmentCommentJsonDTO;
 import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
+import dto.FreeDatesDTO;
 
 //apartments/getApartments
 @Path("/apartments")
@@ -84,38 +89,44 @@ public class ApartmentService {
 	@GET
 	@Path("/getMyApartments")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> getJustMyApartments() {
-
+	public Response getJustMyApartments() {
+		//isUserHost();
 		// With this, we get user who is logged in.
 		// We are in UserService method login() tie user for session.
 		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-
-		System.out.println("\n\n\n DOBAVLJANJE SAMO APARTMANA DOMACINA: " + user.getUserName());
-
-		ApartmentsDAO apartmentsDAO = getApartments();
-
-		return apartmentsDAO.getHostApartments(user);
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+			ApartmentsDAO apartmentsDAO = getApartments();
+			Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE")
+					.entity(apartmentsDAO.getHostApartments(user))
+					.build();
+		
+		}
+	
+		return Response.status(403).type("text/plain")
+                .entity("get lost, loser!").build();
 	}
 
 	@POST
 	@Path("/activateApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> activateApartment(ApartmentDTOJSON newItem) {
+	public Response activateApartment(ApartmentDTOJSON newItem) {
 
-		System.out.println("\n\n\t\t AKTIVACIJA \n\n");
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+			ApartmentsDAO apartmentsDAO = getApartments();
+			apartmentsDAO.activateApartment(newItem.addedApartment.getID());
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS ACTIVATED")
+					.entity(apartmentsDAO.getHostApartments(user))
+					.build();
+		}
 		
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-
-		// Update that apartment in list of all apartments
-		ApartmentsDAO apartmentsDAO = getApartments();
-		apartmentsDAO.activateApartment(newItem.addedApartment.getID());
-
-		return apartmentsDAO.getHostApartments(user);
+		return Response.status(403).type("text/plain")
+                .entity("get lost, loser!").build();
 
 	}
 	
@@ -123,37 +134,44 @@ public class ApartmentService {
 	@Path("/adminActivationApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> adminActivationApartment(ApartmentDTOJSON newItem) {
+	public Response adminActivationApartment(ApartmentDTOJSON newItem) {
 
-		System.out.println("\n\n\t\t AKTIVACIJA OD STRANE ADMINA \n\n");
-
-		// Update that apartment in list of all apartments
-		ApartmentsDAO apartmentsDAO = getApartments();
-		apartmentsDAO.activateApartment(newItem.addedApartment.getID());
-
-		return getApartments().getValues();
-
+		if(isUserAdmin()) {	
+			ApartmentsDAO apartmentsDAO = getApartments();
+			apartmentsDAO.activateApartment(newItem.addedApartment.getID());
+	
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS ACTIVATED")
+					.entity(getApartments().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+                .entity("get lost, loser!").build();
+		
 	}
 
 	@POST
 	@Path("/changeMyApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> changeMyApartment(ApartmentDTOJSON newItem) {
+	public Response changeMyApartment(ApartmentDTOJSON newItem) {
 
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-
-		System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + newItem.addedApartment.getID() + " i cenom"
-				+ newItem.addedApartment.getPricePerNight() + "\n\n");
-
-		// Update that apartment in list of all apartments
-		ApartmentsDAO apartmentsDAO = getApartments();
-		apartmentsDAO.changeApartment(newItem.addedApartment);
-
-		return apartmentsDAO.getHostApartments(user);
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+			System.out.println("\n\n\t\tSTIGAO JE APARTMAN SA ID-om: " + newItem.addedApartment.getID() + " i cenom"
+					+ newItem.addedApartment.getPricePerNight() + "\n\n");
+		
+			ApartmentsDAO apartmentsDAO = getApartments();
+			apartmentsDAO.changeApartment(newItem.addedApartment, newItem.startDateForReservation, newItem.endDateForReservation);
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS ACTIVATED")
+					.entity(apartmentsDAO.getHostApartments(user))
+					.build();
+		}	
+		return Response.status(403).type("text/plain")
+                .entity("get lost, loser!").build();
+	
 	}
 
 	@GET
@@ -161,10 +179,28 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> getJustApartments() {
 		System.out.println("CALLED GET JUST APARTMENTS");
-		for (Apartment ap : getApartments().getValues()) {
-			System.out.println("statusa apartman: " + ap.getStatus() + " i ID: " + ap.getID() + "\n");
-		}
+	
 		return getApartments().getValues();
+	}
+	
+	@POST
+	@Path("/getApartmentFreeDates")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<java.sql.Date> getApartmentFreeDates(FreeDatesDTO freedatesDTO) {
+		
+		ArrayList<java.sql.Date> lsita = new ArrayList<java.sql.Date>();
+	
+		for (Apartment ap : getApartments().getValues()) {
+			if(ap.getID() == freedatesDTO.apartmentID) {
+				for(Date d : ap.getAvailableDates()){
+					java.sql.Date sd = new java.sql.Date(d.getTime());
+					lsita.add(sd);
+				}
+			}	
+		}
+		
+		
+		return lsita;
 	}
 
 	@POST
@@ -176,7 +212,7 @@ public class ApartmentService {
 				+ updatedApartment.addedApartment.getPricePerNight() + "\n\n");
 
 		ApartmentsDAO apartments = getApartments();
-		apartments.changeApartment(updatedApartment.addedApartment);
+		apartments.changeApartment(updatedApartment.addedApartment, updatedApartment.startDateForReservation, updatedApartment.endDateForReservation);
 
 		return getApartments().getValues();
 	}
@@ -242,6 +278,27 @@ public class ApartmentService {
 		}
 
 		return users;
+	}
+	
+	private boolean isUserHost() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("HOST")) {	
+				return true;
+			}
+		}	
+		return false;
+	}
+	private boolean isUserAdmin() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("ADMINISTRATOR")) {
+				return true;
+			}
+		}	
+		return false;
 	}
 
 }

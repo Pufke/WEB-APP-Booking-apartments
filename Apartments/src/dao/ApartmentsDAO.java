@@ -105,12 +105,12 @@ public class ApartmentsDAO {
 	 * Izmena podataka prosledjenog apartmana.
 	 */
 
-	public Boolean changeApartment(Apartment updatedApartment) {
+	public Boolean changeApartment(Apartment updatedApartment, Date startDateForReservation, Date endDateForReservation) {
 
 		for (Apartment apartment : apartments) {
 			if (apartment.getID().equals((updatedApartment.getID()).intValue())) {
-				System.out.println(
-						"NASAO SAM APARTMAN " + updatedApartment.getID() + " i sad cu mu izmeniti podatke");
+				
+				apartment.setTypeOfApartment(updatedApartment.getTypeOfApartment());		
 				apartment.setPricePerNight((updatedApartment.getPricePerNight()).doubleValue());
 				apartment.setTimeForCheckIn(updatedApartment.getTimeForCheckIn());
 				apartment.setTimeForCheckOut(updatedApartment.getTimeForCheckOut());
@@ -118,6 +118,22 @@ public class ApartmentsDAO {
 				apartment.setNumberOfGuests(updatedApartment.getNumberOfGuests());
 				apartment.setApartmentAmentitiesIDs(updatedApartment.getApartmentAmentitiesIDs());
 				apartment.setLocation(updatedApartment.getLocation());
+				
+				ArrayList<Date> dataRangeForHosting = new ArrayList<Date>();
+				
+				while (startDateForReservation.before(endDateForReservation)) {  
+				    	dataRangeForHosting.add(startDateForReservation);
+				        Calendar calendar = Calendar.getInstance();
+				        calendar.setTime(startDateForReservation);
+				        calendar.add(Calendar.DATE, 1);
+				        startDateForReservation =  calendar.getTime();
+			  }		
+			  apartment.setDatesForHosting(dataRangeForHosting);
+			  ArrayList<Date> freeData = new ArrayList<Date>();
+				for(Date d : dataRangeForHosting) {
+					freeData.add(d);
+				}
+			  apartment.setAvailableDates(freeData);
 				
 				saveApartmentsJSON();
 				return true;
