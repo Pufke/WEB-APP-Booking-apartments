@@ -222,7 +222,7 @@ table{
 /* Style for dialog of adding apartments of HOST */
 
 #addDialogForApartments .modal-contents {
-	height: 600px;
+	height: 650px;
 	width: 500px;
 	background-color: white;
 	text-align: center;
@@ -249,3 +249,12 @@ table{
 	cursor: pointer;
 }
 /* End of style for dialog of adding apartments of HOST */
+
+/* Style for map chosing location */
+
+.map {
+	height: 500px;
+	width: 800px;
+}
+
+/* End of style for map chosing location */

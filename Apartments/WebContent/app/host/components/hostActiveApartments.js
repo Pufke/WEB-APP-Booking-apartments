@@ -40,7 +40,7 @@ Vue.component("host-ActiveApartments", {
                 location: {
                     address: {
                         number: null,
-                        populatedPlace: null,
+                        populatedPlace: '',
                         street: null,
                         zipCode: null
                     },
@@ -53,7 +53,7 @@ Vue.component("host-ActiveApartments", {
                 pricePerNight: null,
                 status: "INACTIVE",
                 timeForCheckIn: "14:00",
-                timeForCheckOut:  "10:00",
+                timeForCheckOut: "10:00",
                 typeOfApartment: null,
             },
             filterDataForApartment: {
@@ -77,7 +77,7 @@ Vue.component("host-ActiveApartments", {
             <button type="button" @click="sortDesc">SORT DESC</button>
 
             <br>
-            <button type="button" @click="addItem()"> Add new item </button>
+            <button type="button" id="addNewItemButton" @click="addItem()"> Add new item </button>
             <br><br>
 
             <!-- If user don't want use filter, check just option: Without filter for type -->
@@ -186,6 +186,8 @@ Vue.component("host-ActiveApartments", {
                 <div class="close" @click="hideAddDialog = !hideAddDialog">+</div>
 
                 <form method='post'>
+                    <button type="button" @click="chooseWithMap()"> Add with help of geo map </button>
+
                     <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
                    
                     <label for="checkIn">Check in time:</label>
@@ -199,9 +201,10 @@ Vue.component("host-ActiveApartments", {
                     <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >
 
                     <!-- Address -->
-                    <input type="text" v-model="newApartment.location.address.populatedPlace" placeholder="Town name ...">
-                    <input type="text" v-model="newApartment.location.address.street" placeholder="Street ...">
-                    <input type="text" v-model="newApartment.location.address.number" placeholder="Number ...">
+
+                    <input type="text" id="townID" placeholder="Town name ...">
+                    <input type="text" id="streetID" placeholder="Street ...">
+                    <input type="text" id="numberID" placeholder="Number ...">
                     <!-- End of address -->
 
                     <!-- List of amenities in apartments -->
@@ -224,6 +227,12 @@ Vue.component("host-ActiveApartments", {
     
     `,
     methods: {
+        chooseWithMap: function () {
+            //alert("izbor preko mape");
+            // Simulate a mouse click:
+            window.location.href = "http://localhost:8080/Apartments/hostDashboard.html#/mapChoose";
+
+        },
         onchangeTypeOfApartment: function () {
             if (this.filterDataForApartment.typeOfApartment == "") {
                 // Reset to all apartments
@@ -232,7 +241,7 @@ Vue.component("host-ActiveApartments", {
                 axios
                     .get('rest/apartments/getMyApartments')
                     .then(response => {
-                        this.apartments=[];
+                        this.apartments = [];
                         response.data.forEach(el => {
                             if (el.status == "ACTIVE")
                                 this.apartments.push(el);
@@ -253,7 +262,7 @@ Vue.component("host-ActiveApartments", {
                 axios
                     .get('rest/apartments/getMyApartments')
                     .then(response => {
-                        this.apartments=[];
+                        this.apartments = [];
                         response.data.forEach(el => {
                             if (el.status == "ACTIVE")
                                 this.apartments.push(el);
@@ -282,7 +291,7 @@ Vue.component("host-ActiveApartments", {
                 axios
                     .get('rest/apartments/getMyApartments')
                     .then(response => {
-                        this.apartments=[];
+                        this.apartments = [];
                         response.data.forEach(el => {
                             if (el.status == "ACTIVE")
                                 this.apartments.push(el);
@@ -459,7 +468,7 @@ Vue.component("host-ActiveApartments", {
         axios
             .get('rest/apartments/getMyApartments')
             .then(response => {
-                this.apartments=[];
+                this.apartments = [];
                 response.data.forEach(el => {
                     if (el.status == "ACTIVE")
                         this.apartments.push(el);
@@ -470,7 +479,7 @@ Vue.component("host-ActiveApartments", {
         axios
             .get('rest/amenities/getAmenities')
             .then(response => {
-                this.amenities=[];
+                this.amenities = [];
                 response.data.forEach(el => {
                     this.amenities.push(el);
                 });
@@ -488,7 +497,6 @@ Vue.component("host-ActiveApartments", {
                 this.apartmentForChange = response.data
             });
     },
-
 
 
 });

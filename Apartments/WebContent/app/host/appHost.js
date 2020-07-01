@@ -6,6 +6,8 @@ const ActiveApartmentsComponent = {template: '<host-ActiveApartments></host-Acti
 const InActiveApartmentsComponent = {template: '<host-InactiveApartments></host-InactiveApartments>'}
 const CommentsAndReviewwsComponent = {template: '<host-CommentsAndReviews></host-CommentsAndReviews>'}
 
+const MapChoose = { template : '<host-mapChoose></host-mapChoose>' }
+
 const router = new VueRouter({
     mode: 'hash',
     routes:[
@@ -15,7 +17,8 @@ const router = new VueRouter({
         { path: '/profile', component: ProfileComponent},
         { path: '/hostActiveApartments', component: ActiveApartmentsComponent},
         { path: '/hostInactiveApartments', component: InActiveApartmentsComponent},
-        { path: '/commentsAndReviews', component: CommentsAndReviewwsComponent}
+        { path: '/commentsAndReviews', component: CommentsAndReviewwsComponent},
+        { path: '/mapChoose', component: MapChoose},
     ]
 });
 
