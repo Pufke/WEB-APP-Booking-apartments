@@ -46,7 +46,7 @@ Vue.component("host-mapChoose", {
             <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out..."><br><br>
         
             <input name="startDate" type="date" v-model="startDateForHost" placeholder="Start date for host..." ><br><br>
-            <input name="endDate" type="date" v-model="endDateForHost" placeholder="End date for host...">
+            <input name="endDate" type="date" v-model="endDateForHost" placeholder="End date for host..."> <br><br>
 
             <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." > <br><br>
             <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." > <br><br>
