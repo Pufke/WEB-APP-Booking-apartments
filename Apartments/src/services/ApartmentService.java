@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import beans.Address;
 import beans.Apartment;
@@ -29,6 +32,7 @@ import dto.ApartmentChangeDTO;
 import dto.ApartmentCommentJsonDTO;
 import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
+import dto.FreeDatesDTO;
 
 //apartments/getApartments
 @Path("/apartments")
@@ -175,10 +179,28 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> getJustApartments() {
 		System.out.println("CALLED GET JUST APARTMENTS");
-		for (Apartment ap : getApartments().getValues()) {
-			System.out.println("statusa apartman: " + ap.getStatus() + " i ID: " + ap.getID() + "\n");
-		}
+	
 		return getApartments().getValues();
+	}
+	
+	@POST
+	@Path("/getApartmentFreeDates")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<java.sql.Date> getApartmentFreeDates(FreeDatesDTO freedatesDTO) {
+		
+		ArrayList<java.sql.Date> lsita = new ArrayList<java.sql.Date>();
+	
+		for (Apartment ap : getApartments().getValues()) {
+			if(ap.getID() == freedatesDTO.apartmentID) {
+				for(Date d : ap.getAvailableDates()){
+					java.sql.Date sd = new java.sql.Date(d.getTime());
+					lsita.add(sd);
+				}
+			}	
+		}
+		
+		
+		return lsita;
 	}
 
 	@POST

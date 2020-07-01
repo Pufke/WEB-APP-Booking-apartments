@@ -2,6 +2,7 @@ Vue.component("guest-apartments", {
     data() {
         return {
         	startDateForReservation:null,
+        	freeDates: [], 
         	commentForHost:"",
             numberOfNights:"",
         	apartments: [],
@@ -64,10 +65,19 @@ Vue.component("guest-apartments", {
                 
                 <button @click="viewComments(apartment.id)">VIRW COMMENTS</button>
                 
-
+                 <button @click="viewFreeDates(apartment.id)">VIRW DATES</button>
+                <br>
+                
+    			
                 
             </li>
         </ul>
+         <table border="1">
+        			<tr bgcolor="lightgrey"><th> Free dates for choosen apartment </th> </tr>
+    				<tr v-for="date in freeDates">
+    					<td> {{ date }} </td>
+            		</tr>
+        </table>
         
          <table border="1">
         	<tr bgcolor="lightgrey">
@@ -186,6 +196,21 @@ Vue.component("guest-apartments", {
                 .catch(err => {
                     toastr["error"]("Apartment is not free in that data interval!", "Fail");
                 })
+        }, viewFreeDates: function(id) {
+        	console.log(id);
+            axios
+                .post('rest/apartments/getApartmentFreeDates',{
+                	"apartmentID" : id
+                })
+                .then(response => {
+                    this.freeDates = [];
+                    response.data.forEach(el => {
+                            this.freeDates.push(el);
+                    });
+                    return this.freeDates; 
+                });
+
+        	
         },
         viewComments: function(apartmentCommentsIDs) {
         	console.log(apartmentCommentsIDs);

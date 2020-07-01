@@ -134,8 +134,7 @@ public class ReservationService {
 				break;
 			}
 		}
-	//Convert java.util.Date to java.Sql.date, reason why i do this i beacuse frontend doesnt format well 
-   // java.util.Date format 
+	//Convert java.util.Date to java.Sql.date, reason why i do this i beacuse frontend doesnt format well java.util.Date format 
 		java.sql.Date sd = new java.sql.Date(reservationData.dateOfReservation.getTime());
 
 		ArrayList<Date> listaSlobodnihDatuma = apartment.getAvailableDates();
