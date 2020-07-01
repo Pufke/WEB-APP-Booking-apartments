@@ -38,19 +38,26 @@ Vue.component("administrator-apartments", {
                 maxNumberOfRooms: '',
                 minNumberOfGuests: '',
                 maxNumberOfGuests: '',
-            }
+            },
+            previewMap: false,
         }
     },
-
+// v-model="searchField.populatedPlace"
     template: `
     <div id = "styleForApartmentsView">
 
 
         <form method='post'>
 
-            <input type="text" v-model="searchField.populatedPlace" placeholder="City..." >
-            <input type="text" v-model="searchField.maxGuests" placeholder="Max guests in room..." >
+            <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
+            <button type="button" @click="previewMapForSearch()"> Choose on map </button>
+            
             <br><br>
+            
+            <div id="mapSearch" class="mapSearch" v-if="previewMap">
+                <br><br>
+            </div>
+
 
             <input type="text" v-model="searchField.minPrice" placeholder="Min price..." >
             <input type="text" v-model="searchField.maxPrice" placeholder="Max price..." >
@@ -64,13 +71,7 @@ Vue.component("administrator-apartments", {
             <input type="text" v-model="searchField.maxNumberOfGuests" placeholder="Max guests..." >
             <br><br>
 
-            <!--
-            <input type="date" v-model="searchData.checkIn" placeholder="Check in...">
-            <input type="date" v-model="searchData.checkOut" placeholder="Check out...">
-            <input type="number" v-model="searchData.price" placeholder="Price per night..." >
-            <input type="number" v-model="searchData.rooms" placeholder="Number of rooms ..." >
-            <input type="number" v-model="searchData.maxGuests" placeholder="Max guests in room..." >
-            -->
+
             <br><br>
 
             <!-- If user don't want use filter, check just option: Without filter for type -->
@@ -152,6 +153,40 @@ Vue.component("administrator-apartments", {
 
     `,
     methods: {
+        initForMap: function () {
+
+            const mapSearch = new ol.Map({
+                target: 'mapSearch',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ],
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 2
+                })
+            })
+
+            mapSearch.on('click', function (evt) {
+                console.log(evt.coordinate);
+                //alert(evt.coordinate);
+
+                var coord = ol.proj.toLonLat(evt.coordinate);
+                reverseGeocode(coord);
+
+            })
+
+        },
+        previewMapForSearch: function(){
+            this.previewMap = !this.previewMap;
+            if(this.previewMap){
+                // Draw map on screen
+                this.$nextTick(function () {
+                    this.initForMap();
+                })
+            }
+        },
         activateApartment(apartment){
 			axios
                 .post('rest/apartments/adminActivationApartment', {
@@ -367,6 +402,11 @@ Vue.component("administrator-apartments", {
         }
     },
     mounted() {
+        // Draw map on screen
+        this.$nextTick(function () {
+            this.initForMap();
+        })
+
         axios
             .get('rest/apartments/getApartments')
             .then(response => {
@@ -386,3 +426,37 @@ Vue.component("administrator-apartments", {
         }
     },
 })
+
+/**
+ * From coords get real address and put that value in form. 
+ * @param coords cords (x,y)
+ */
+function reverseGeocode(coords) {
+    fetch('http://nominatim.openstreetmap.org/reverse?format=json&lon=' + coords[0] + '&lat=' + coords[1])
+        .then(function (response) {
+            return response.json();
+        }).then(function (json) {
+
+            // TOWN 
+            console.log(json.address);
+            if (json.address.city) {
+                let el = document.getElementById("cityID");
+                /*
+                    I need this new Event because.
+                    The idea is that when I change cityID, i need to update 
+                    data in Vue, and only way i found is this.
+
+                    author: Vaxi
+
+                    ref: https://stackoverflow.com/questions/56348513/how-to-change-v-model-value-from-js
+                */
+                el.value = json.address.city;
+                el.dispatchEvent(new Event('input'));
+            } else if (json.address.city_district) {
+                let el = document.getElementById("cityID");
+                el.value = json.address.city_district;
+                el.dispatchEvent(new Event('input'));
+            }
+
+        });
+}

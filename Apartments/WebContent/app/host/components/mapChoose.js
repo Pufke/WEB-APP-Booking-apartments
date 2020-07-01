@@ -119,32 +119,6 @@ Vue.component("host-mapChoose", {
             window.location.href = "http://localhost:8080/Apartments/hostDashboard.html#/hostActiveApartments";
 
         },
-
-        reverseGeocode: function (coords) {
-            fetch('http://nominatim.openstreetmap.org/reverse?format=json&lon=' + coords[0] + '&lat=' + coords[1])
-                .then(function (response) {
-                    return response.json();
-                }).then(function (json) {
-                    // TOWN 
-                    console.log(json.address);
-                    if (json.address.city) {
-                        document.getElementById("townID").value = json.address.city;
-                    } else if (json.address.city_district) {
-                        document.getElementById("townID").value = json.address.city_district;
-                    }
-
-                    // STREET
-                    if (json.address.road) {
-                        document.getElementById("streetID").value = json.address.road;
-                    }
-
-                    // NUMBER OF HOUSE
-                    if (json.address.house_number) {
-                        document.getElementById("numberID").value = json.address.house_number;
-                    }
-
-                });
-        },
         initForMap: function () {
 
             const map = new ol.Map({
@@ -190,10 +164,7 @@ Vue.component("host-mapChoose", {
             });
 
 
-    },
-    beforeMount() {
-        this.initForMap();
-    },
+    }
 
 
 });

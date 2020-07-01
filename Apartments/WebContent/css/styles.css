@@ -252,7 +252,14 @@ table{
 
 /* Style for map chosing location */
 
+/* In host mode */
 .map {
+	height: 500px;
+	width: 800px;
+}
+
+/* In admin mode */
+.mapSearch{
 	height: 500px;
 	width: 800px;
 }
