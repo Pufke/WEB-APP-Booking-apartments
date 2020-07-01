@@ -190,7 +190,7 @@ public class ApartmentService {
 				+ updatedApartment.addedApartment.getPricePerNight() + "\n\n");
 
 		ApartmentsDAO apartments = getApartments();
-		apartments.changeApartment(updatedApartment.addedApartment);
+		apartments.changeApartment(updatedApartment.addedApartment, updatedApartment.startDateForReservation, updatedApartment.endDateForReservation);
 
 		return getApartments().getValues();
 	}
