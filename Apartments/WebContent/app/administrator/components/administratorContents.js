@@ -25,7 +25,7 @@ Vue.component("administrator-contents", {
             amenities: [],
             hideDialog: true,
             itemForChange: {
-                amenitiesID: 999,
+                amenitiesID: "",
                 name: ""
             },
             hideAddDialog: true,
@@ -127,7 +127,8 @@ Vue.component("administrator-contents", {
         changeItem: function (item) {
             this.hideDialog = !this.hideDialog;
 
-            this.itemForChange = item;
+            this.itemForChange.amenitiesID = item.id;
+            this.itemForChange.name = item.name;
 
         },
         confirmChanging: function () {
