@@ -3,69 +3,69 @@ Vue.component("administrator-reservations",{
         return {
             reservations: [],
             user: {},
+            ocena : "",
+            komentar : "",
             searchData: {
-                usernameOfGuest : ""
-            },
-            statusOfReservation: ""
+                location: "",
+                checkIn: "",
+                checkOut: "",
+                price: 0.0,
+                rooms: 0,
+                maxGuests: 0
+            }
         }
     },
     
-    template:`
-    <div id = "styleForApartmentsView">
-        <h1> Guten tag {{ user.userName }}, wie geht's ?</h1>
-        
-        <!-- Search & filter & sort -- >
-        <form method='post'>
+    template: `
+        <div id = "styleForApartmentsView">
+         	
+            <form @submit="searchParam" method='post'>
 
-            <input type="text" v-model="searchData.usernameOfGuest" placeholder="Username of guest..." >
+                <input type="text" v-model="searchData.location" placeholder="Location..." >
+                <input type="date" v-model="searchData.checkIn" placeholder="Check in...">
+                <input type="date" v-model="searchData.checkOut" placeholder="Check out...">
+                <input type="number" v-model="searchData.price" placeholder="Price per night..." >
+                <input type="number" v-model="searchData.rooms" placeholder="Number of rooms ..." >
+                <input type="number" v-model="searchData.maxGuests" placeholder="Max guests in room..." >
+
+                <button type="submit" >Search</button>
+                <button type="submit" @click="cancelSearch">Cancel search</button>
+
+            </form>
             
-
-            <button type="button" @click="searchParam" >Search</button>
-            <button type="button" @click="cancelSearch">Cancel search</button>
-            <button type="button" @click="sortAsc">SORT ASC</button>
-            <button type="button" @click="sortDesc">SORT DESC</button>
-
-            <!-- If user don't want use filter, check just option: Without filter for status -->
-            <select v-model="statusOfReservation" @change="onchange()">
-                <option value="">Without filter for status</option>
-                <option>Kreirana</option>
-                <option>Odbijena</option>
-                <option>Odustanak</option>
-                <option>Prihvacena</option>
-                <option>Zavrsena</option>
-            </select>
+        	<h1> Trenutno ulogovani korisnik je {{ user.userName }} i ovo su rezervacije samo za tog korisnika!! :) </h1>
+            <ul>
+                <li v-for="reservation in reservations">
+                	<h2> Reservation ID: {{ reservation.id }} </h2>
+                    <h2> Apartment ID: {{ reservation.idOfReservedApartment }} </h2>
+                    <h2> Total price: {{ reservation.totalPrice }} </h2>
+                    <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
+                    <h2> Guest ID: {{ reservation.guestID }} </h2>
+                    <h2> Message for Host: {{ reservation.messageForHost }} </h2>
+                    <h2> Status of reservation: {{ reservation.statusOfReservation }} </h2>                	   
+                
+                </li>
+            </ul>
             
-
-        </form>
-        <!-- End of search & filter & sort -- >
-        <br>
-
-
-        <ul>
-            <li v-for="reservation in reservations">
-                <h2> Guest ID: {{ reservation.guestID }} </h2>
-                <h2> ID of reserved apartment: {{ reservation.idOfReservedApartment }} </h2>
-                <h2> Status : {{ reservation.statusOfReservation }} </h2>
-                <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
-                <h2> Message for host: {{ reservation.messageForHost }} </h2>
-               
-            </li>
-        </ul>
+            <br>
+            <table border="1">
+            <tr bgcolor="lightgrey">
+            <th> ID apartmana</th> <th> Status rezervacije </th><th> startDateOfReservation </th><th> Guest ID </th> </tr>
+                <tr v-for="reservation in reservations">
+                    <td> {{ reservation.idOfReservedApartment }} </td>
+                    <td> {{ reservation.statusOfReservation }} </td>
+                    <td>  {{ reservation.startDateOfReservation }} </td>
+                    <td> {{ reservation.guestID }}  </td>
+        				
+                </tr>
+            </table>
+            
+             <button type="button" @click="sortAsc">SORT ASC</button>
+             <button type="button" @click="sortDesc">SORT DESC</button>
+            
+        </div>
         
-        <br>
-        <table border="1">
-        <tr bgcolor="lightgrey">
-        <th> ID apartmana</th> <th> Status rezervacije </th><th> startDateOfReservation </th><th> Guest ID</th> </tr>
-            <tr v-for="reservation in reservations">
-                <td> {{ reservation.idOfReservedApartment }} </td>
-                <td> {{ reservation.statusOfReservation }} </td>
-                <td>  {{ reservation.startDateOfReservation }} </td>
-                <td> {{ reservation.guestID}}  </td>
-
-            </tr>
-        </table>
-    </div>
-    `,
+        `,
     methods: {
         onchange: function() {
             if(this.statusOfReservation == ""){
@@ -117,101 +117,71 @@ Vue.component("administrator-reservations",{
             });
     
           },
-        sortAsc: function(){
-            let reservedApartments = [];
-            let tempReservations = [];
-            (this.reservations).forEach(element => reservedApartments.push(element.reservedApartment));
+          sortAsc: function () {
+              this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['ASC', 'DESC']);
+          },
+          sortDesc: function () {
+              this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['DESC', 'ASC']);
+          },
+          multisort: function (arr, columns, order_by) {
+              if (typeof columns == 'undefined') {
+                  columns = []
+                  for (x = 0; x < arr[0].length; x++) {
+                      columns.push(x);
+                  }
+              }
 
-            reservedApartments = this.multisort(reservedApartments, ['pricePerNight', 'pricePerNight'], ['ASC','DESC']);
-            
-            reservedApartments.forEach(reservedApartment =>{
-                this.reservations.forEach(reservation =>{
-                    if(reservedApartment.identificator === reservation.reservedApartment.identificator){
-                        tempReservations.push(reservation);
-                    }
+              if (typeof order_by == 'undefined') {
+                  order_by = []
+                  for (x = 0; x < arr[0].length; x++) {
+                      order_by.push('ASC');
+                  }
+              }
 
-                });
-            });
+              function multisort_recursive(a, b, columns, order_by, index) {
+                  var direction = order_by[index] == 'DESC' ? 1 : 0;
 
-            this.reservations = tempReservations;
+                  var is_numeric = !isNaN(a[columns[index]] - b[columns[index]]);
 
-        },
-        sortDesc: function(){
-            let reservedApartments = [];
-            let tempReservations = [];
-            (this.reservations).forEach(element => reservedApartments.push(element.reservedApartment));
+                  var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
+                  var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
 
-            reservedApartments = this.multisort(reservedApartments, ['pricePerNight', 'pricePerNight'], ['DESC','ASC']);
-            
-            reservedApartments.forEach(reservedApartment =>{
-                this.reservations.forEach(reservation =>{
-                    if(reservedApartment.identificator === reservation.reservedApartment.identificator){
-                        tempReservations.push(reservation);
-                    }
+                  if (!is_numeric) {
+                      /*
+                          If we have string, then convert it to
+                          array of charachter with .split("")
+                          then go through every ellement and 
+                          get ascii value from it and add that to sum
+                          of that word, with that, we have uniq value for every
+                          word.
 
-                });
-            });
+                          author: vaxi
+                      */
+                      let sum_x = 0;
+                      let sum_y = 0;
 
-            this.reservations = tempReservations;
-        },
-        multisort: function(arr, columns, order_by) {
-            if(typeof columns == 'undefined') {
-                columns = []
-                for(x=0;x<arr[0].length;x++) {
-                    columns.push(x);
-                }
-            }
+                      x.split("").forEach(element => sum_x += element.charCodeAt())
+                      y.split("").forEach(element => sum_y += element.charCodeAt())
 
-            if(typeof order_by == 'undefined') {
-                order_by = []
-                for(x=0;x<arr[0].length;x++) {
-                    order_by.push('ASC');
-                }
-            }
+                      x = sum_x;
+                      y = sum_y;
+                  }
 
-            function multisort_recursive(a,b,columns,order_by,index) {  
-                var direction = order_by[index] == 'DESC' ? 1 : 0;
+                  if (x < y) {
+                      return direction == 0 ? -1 : 1;
+                  }
 
-                var is_numeric = !isNaN(a[columns[index]]-b[columns[index]]);
+                  if (x == y) {
+                      return columns.length - 1 > index ? multisort_recursive(a, b, columns, order_by, index + 1) : 0;
+                  }
 
-                var x = is_numeric ? a[columns[index]] : a[columns[index]].toLowerCase();
-                var y = is_numeric ? b[columns[index]] : b[columns[index]].toLowerCase();
+                  return direction == 0 ? 1 : -1;
+              }
 
-                if(!is_numeric) {
-                    /*
-                    *   If we have string, then convert it to
-                    *   array of charachter with .split("")
-                    *   then go through every ellement and 
-                    *   get ascii value from it and add that to sum
-                    *   of that word, with that, we have uniq value for every
-                    *   word.
-                    *    author: vaxi
-                    */
-                    let sum_x=0;
-                    let sum_y=0;
-                    
-                    x.split("").forEach(element => sum_x += element.charCodeAt())
-                    y.split("").forEach(element => sum_y += element.charCodeAt())
-
-                    x= sum_x;
-                    y=sum_y;
-                }
-
-                if(x < y) {
-                        return direction == 0 ? -1 : 1;
-                }
-
-                if(x == y)  {
-                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
-                }
-
-                return direction == 0 ? 1 : -1;
-            }
-
-            return arr.sort(function (a,b) {
-                return multisort_recursive(a,b,columns,order_by,0);
-            });
-        },
+              return arr.sort(function (a, b) {
+                  return multisort_recursive(a, b, columns, order_by, 0);
+              });
+          },
     },
     mounted() {
         let one = 'rest/reservation/getReservations';
