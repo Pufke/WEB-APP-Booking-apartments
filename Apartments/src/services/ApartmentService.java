@@ -54,22 +54,26 @@ public class ApartmentService {
 	@Path("/addNewApartments")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> addItem(ApartmentDTOJSON newItem) {
-		// With this, we get user who is loged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-
-		ApartmentsDAO apartmentsDAO = getApartments();
+	public Response addItem(ApartmentDTOJSON newItem) {
 		
-		apartmentsDAO.addNewApartments(newItem, user.getID());
-
-		// Add that apartment in list of hosts apartments
-		UsersDAO allUsersDAO = getUsers();
-		Integer idOfApartment = apartmentsDAO.getValues().size();
-		allUsersDAO.addHostApartments(user, idOfApartment);
-
-		return apartmentsDAO.getHostApartments(user);
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+	
+			ApartmentsDAO apartmentsDAO = getApartments();
+			
+			apartmentsDAO.addNewApartments(newItem, user.getID());
+			UsersDAO allUsersDAO = getUsers();
+			Integer idOfApartment = apartmentsDAO.getValues().size();
+			allUsersDAO.addHostApartments(user, idOfApartment);
+	
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE")
+					.entity(apartmentsDAO.getHostApartments(user))
+					.build();
+		
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	
@@ -97,16 +101,14 @@ public class ApartmentService {
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
 			ApartmentsDAO apartmentsDAO = getApartments();
-			Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
 			return Response
 					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE")
 					.entity(apartmentsDAO.getHostApartments(user))
 					.build();
-		
 		}
 	
 		return Response.status(403).type("text/plain")
-                .entity("get lost, loser!").build();
+                .entity("You do not have permission to access!").build();
 	}
 
 	@POST
@@ -126,7 +128,7 @@ public class ApartmentService {
 		}
 		
 		return Response.status(403).type("text/plain")
-                .entity("get lost, loser!").build();
+				.entity("You do not have permission to access!").build();
 
 	}
 	
@@ -146,7 +148,7 @@ public class ApartmentService {
 					.build();
 		}
 		return Response.status(403).type("text/plain")
-                .entity("get lost, loser!").build();
+				.entity("You do not have permission to access!").build();
 		
 	}
 
@@ -170,7 +172,7 @@ public class ApartmentService {
 					.build();
 		}	
 		return Response.status(403).type("text/plain")
-                .entity("get lost, loser!").build();
+				.entity("You do not have permission to access!").build();
 	
 	}
 
@@ -186,21 +188,26 @@ public class ApartmentService {
 	@POST
 	@Path("/getApartmentFreeDates")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<java.sql.Date> getApartmentFreeDates(FreeDatesDTO freedatesDTO) {
+	public Response getApartmentFreeDates(FreeDatesDTO freedatesDTO) {
+		if(isUserGuest()) {
+			ArrayList<java.sql.Date> lsita = new ArrayList<java.sql.Date>();
 		
-		ArrayList<java.sql.Date> lsita = new ArrayList<java.sql.Date>();
-	
-		for (Apartment ap : getApartments().getValues()) {
-			if(ap.getID() == freedatesDTO.apartmentID) {
-				for(Date d : ap.getAvailableDates()){
-					java.sql.Date sd = new java.sql.Date(d.getTime());
-					lsita.add(sd);
-				}
-			}	
+			for (Apartment ap : getApartments().getValues()) {
+				if(ap.getID() == freedatesDTO.apartmentID) {
+					for(Date d : ap.getAvailableDates()){
+						java.sql.Date sd = new java.sql.Date(d.getTime());
+						lsita.add(sd);
+					}
+				}	
+			}
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS ACTIVATED")
+					.entity(lsita)
+					.build();
 		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 		
-		
-		return lsita;
 	}
 
 	@POST
@@ -295,6 +302,16 @@ public class ApartmentService {
 		
 		if(user!= null) {
 			if(user.getRole().equals("ADMINISTRATOR")) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	private boolean isUserGuest() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("GUEST")) {
 				return true;
 			}
 		}	

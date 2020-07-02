@@ -143,7 +143,7 @@ public class ReservationService {
 		for(int i = 0; i < reservationData.numberOfNights; i++) {
 			System.out.println("Uporedjivanje");
 				if(isContains(listaSlobodnihDatuma, reservationData.dateOfReservation)){
-					listaSlobodnihDatuma.remove(reservationData.dateOfReservation);
+					listaSlobodnihDatuma = removeDateFromList(listaSlobodnihDatuma, reservationData.dateOfReservation);
 					Calendar calendar = Calendar.getInstance();
 					calendar.setTime(reservationData.dateOfReservation);
 					calendar.add(Calendar.DATE, 1);
@@ -321,6 +321,19 @@ public class ReservationService {
 			}
 		}
 		return false;
+	}
+	
+	private ArrayList<Date> removeDateFromList(ArrayList<Date> listaDatuma, Date datum) {
+		Date dateForDelete = null;
+		for(Date d : listaDatuma) {
+			//System.out.println("VREME " + d.toString().substring(0, 10) + " " +  datum.toString().substring(0, 10));
+			if(d.toString().substring(0, 10).equals(datum.toString().substring(0, 10))) {
+				dateForDelete = d;
+				
+			}
+		}
+		listaDatuma.remove(dateForDelete);
+		return listaDatuma;
 	}
 }
 //reservation/makeReservations

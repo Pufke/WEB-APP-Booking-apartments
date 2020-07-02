@@ -63,9 +63,9 @@ Vue.component("guest-apartments", {
                  
                 <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
                 
-                <button @click="viewComments(apartment.id)">VIRW COMMENTS</button>
+                <button @click="viewComments(apartment.id)">VIEW COMMENTS</button>
                 
-                 <button @click="viewFreeDates(apartment.id)">VIRW DATES</button>
+                 <button @click="viewFreeDates(apartment.id)">VIEW FREE DATES</button>
                 <br>
                 
     			
