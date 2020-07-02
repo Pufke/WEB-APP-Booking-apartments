@@ -52,8 +52,6 @@ public class ReservationService {
 		}	
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
-		
-		
 	}
 
 	@POST

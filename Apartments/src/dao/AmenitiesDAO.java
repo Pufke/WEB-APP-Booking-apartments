@@ -97,10 +97,12 @@ public class AmenitiesDAO {
 
 	}
 
-	public void deleteItem(Long amenitiesID) {
+	public void deleteItem(Integer amenitiesID) {
 
 		for (AmenitiesItem amenitiesItem : amenities) {
-			if (amenitiesItem.getID().equals((amenitiesID).intValue())) {
+			System.out.println("UPOREDJUJEM " + amenitiesItem.getID() +" I " +  amenitiesID);
+			if (amenitiesItem.getID() == amenitiesID) {
+				System.out.println("BRISEM");
 				amenities.remove(amenitiesItem);
 				saveAmenitiesJSON();
 				return;

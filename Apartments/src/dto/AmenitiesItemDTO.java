@@ -1,6 +1,6 @@
 package dto;
 
 public class AmenitiesItemDTO {
-	public Long amenitiesID;
+	public Integer amenitiesID;
 	public String name;
 }
