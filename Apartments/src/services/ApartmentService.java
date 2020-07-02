@@ -75,8 +75,6 @@ public class ApartmentService {
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
 	}
-
-	
 	
 	@GET
 	@Path("/getDummyApartments")
