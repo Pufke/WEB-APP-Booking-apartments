@@ -183,9 +183,9 @@ public class ApartmentService {
 	@Path("/getApartmentFreeDates")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getApartmentFreeDates(FreeDatesDTO freedatesDTO) {
+		
 		if(isUserGuest()) {
 			ArrayList<java.sql.Date> lsita = new ArrayList<java.sql.Date>();
-		
 			for (Apartment ap : getApartments().getValues()) {
 				if(ap.getID() == freedatesDTO.apartmentID) {
 					for(Date d : ap.getAvailableDates()){
@@ -227,18 +227,18 @@ public class ApartmentService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteHostApartment(ApartmentsDTO updatedApartment) {
+		
 		if(isUserHost()) {
-
-			ApartmentsDAO apartmentsDAO = getApartments();
-			apartmentsDAO.deleteApartment(updatedApartment.identificator);
-	
-			User user = (User) request.getSession().getAttribute("loginUser");
-			UsersDAO allUsersDAO = getUsers();
-			allUsersDAO.deleteHostApartment(user.getID(), updatedApartment.identificator);
-			return Response
-					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
-					.entity(apartmentsDAO.getHostApartments(user))
-					.build();
+				ApartmentsDAO apartmentsDAO = getApartments();
+				apartmentsDAO.deleteApartment(updatedApartment.identificator);
+		
+				User user = (User) request.getSession().getAttribute("loginUser");
+				UsersDAO allUsersDAO = getUsers();
+				allUsersDAO.deleteHostApartment(user.getID(), updatedApartment.identificator);
+				return Response
+						.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+						.entity(apartmentsDAO.getHostApartments(user))
+						.build();
 		}
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
@@ -251,22 +251,23 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteApartment(ApartmentsDTO updatedApartment) {
 		if(isUserAdmin()) {
-			ApartmentsDAO apartments = getApartments();
-			apartments.deleteApartment(updatedApartment.identificator);
-			
-			UsersDAO allUsersDAO = getUsers();
-			allUsersDAO.deleteHostApartment(updatedApartment.hostID, updatedApartment.identificator);
-	
-			return Response
-					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
-					.entity(getApartments().getValues())
-					.build();
+				ApartmentsDAO apartments = getApartments();
+				apartments.deleteApartment(updatedApartment.identificator);
+				
+				UsersDAO allUsersDAO = getUsers();
+				allUsersDAO.deleteHostApartment(updatedApartment.hostID, updatedApartment.identificator);
+		
+				return Response
+						.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+						.entity(getApartments().getValues())
+						.build();
 		}
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
 	}
 
 	private ApartmentsDAO getApartments() {
+		
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
 
 		if (apartments == null) {
@@ -277,11 +278,12 @@ public class ApartmentService {
 		}
 
 		return apartments;
-
 	}
 
 	private UsersDAO getUsers() {
+		
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
+		
 		if (users == null) {
 			users = new UsersDAO();
 			users.readUsers();
@@ -302,6 +304,7 @@ public class ApartmentService {
 		}	
 		return false;
 	}
+	
 	private boolean isUserAdmin() {
 		User user = (User) request.getSession().getAttribute("loginUser");
 		
@@ -312,6 +315,7 @@ public class ApartmentService {
 		}	
 		return false;
 	}
+	
 	private boolean isUserGuest() {
 		User user = (User) request.getSession().getAttribute("loginUser");
 		
