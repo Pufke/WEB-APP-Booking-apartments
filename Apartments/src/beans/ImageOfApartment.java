@@ -13,6 +13,9 @@ public class ImageOfApartment {
 	private Integer ID;
 	private String code64ForImage;
 	
+	public ImageOfApartment() {
+		
+	}
 	
 	public ImageOfApartment(Integer iD, String code64ForImage) {
 		super();

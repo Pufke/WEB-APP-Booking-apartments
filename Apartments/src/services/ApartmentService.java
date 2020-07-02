@@ -16,23 +16,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import beans.Address;
 import beans.Apartment;
-import beans.Comment;
+import beans.ImageOfApartment;
 import beans.Location;
 import beans.User;
 
 import dao.ApartmentsDAO;
-import dao.CommentsDAO;
 import dao.ImagesDAO;
 import dao.UsersDAO;
 
-import dto.ApartmentChangeDTO;
-import dto.ApartmentCommentJsonDTO;
 import dto.ApartmentDTOJSON;
-import dto.ApartmentWithImgDTOJSON;
 import dto.ApartmentsDTO;
 import dto.FreeDatesDTO;
 
@@ -45,25 +39,6 @@ public class ApartmentService {
 	@Context
 	ServletContext ctx;
 
-	@GET
-	@Path("/test")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String test() {
-		return "Hello Jersey";
-	}
-
-	
-	@POST
-	@Path("/addNewApartmentWithImg")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response addNewApartmentWithImg(ApartmentWithImgDTOJSON newItem) {
-		if(isUserHost()) {
-			//System.out.println(" \n\ncode slike: " +newItem.codeForImage + "\n\n");
-		}
-		return Response.status(403).type("text/plain")
-				.entity("You do not have permission to access!").build();
-	}
 	@POST
 	@Path("/addNewApartments")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -74,10 +49,17 @@ public class ApartmentService {
 		
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
-	
-			ApartmentsDAO apartmentsDAO = getApartments();
 			
+			// Add image to the images storage
+			ImagesDAO imagesDAO = getImages();
+			ImageOfApartment addedImage = imagesDAO.addNewImage(newItem.addedApartment.getImagesPath());
+			newItem.addedApartment.setImagesPath(Integer.toString(addedImage.getID())); // need this to set reference from apartment to images
+			
+			// Add apartment to the apartments storage
+			ApartmentsDAO apartmentsDAO = getApartments();
 			apartmentsDAO.addNewApartments(newItem, user.getID());
+			
+			// Add apartment id to the host list of apartments
 			UsersDAO allUsersDAO = getUsers();
 			Integer idOfApartment = apartmentsDAO.getValues().size();
 			allUsersDAO.addHostApartments(user, idOfApartment);

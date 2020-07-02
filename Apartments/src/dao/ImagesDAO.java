@@ -27,7 +27,7 @@ public class ImagesDAO {
 		this.images = new ArrayList<ImageOfApartment>();
 		
 		// UNCOMMENT IF WANT TO PUT DUMMY DATA IN FILE 
-		addMockupData();
+		//addMockupData();
 	}
 
 	public void readImagesJSON() {
@@ -80,6 +80,21 @@ public class ImagesDAO {
 		return images;
 	}
 
+	/**
+	 * Add new image to json storage.
+	 * 
+	 * @param code64ForImage : Base64 string format of Image
+	 */
+	public ImageOfApartment addNewImage(String code64ForImage) {
+		
+		Integer ID = getValues().size() + 1;
+		ImageOfApartment newImage = new ImageOfApartment(ID, code64ForImage);
+		images.add(newImage);
+		saveImagesJSON();
+		
+		return newImage;
+		
+	}
 
 
 	/**
@@ -105,5 +120,7 @@ public class ImagesDAO {
 			e.printStackTrace();
 		}
 	}
+
+
 	
 }

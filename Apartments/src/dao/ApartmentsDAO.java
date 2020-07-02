@@ -180,6 +180,12 @@ public class ApartmentsDAO {
 
 	}
 
+	/**
+	 * Add apartment to file & save it.
+	 * 
+	 * @param newItem
+	 * @param hostID : need this parameter to set ID of host which is this apartment 
+	 */
 	public void addNewApartments(ApartmentDTOJSON newItem,Integer hostID) {
 
 		Apartment apartment = new Apartment();
