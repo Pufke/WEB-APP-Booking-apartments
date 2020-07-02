@@ -26,11 +26,13 @@ import beans.User;
 
 import dao.ApartmentsDAO;
 import dao.CommentsDAO;
+import dao.ImagesDAO;
 import dao.UsersDAO;
 
 import dto.ApartmentChangeDTO;
 import dto.ApartmentCommentJsonDTO;
 import dto.ApartmentDTOJSON;
+import dto.ApartmentWithImgDTOJSON;
 import dto.ApartmentsDTO;
 import dto.FreeDatesDTO;
 
@@ -50,11 +52,25 @@ public class ApartmentService {
 		return "Hello Jersey";
 	}
 
+	
+	@POST
+	@Path("/addNewApartmentWithImg")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addNewApartmentWithImg(ApartmentWithImgDTOJSON newItem) {
+		if(isUserHost()) {
+			//System.out.println(" \n\ncode slike: " +newItem.codeForImage + "\n\n");
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
+	}
 	@POST
 	@Path("/addNewApartments")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItem(ApartmentDTOJSON newItem) {
+		
+		System.out.println("\n\n poslata i slika \n\n");
 		
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
@@ -94,6 +110,10 @@ public class ApartmentService {
 	@Path("/getMyApartments")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJustMyApartments() {
+		ImagesDAO imagesDAO = getImages();
+		//String code64OfImage = imagesDAO.getValues().get(0).getCode64ForImage();
+		//newItem.addedApartment.setImagesPath(code64OfImage);
+		
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
 			ApartmentsDAO apartmentsDAO = getApartments();
@@ -266,6 +286,21 @@ public class ApartmentService {
 				.entity("You do not have permission to access!").build();
 	}
 
+	
+	private ImagesDAO getImages() {
+		ImagesDAO images = (ImagesDAO) ctx.getAttribute("images");
+		
+		if(images == null) {
+			images = new ImagesDAO();
+			images.readImagesJSON();
+			
+			ctx.setAttribute("images", images);
+		}
+		
+		return images;
+		
+	}
+	
 	private ApartmentsDAO getApartments() {
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
 

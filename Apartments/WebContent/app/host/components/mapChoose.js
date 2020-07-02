@@ -2,7 +2,7 @@ Vue.component("host-mapChoose", {
     data() {
         return {
             startDateForHost: null,
-        	endDateForHost: null,
+            endDateForHost: null,
             amenities: [],          // need it for adding form of new apartment ( we need available amenities )
             newApartment: {
                 apartmentAmentitiesIDs: [],
@@ -32,12 +32,12 @@ Vue.component("host-mapChoose", {
                 timeForCheckOut: "10:00",
                 typeOfApartment: null,
             },
+            previewMap: false,
+            codeForImage: ''
         }
     },
     template: `
     <div>
-        <h1> Cao od mape </h1>
-
         <!-- Form for adding apartment -->
         <form method='post'>
             <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment..."><br><br>
@@ -54,6 +54,10 @@ Vue.component("host-mapChoose", {
 
 
             <!-- Address -->
+            <button type="button" @click="previewMapChooseLocation()"> Choose on map </button> <br><br>
+            
+            <div id="map" class="map" v-if="previewMap"> <br><br></div> 
+
             <input type="text" id="townID" placeholder="Town name ..."> <br><br>
             <input type="text" id="streetID" placeholder="Street ..."> <br><br>
             <input type="text" id="numberID" placeholder="Number ..."> <br><br>
@@ -66,6 +70,11 @@ Vue.component("host-mapChoose", {
                 </option>
             </select>
             <!-- End list of amenities in apartments -->
+            <br><br>
+
+            <!-- Choose image of apartment -->
+            <input type="file" onchange="encodeImageFileAsURL(this)" /><br><br>
+            <!-- End of choose of image of apartment --> <br><br>
 
             <button type="button" @click="confirmAdding()">Confirm</button> <br><br>
 
@@ -73,25 +82,39 @@ Vue.component("host-mapChoose", {
         <!-- End of form for adding apartment -->
 
         <br><br>
-        <button type="button" @click="endAddingApartments()"> End adding apartments </button>
-
-        <br><br><br>
-        <div id="map" class="map"> </div>
         
+        
+        <img id="imgSampleID" src="" alt="Image of apartment" width="300" height="200"> 
+
+        <br><br>
+        <button type="button" @click="endAddingApartments()"> End adding apartments </button>
 
     </div>
     `,
     methods: {
+        previewMapChooseLocation: function () {
+            this.previewMap = !this.previewMap;
+            if (this.previewMap) {
+                // Draw map on screen
+                this.$nextTick(function () {
+                    this.initForMap();
+                })
+            }
+        },
         confirmAdding: function () {
             // Get data from form
             this.newApartment.location.address.populatedPlace = document.getElementById("townID").value;
             this.newApartment.location.address.street = document.getElementById("streetID").value;
             this.newApartment.location.address.number = document.getElementById("numberID").value;
 
+            // Get codeForImage 
+            this.codeForImage = document.getElementById("imgSampleID").src;
+
+            this.newApartment.imagesPath = this.codeForImage;
 
             // warning/error if some fields are null or empty
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut || 
+            if (!this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut ||
                 !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms ||
                 !this.newApartment.numberOfGuests || !this.newApartment.location.address.populatedPlace ||
                 !this.newApartment.location.address.street || !this.newApartment.location.address.number
@@ -106,7 +129,7 @@ Vue.component("host-mapChoose", {
                 .post('rest/apartments/addNewApartments', {
                     addedApartment: this.newApartment,
                     "startDateForReservation": this.startDateForHost,
-                    "endDateForReservation" : this.endDateForHost
+                    "endDateForReservation": this.endDateForHost
                 })
                 .then(response => {
                     toastr["success"]("You make success adding !!", "Success adding!");
@@ -197,4 +220,21 @@ function reverseGeocode(coords) {
             }
 
         });
+}
+
+/**
+ * ref: https://stackoverflow.com/questions/6150289/how-can-i-convert-an-image-into-base64-string-using-javascript
+ * @param {*} element 
+ */
+function encodeImageFileAsURL(element) {
+    var file = element.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function () {
+        console.log('RESULT', reader.result);
+        document.getElementById('imgSampleID')
+            .setAttribute(
+                'src', reader.result
+            );
+    }
+    reader.readAsDataURL(file);
 }

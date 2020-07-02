@@ -75,6 +75,9 @@ public class ApartmentsDAO {
 			 * dateRange.getFromDate()); System.out.println("to date: " +
 			 * dateRange.getToDate()); }
 			 */
+			//System.out.println("\n\n code slike: " + a.getImagesPath() + "\n\n");
+		
+			
 			apartments.add(a);
 		}
 		System.out.println("\n\n");
@@ -194,7 +197,9 @@ public class ApartmentsDAO {
 		apartment.setNumberOfGuests(newItem.addedApartment.getNumberOfGuests());
 		apartment.setLocation(newItem.addedApartment.getLocation());
 		apartment.setApartmentAmentitiesIDs(newItem.addedApartment.getApartmentAmentitiesIDs());
-		
+		apartment.setImagesPath(newItem.addedApartment.getImagesPath());
+		//System.out.println("\n\n\t\t code od slike je: " + apartment.getImagesPath());
+		//System.out.println("\n\n kraj coda");
 		// init to empty, because null is not allowed for deserialization
 		ArrayList<Date> dataRangeForHosting = new ArrayList<Date>();
 		
@@ -216,7 +221,7 @@ public class ApartmentsDAO {
 		apartment.setAvailableDates(freeData);
 		
 		newItem.addedApartment.getLocation().getAddress().setZipCode("");
-		apartment.setImagesPath("withoutPath");
+		//apartment.setImagesPath("withoutPath");
 		apartment.setListOfReservationsIDs(new ArrayList<Integer>());
 		
 		apartments.add(apartment);

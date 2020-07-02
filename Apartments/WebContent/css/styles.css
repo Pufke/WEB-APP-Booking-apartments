@@ -296,3 +296,13 @@ table{
 	cursor: pointer;
 }
 /* End of style for dialog of adding NEW HOST */
+
+
+/* Style for images of apartments */
+
+img.imagesOfApartment{
+	height: 220px;
+	width: 350px;
+}
+
+/* End of images for apartments */
