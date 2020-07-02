@@ -42,139 +42,164 @@ public class ReservationService {
 	@GET
 	@Path("/getReservations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Reservation> getJustApartments() {
-		System.out.println("CALLED GET JUST RESERVATIONS");
-		return getReservations().getValues();
+	public Response getJustApartments() {
+		
+		if(isUserAdmin() || isUserGuest()) {
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS GET")
+					.entity(getReservations().getValues())
+					.build();
+		}	
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	@POST
 	@Path("/acceptReservation")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Reservation> acceptReservation(ReservationDTOJSON param){
+	public Response acceptReservation(ReservationDTOJSON param){
 		
-		ReservationDAO reservationsDAO = getReservations();
-		reservationsDAO.acceptReservation(param.reservation);
-		
-		UsersDAO usersDAO = getUsers();
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-		return usersDAO.getReservationsOfHost(user, reservationsDAO.getValues());
+		if(isUserHost()) {
+			ReservationDAO reservationsDAO = getReservations();
+			reservationsDAO.acceptReservation(param.reservation);
+			
+			UsersDAO usersDAO = getUsers();
+			User user = (User) request.getSession().getAttribute("loginUser");
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS ACCEPTED")
+					.entity(usersDAO.getReservationsOfHost(user, reservationsDAO.getValues()))
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	@POST
 	@Path("/declineReservation")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Reservation> declineReservation(ReservationDTOJSON param){
+	public Response declineReservation(ReservationDTOJSON param){
 		
-		ReservationDAO reservationsDAO = getReservations();
-		reservationsDAO.declineReservation(param.reservation);
-		
-		UsersDAO usersDAO = getUsers();
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-		return usersDAO.getReservationsOfHost(user, reservationsDAO.getValues());
+		if(isUserHost()) {
+			ReservationDAO reservationsDAO = getReservations();
+			reservationsDAO.declineReservation(param.reservation);
+			
+			UsersDAO usersDAO = getUsers();
+			User user = (User) request.getSession().getAttribute("loginUser");
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS DECLINED")
+					.entity(usersDAO.getReservationsOfHost(user, reservationsDAO.getValues()))
+					.build();
+			
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	@POST
 	@Path("/endReservation")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Reservation> endReservation(ReservationDTOJSON param){
-		
-		ReservationDAO reservationsDAO = getReservations();
-		reservationsDAO.endReservation(param.reservation);
-		
-		UsersDAO usersDAO = getUsers();
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-		return usersDAO.getReservationsOfHost(user, reservationsDAO.getValues());
+	public Response endReservation(ReservationDTOJSON param){
+		if(isUserHost()) {
+			ReservationDAO reservationsDAO = getReservations();
+			reservationsDAO.endReservation(param.reservation);
+			
+			UsersDAO usersDAO = getUsers();
+	
+			User user = (User) request.getSession().getAttribute("loginUser");
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS ENDED")
+					.entity(usersDAO.getReservationsOfHost(user, reservationsDAO.getValues()))
+					.build();
+			
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
-	
-	//declineReservation
 	
 	@POST
 	@Path("/makeReservations")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response makeReservations(ReservationDTO reservationData) {
-		// Prilikom kreiranja rezervacije kreirati rezervaciju dodati u Apartman
-		// IdRezervacije
-		ReservationDAO reservationsCTX = getReservations();
-		UsersDAO usersCTX = getUsers();
-		ApartmentsDAO apartmentsCTX = getApartments();
-
-		System.out.println("Kreiranje rezervacijE");
-
-		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
-		Collection<User> users = usersCTX.getValues();
-		ArrayList<Reservation> reservations = reservationsCTX.getValues();
-
-		Apartment apartment = new Apartment();
-		User user = new User();
-
-		for (Apartment a : apartments) {
-			if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {
-				// a.setReservedStatus("Rezervisano");
-				apartment = a;
-				break;
-			}
-		}
-		for (User u : users) {
-			if (u.getID() == reservationData.guestID) {
-				user = u;
-				break;
-			}
-		}
-	//Convert java.util.Date to java.Sql.date, reason why i do this i beacuse frontend doesnt format well java.util.Date format 
-		java.sql.Date sd = new java.sql.Date(reservationData.dateOfReservation.getTime());
-
-		ArrayList<Date> listaSlobodnihDatuma = apartment.getAvailableDates();
-
 		
-		for(int i = 0; i < reservationData.numberOfNights; i++) {
-			System.out.println("Uporedjivanje");
-				if(isContains(listaSlobodnihDatuma, reservationData.dateOfReservation)){
-					listaSlobodnihDatuma = removeDateFromList(listaSlobodnihDatuma, reservationData.dateOfReservation);
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTime(reservationData.dateOfReservation);
-					calendar.add(Calendar.DATE, 1);
-					System.out.println("Povecava datum");
-					reservationData.dateOfReservation =  calendar.getTime();
-				}else {
-					return Response.status(Response.Status.EXPECTATION_FAILED).entity("APARTMENT IS NOT FREE").build();
+		if(isUserGuest()) {
+			ReservationDAO reservationsCTX = getReservations();
+			UsersDAO usersCTX = getUsers();
+			ApartmentsDAO apartmentsCTX = getApartments();
+	
+			System.out.println("Kreiranje rezervacijE");
+	
+			ArrayList<Apartment> apartments = apartmentsCTX.getValues();
+			Collection<User> users = usersCTX.getValues();
+			ArrayList<Reservation> reservations = reservationsCTX.getValues();
+	
+			Apartment apartment = new Apartment();
+			User user = new User();
+	
+			for (Apartment a : apartments) {
+				if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {	
+					apartment = a;
+					break;
 				}
+			}
+			for (User u : users) {
+				if (u.getID() == reservationData.guestID) {
+					user = u;
+					break;
+				}
+			}
 			
+			//Convert java.util.Date to java.Sql.date, reason why i do this i beacuse frontend doesnt format well java.util.Date format 
+			java.sql.Date sd = new java.sql.Date(reservationData.dateOfReservation.getTime());
+	
+			ArrayList<Date> listaSlobodnihDatuma = apartment.getAvailableDates();
+			
+			for(int i = 0; i < reservationData.numberOfNights; i++) {
+				System.out.println("Uporedjivanje");
+					if(isContains(listaSlobodnihDatuma, reservationData.dateOfReservation)){
+						listaSlobodnihDatuma = removeDateFromList(listaSlobodnihDatuma, reservationData.dateOfReservation);
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(reservationData.dateOfReservation);
+						calendar.add(Calendar.DATE, 1);
+						System.out.println("Povecava datum");
+						reservationData.dateOfReservation =  calendar.getTime();
+					}else {
+						return Response.status(Response.Status.EXPECTATION_FAILED).entity("APARTMENT IS NOT FREE").build();
+					}
+				
+			}
+			
+			
+			double totalPrice =  reservationData.numberOfNights * apartment.getPricePerNight();
+			Integer ReservationUniqueID = reservations.size() + 1;
+	
+			
+			Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator,
+					sd, reservationData.numberOfNights, totalPrice,
+					reservationData.messageForHost, reservationData.guestID, reservationData.statusOfReservation);
+			
+			ArrayList<Integer> reservedApartmentList = apartment.getListOfReservationsIDs();
+			reservedApartmentList.add(ReservationUniqueID);
+			apartment.setListOfReservationsIDs(reservedApartmentList);
+			apartment.setAvailableDates(listaSlobodnihDatuma);
+			
+			reservations.add(newReservation);
+	
+			reservationsCTX.saveReservationsJSON();
+			apartmentsCTX.saveApartmentsJSON();
+
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS RESERVED APARTMENT")				
+					.build();
 		}
-		
-		
-		double totalPrice =  reservationData.numberOfNights * apartment.getPricePerNight();
-		Integer ReservationUniqueID = reservations.size() + 1;
-
-		
-		Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator,
-				sd, reservationData.numberOfNights, totalPrice,
-				reservationData.messageForHost, reservationData.guestID, reservationData.statusOfReservation);
-		
-		ArrayList<Integer> reservedApartmentList = apartment.getListOfReservationsIDs();
-		reservedApartmentList.add(ReservationUniqueID);
-		apartment.setListOfReservationsIDs(reservedApartmentList);
-		apartment.setAvailableDates(listaSlobodnihDatuma);
-		
-		reservations.add(newReservation);
-
-		reservationsCTX.saveReservationsJSON();
-		apartmentsCTX.saveApartmentsJSON();
-		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
-
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	@POST
@@ -182,43 +207,50 @@ public class ReservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteReservations(DeleteReservationDTO reservationData) {
-		ReservationDAO reservationsCTX = getReservations();
-		ApartmentsDAO apartmentsCTX = getApartments();
-
-		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
-		ArrayList<Reservation> reservations = reservationsCTX.getValues();
-
-		Reservation reservation = new Reservation();
-
-		System.out.println(reservationData.reservationID);
-		for (Reservation r : reservations) {
-			if (r.getID().equals(Integer.parseInt(reservationData.reservationID))) {
-				reservation = r;
-				break;
-			}
-		}
-
-		for (Apartment a : apartments) {
-			if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {
-				ArrayList<Integer> rezervacije = a.getListOfReservationsIDs();
-				for (Integer s : rezervacije) {
-					if (s.equals(reservationData.reservationID)) {
-						rezervacije.remove(s);
-						break;
-					}
-
+		
+		if(isUserGuest()) {
+			
+			ReservationDAO reservationsCTX = getReservations();
+			ApartmentsDAO apartmentsCTX = getApartments();
+	
+			ArrayList<Apartment> apartments = apartmentsCTX.getValues();
+			ArrayList<Reservation> reservations = reservationsCTX.getValues();
+	
+			Reservation reservation = new Reservation();
+	
+			System.out.println(reservationData.reservationID);
+			for (Reservation r : reservations) {
+				if (r.getID().equals(Integer.parseInt(reservationData.reservationID))) {
+					reservation = r;
+					break;
 				}
-				a.setListOfReservationsIDs(rezervacije);
-				break;
 			}
+	
+			for (Apartment a : apartments) {
+				if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {
+					ArrayList<Integer> rezervacije = a.getListOfReservationsIDs();
+					for (Integer s : rezervacije) {
+						if (s.equals(reservationData.reservationID)) {
+							rezervacije.remove(s);
+							break;
+						}
+	
+					}
+					a.setListOfReservationsIDs(rezervacije);
+					break;
+				}
+			}
+	
+			reservations.remove(reservation);
+			reservationsCTX.saveReservationsJSON();
+			apartmentsCTX.saveApartmentsJSON();
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS RESERVED APARTMENT")				
+					.build();
 		}
-
-		reservations.remove(reservation);
-
-		reservationsCTX.saveReservationsJSON();
-		apartmentsCTX.saveApartmentsJSON();
-		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
-
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	@POST
@@ -226,42 +258,54 @@ public class ReservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response makeComment(CommentDTO commentData) {
-		UsersDAO usersCTX = getUsers();
-		ApartmentsDAO apartmentsCTX = getApartments();
-		CommentsDAO commentsCTX = getComments();
-
-		ArrayList<Comment> comments = commentsCTX.getValues();
-		ArrayList<Apartment> apartments = apartmentsCTX.getValues();
-		Collection<User> users = usersCTX.getValues();
-
-		Apartment apartment = new Apartment();
-		User user = new User();
-
-		for (Apartment a : apartments) {
-			if (a.getID().equals((commentData.apartmentID).intValue())) {
-				apartment = a;
-				break;
+	
+		if(isUserGuest()) {
+			
+			UsersDAO usersCTX = getUsers();
+			ApartmentsDAO apartmentsCTX = getApartments();
+			CommentsDAO commentsCTX = getComments();
+	
+			ArrayList<Comment> comments = commentsCTX.getValues();
+			ArrayList<Apartment> apartments = apartmentsCTX.getValues();
+			Collection<User> users = usersCTX.getValues();
+	
+			Apartment apartment = new Apartment();
+			User user = new User();
+	
+			for (Apartment a : apartments) {
+				if (a.getID().equals((commentData.apartmentID).intValue())) {
+					apartment = a;
+					break;
+				}
 			}
-		}
-		for (User u : users) {
-			if (u.getUserName().equals(commentData.guestUserName)) {
-				user = u;
-				break;
+			for (User u : users) {
+				if (u.getUserName().equals(commentData.guestUserName)) {
+					user = u;
+					break;
+				}
 			}
+	
+			Integer CommentUniqueID = comments.size() + 1;
+			
+			Comment comment = new Comment(CommentUniqueID, 0, 0, user.getID(), apartment.getID(),
+					commentData.txtOfComment, commentData.ratingForApartment);
+	
+			comments.add(comment);
+	
+			apartmentsCTX.saveApartmentsJSON();
+			commentsCTX.saveCommentJSON();
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS COMMENTED")				
+					.build();
 		}
-
-		Comment comment = new Comment(1000, 0, 0, user.getID(), (apartment.getID()).intValue(),
-				commentData.txtOfComment, commentData.ratingForApartment);
-
-		comments.add(comment);
-
-		apartmentsCTX.saveApartmentsJSON();
-		commentsCTX.saveCommentJSON();
-		return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 
 	}
 
 	private ReservationDAO getReservations() {
+		
 		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
 
 		if (reservations == null) {
@@ -273,7 +317,9 @@ public class ReservationService {
 	}
 
 	private UsersDAO getUsers() {
+		
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
+		
 		if (users == null) {
 			users = new UsersDAO();
 			users.readUsers();
@@ -285,6 +331,7 @@ public class ReservationService {
 	}
 
 	private ApartmentsDAO getApartments() {
+		
 		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
 
 		if (apartments == null) {
@@ -299,6 +346,7 @@ public class ReservationService {
 	}
 
 	private CommentsDAO getComments() {
+		
 		CommentsDAO comments = (CommentsDAO) ctx.getAttribute("comments");
 
 		if (comments == null) {
@@ -313,9 +361,10 @@ public class ReservationService {
 	}
 
 
+	// I made this two functions beacuse i have problem with comparing and removing dates after deserialization from JSON, date time is not same
 	private boolean isContains(ArrayList<Date> listaDatuma, Date datum) {
 		for(Date d : listaDatuma) {
-			//System.out.println("VREME " + d.toString().substring(0, 10) + " " +  datum.toString().substring(0, 10));
+	
 			if(d.toString().substring(0, 10).equals(datum.toString().substring(0, 10))) {
 				return true;
 			}
@@ -326,7 +375,6 @@ public class ReservationService {
 	private ArrayList<Date> removeDateFromList(ArrayList<Date> listaDatuma, Date datum) {
 		Date dateForDelete = null;
 		for(Date d : listaDatuma) {
-			//System.out.println("VREME " + d.toString().substring(0, 10) + " " +  datum.toString().substring(0, 10));
 			if(d.toString().substring(0, 10).equals(datum.toString().substring(0, 10))) {
 				dateForDelete = d;
 				
@@ -335,5 +383,38 @@ public class ReservationService {
 		listaDatuma.remove(dateForDelete);
 		return listaDatuma;
 	}
+	
+	private boolean isUserHost() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("HOST")) {	
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserAdmin() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("ADMINISTRATOR")) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserGuest() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("GUEST")) {
+				return true;
+			}
+		}	
+		return false;
+	}
 }
-//reservation/makeReservations
+	

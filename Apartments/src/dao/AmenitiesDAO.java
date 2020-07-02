@@ -84,9 +84,8 @@ public class AmenitiesDAO {
 	public Boolean changeItem(AmenitiesItemDTO updatedItem) {
 
 		for (AmenitiesItem item : amenities) {
-			if (item.getID().equals((updatedItem.amenitiesID).intValue())) {
-				System.out.println(" nasao sam item sa id-om: " + updatedItem.amenitiesID);
-
+			System.out.println("UPOREDJUJEM I MENJAM " + item.getID() + " I " + updatedItem.amenitiesID);
+			if (item.getID() == updatedItem.amenitiesID ) {
 				item.setItemName(updatedItem.name);
 				saveAmenitiesJSON();
 				return true;
@@ -97,10 +96,11 @@ public class AmenitiesDAO {
 
 	}
 
-	public void deleteItem(Long amenitiesID) {
+	public void deleteItem(Integer amenitiesID) {
 
 		for (AmenitiesItem amenitiesItem : amenities) {
-			if (amenitiesItem.getID().equals((amenitiesID).intValue())) {
+		
+			if (amenitiesItem.getID() == amenitiesID) {
 				amenities.remove(amenitiesItem);
 				saveAmenitiesJSON();
 				return;

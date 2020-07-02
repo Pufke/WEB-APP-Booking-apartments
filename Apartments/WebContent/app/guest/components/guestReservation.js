@@ -178,12 +178,12 @@ totalPrice:99
                     filteredReservations = [];
                     this.reservations.forEach(el => {
 
-                        if (el.reservationID != identificator) {
+                        if (el.id != identificator) {
                             filteredReservations.push(el);
                         }
                     });
                     this.reservations = filteredReservations;
-                    toastr["success"]("Success changes!!", "Success!");
+                    toastr["success"]("Success deleted!!", "Success!");
                 })
                 .catch(err => {
                     toastr["error"]("Failed during changes :(", "Fail");

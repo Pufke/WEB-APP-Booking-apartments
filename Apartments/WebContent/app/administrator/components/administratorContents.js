@@ -25,7 +25,7 @@ Vue.component("administrator-contents", {
             amenities: [],
             hideDialog: true,
             itemForChange: {
-                amenitiesID: 999,
+                amenitiesID: "",
                 name: ""
             },
             hideAddDialog: true,
@@ -64,7 +64,7 @@ Vue.component("administrator-contents", {
                 <h2> {{ item.itemName }} </h2>
 
                 <button type="button" @click="changeItem(item)"> Change </button>
-                <button type="button" @click="deleteItem(item)"> Delete </button>
+                <button type="button" @click="deleteItem(item.id)"> Delete </button>
             
 
             </li>
@@ -127,7 +127,8 @@ Vue.component("administrator-contents", {
         changeItem: function (item) {
             this.hideDialog = !this.hideDialog;
 
-            this.itemForChange = item;
+            this.itemForChange.amenitiesID = item.id;
+            this.itemForChange.name = item.name;
 
         },
         confirmChanging: function () {
@@ -147,19 +148,13 @@ Vue.component("administrator-contents", {
                 });
 
         },
-        deleteItem: function (item) {
-            this.itemForChange = item;
-            this.requestForDeleteItem();
-        },
-        requestForDeleteItem: function () {
-
+        deleteItem:  function (item) {
             axios
                 .delete('rest/amenities/deleteItem', {
                     data: {
-                        "amenitiesID": this.itemForChange.amenitiesID,
-                        "name": this.itemForChange.name
+                        "amenitiesID": item,
+                        "name": item.name
                     }
-
                 })
                 .then(response => {
                     this.amenities = [];
