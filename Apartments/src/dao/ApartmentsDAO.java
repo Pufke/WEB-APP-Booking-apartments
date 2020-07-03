@@ -121,6 +121,7 @@ public class ApartmentsDAO {
 				apartment.setNumberOfGuests(updatedApartment.getNumberOfGuests());
 				apartment.setApartmentAmentitiesIDs(updatedApartment.getApartmentAmentitiesIDs());
 				apartment.setLocation(updatedApartment.getLocation());
+				apartment.setImagesPath(updatedApartment.getImagesPath());
 				
 				ArrayList<Date> dataRangeForHosting = new ArrayList<Date>();
 				

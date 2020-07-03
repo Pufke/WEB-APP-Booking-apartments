@@ -50,10 +50,18 @@ public class ApartmentService {
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
 			
-			// Add image to the images storage
+			/*
+			 * Add image to the images storage.
+			 * 
+			 * After that we need to set ID of image in apartment attribute imagesPath
+			 * from front-end we get imagesPath like Base64 format, and we add that image
+			 * to the storage, after that imagesPath in apartment became only ID of that image
+			 * for faster and easier use.
+			 *  
+			 */
 			ImagesDAO imagesDAO = getImages();
 			ImageOfApartment addedImage = imagesDAO.addNewImage(newItem.addedApartment.getImagesPath());
-			newItem.addedApartment.setImagesPath(Integer.toString(addedImage.getID())); // need this to set reference from apartment to images
+			newItem.addedApartment.setImagesPath(Integer.toString(addedImage.getID())); 
 			
 			// Add apartment to the apartments storage
 			ApartmentsDAO apartmentsDAO = getApartments();
@@ -157,6 +165,20 @@ public class ApartmentService {
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
 		
+			/*
+			 * Add image to the images storage.
+			 * 
+			 * After that we need to set ID of image in apartment attribute imagesPath
+			 * from front-end we get imagesPath like Base64 format, and we add that image
+			 * to the storage, after that imagesPath in apartment became only ID of that image
+			 * for faster and easier use.
+			 *  
+			 */
+			ImagesDAO imagesDAO = getImages();
+			ImageOfApartment addedImage = imagesDAO.addNewImage(newItem.addedApartment.getImagesPath());
+			newItem.addedApartment.setImagesPath(Integer.toString(addedImage.getID())); 
+			
+			
 			ApartmentsDAO apartmentsDAO = getApartments();
 			apartmentsDAO.changeApartment(newItem.addedApartment, newItem.startDateForReservation, newItem.endDateForReservation);
 			
