@@ -27,20 +27,19 @@ public class PofileService {
 	@GET
 	@Path("/profileUser")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getUserInformationForEdit() {
+	public Response getUserInformationForEdit() {
 		
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-		
-		if(user.getRole().equals("GUEST")) {
-			System.out.println("\n\n\n \t DOBIO SAM " + user.getRole()+"\n\n");
-			System.out.println("username: " +user.getUserName() + " password: " + user.getPassword());
-		}else {
-			System.out.println("NISAM");
+		if(isUserHost() || isUserAdmin() || isUserGuest()) {
+	
+			User user = (User) request.getSession().getAttribute("loginUser");		
+
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS SHOW")
+					.entity( user)
+					.build();
 		}
-		return user;
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	@POST
@@ -48,17 +47,17 @@ public class PofileService {
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveProileChanges(UserDTO updatedUser) {
-		UsersDAO users = getUsers();
 		
-		if(users.changeUser(updatedUser)) {
-
-			return Response.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE").build();
+		if(isUserHost() || isUserAdmin() || isUserGuest()) {
 			
-			
-		}else {
-			return Response.status(Response.Status.BAD_REQUEST).entity("ERROR DURING CHANGES").build();
+			UsersDAO users = getUsers();
+			users.changeUser(updatedUser);
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE")
+					.build();
 		}
-		
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 
 	}
 	
