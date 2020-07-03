@@ -1,7 +1,6 @@
 package services;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +11,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import beans.Apartment;
 import beans.Comment;
 import beans.User;
-import dao.ApartmentsDAO;
 import dao.CommentsDAO;
 import dto.ApartmentCommentJsonDTO;
 import dto.CommentDTOJSON;
@@ -32,86 +30,105 @@ public class CommentsService {
 	@GET
 	@Path("/getComments")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Comment> getJustComments() {
-		System.out.println("\n\n\n\n Pozvano getovanje svih komentara \n\n");
-		return getComments().getValues();
+	public Response getJustComments() {
+		
+		if(isUserAdmin() || isUserHost()) {
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS GET")
+					.entity(getComments().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	@GET
 	@Path("/getMyComments")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Comment> getJustMyComments() {
+	public Response getJustMyComments() {
 
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-
-		System.out.println("\n\n\n DOBAVLJANJE SAMO APARTMANA DOMACINA: " + user.getUserName());
-
-		CommentsDAO commentsDAO = getComments();
-
-		return commentsDAO.getCommentsForHostApartments(user);
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+			CommentsDAO commentsDAO = getComments();
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS GET")
+					.entity(commentsDAO.getCommentsForHostApartments(user))
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	@POST
 	@Path("/hideComment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Comment> hideComment(CommentDTOJSON newItem) {
+	public Response hideComment(CommentDTOJSON newItem) {
 
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-
-		System.out.println("\n\n\n DOBAVLJANJE SAMO APARTMANA DOMACINA: " + user.getUserName());
-
-		CommentsDAO commentsDAO = getComments();
-		commentsDAO.hideComment(newItem.comment);
-		
-		return commentsDAO.getCommentsForHostApartments(user);
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+	
+			CommentsDAO commentsDAO = getComments();
+			commentsDAO.hideComment(newItem.comment);
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS HIDEN")
+					.entity(commentsDAO.getCommentsForHostApartments(user))
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 
 	@POST
 	@Path("/getCommentsForApartment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Comment> getCommentsForApartment(ApartmentCommentJsonDTO apartmentCommentJsonDTO) {
-		ArrayList<Comment> commentsForApartment = new ArrayList<Comment>();
+	public Response getCommentsForApartment(ApartmentCommentJsonDTO apartmentCommentJsonDTO) {
 		
-		CommentsDAO commentsDAO = getComments();
-		ArrayList<Comment> allComments = commentsDAO.getValues();
-		
-		for (Comment c: allComments) {
-			if(c.getCommentForApartmentID() == apartmentCommentJsonDTO.apartmentID) {
-				commentsForApartment.add(c);
+		if(isUserGuest()) {
+			ArrayList<Comment> commentsForApartment = new ArrayList<Comment>();
+			
+			CommentsDAO commentsDAO = getComments();
+			ArrayList<Comment> allComments = commentsDAO.getValues();
+			
+			for (Comment c: allComments) {
+				if(c.getCommentForApartmentID() == apartmentCommentJsonDTO.apartmentID) {
+					commentsForApartment.add(c);
+				}
 			}
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS GET")
+					.entity(commentsForApartment)
+					.build();
 		}
-	
-		return commentsForApartment;
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
-	
-	
 	
 	@POST
 	@Path("/showComment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Comment> showComment(CommentDTOJSON newItem) {
+	public Response showComment(CommentDTOJSON newItem) {
 
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-
-		System.out.println("\n\n\n DOBAVLJANJE SAMO APARTMANA DOMACINA: " + user.getUserName());
-
-		CommentsDAO commentsDAO = getComments();
-		commentsDAO.showComment(newItem.comment);
-		
-		return commentsDAO.getCommentsForHostApartments(user);
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+	
+			CommentsDAO commentsDAO = getComments();
+			commentsDAO.showComment(newItem.comment);
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS SHOW")
+					.entity( commentsDAO.getCommentsForHostApartments(user))
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
+	
 	private CommentsDAO getComments() {
 
 		CommentsDAO commentsDAO = (CommentsDAO) ctx.getAttribute("comments");
@@ -124,18 +141,37 @@ public class CommentsService {
 
 		return commentsDAO;
 	}
-
-	private ApartmentsDAO getApartments() {
-		ApartmentsDAO apartments = (ApartmentsDAO) ctx.getAttribute("apartments");
-
-		if (apartments == null) {
-			apartments = new ApartmentsDAO();
-			apartments.readApartments();
-
-			ctx.setAttribute("apartments", apartments);
-		}
-
-		return apartments;
-
+	
+	private boolean isUserHost() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("HOST")) {	
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserAdmin() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("ADMINISTRATOR")) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserGuest() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("GUEST")) {
+				return true;
+			}
+		}	
+		return false;
 	}
 }

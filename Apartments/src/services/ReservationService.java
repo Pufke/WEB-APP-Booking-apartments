@@ -16,8 +16,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
-
 import beans.Apartment;
 import beans.Comment;
 import beans.Reservation;
@@ -130,27 +128,16 @@ public class ReservationService {
 		
 		if(isUserGuest()) {
 			ReservationDAO reservationsCTX = getReservations();
-			UsersDAO usersCTX = getUsers();
 			ApartmentsDAO apartmentsCTX = getApartments();
 	
-			System.out.println("Kreiranje rezervacijE");
-	
 			ArrayList<Apartment> apartments = apartmentsCTX.getValues();
-			Collection<User> users = usersCTX.getValues();
 			ArrayList<Reservation> reservations = reservationsCTX.getValues();
 	
 			Apartment apartment = new Apartment();
-			User user = new User();
 	
 			for (Apartment a : apartments) {
 				if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {	
 					apartment = a;
-					break;
-				}
-			}
-			for (User u : users) {
-				if (u.getID() == reservationData.guestID) {
-					user = u;
 					break;
 				}
 			}

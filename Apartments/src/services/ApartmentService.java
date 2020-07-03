@@ -30,7 +30,6 @@ import dto.ApartmentDTOJSON;
 import dto.ApartmentsDTO;
 import dto.FreeDatesDTO;
 
-//apartments/getApartments
 @Path("/apartments")
 public class ApartmentService {
 
@@ -44,8 +43,6 @@ public class ApartmentService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItem(ApartmentDTOJSON newItem) {
-		
-		System.out.println("\n\n poslata i slika \n\n");
 		
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
@@ -98,13 +95,11 @@ public class ApartmentService {
 	@Path("/getMyApartments")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJustMyApartments() {
-		ImagesDAO imagesDAO = getImages();
-		//String code64OfImage = imagesDAO.getValues().get(0).getCode64ForImage();
-		//newItem.addedApartment.setImagesPath(code64OfImage);
 		
 		if(isUserHost()) {
 			User user = (User) request.getSession().getAttribute("loginUser");
 			ApartmentsDAO apartmentsDAO = getApartments();
+			
 			return Response
 					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGE")
 					.entity(apartmentsDAO.getHostApartments(user))
