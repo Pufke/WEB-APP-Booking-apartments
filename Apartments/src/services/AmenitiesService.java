@@ -11,8 +11,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.AmenitiesItem;
+import beans.User;
 import dao.AmenitiesDAO;
 import dto.AmenitiesItemAddDTO;
 import dto.AmenitiesItemDTO;
@@ -28,9 +30,16 @@ public class AmenitiesService {
 	@GET
 	@Path("/getAmenities")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AmenitiesItem> getJustAmenities() {
-		System.out.println("\n\n\n\n Pozvano getovanje sadrzaja \n\n");
-		return getAmenities().getValues();
+	public Response getJustAmenities() {
+		
+		if(isUserAdmin()) {
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+					.entity(getAmenities().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	
@@ -38,40 +47,61 @@ public class AmenitiesService {
 	@Path("/addItem")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AmenitiesItem> addItem(AmenitiesItemAddDTO newItem){
-		System.out.println("\n stigao je item " + newItem.newItemName );
+	public Response addItem(AmenitiesItemAddDTO newItem){
 		
-		AmenitiesDAO amenties = getAmenities();
-		
-		amenties.addItem(newItem);
-		
-		return getAmenities().getValues();
+		if(isUserAdmin()) {
+			
+			AmenitiesDAO amenties = getAmenities();
+			amenties.addItem(newItem);
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+					.entity(getAmenities().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	@POST
 	@Path("/changeItem")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AmenitiesItem> changeItem(AmenitiesItemDTO updatedItem){
-		System.out.println("\n stigao je item " + updatedItem.name + " sa id-om: " + updatedItem.amenitiesID);
+	public Response changeItem(AmenitiesItemDTO updatedItem){
 		
-		AmenitiesDAO amenties = getAmenities();
 		
-		amenties.changeItem(updatedItem);
+		if(isUserAdmin()) {
 		
-		return getAmenities().getValues();
+			AmenitiesDAO amenties = getAmenities();
+			amenties.changeItem(updatedItem);
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+					.entity(getAmenities().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	@DELETE
 	@Path("/deleteItem")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AmenitiesItem> deleteItem(AmenitiesItemDTO deletedItem){
-		AmenitiesDAO amenitiesDAO = getAmenities();
+	public Response deleteItem(AmenitiesItemDTO deletedItem){
 		
-		amenitiesDAO.deleteItem(deletedItem.amenitiesID);
-		
-		return getAmenities().getValues();
+		if(isUserAdmin()) {
+			
+			AmenitiesDAO amenitiesDAO = getAmenities();
+			amenitiesDAO.deleteItem(deletedItem.amenitiesID);
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+					.entity(getAmenities().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	private AmenitiesDAO getAmenities() {
@@ -86,4 +116,16 @@ public class AmenitiesService {
 
 		return amenities;
 	}
+	
+	private boolean isUserAdmin() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("ADMINISTRATOR")) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	
 }
