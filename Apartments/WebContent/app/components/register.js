@@ -22,7 +22,6 @@ toastr.options = {
 Vue.component("app-register", {
     data() {
         return {
-            users: {},
             newUser: {},
             errors: [],
             message: null
@@ -40,25 +39,8 @@ Vue.component("app-register", {
             <input type="password" placeholder="Re Password" required>
 
             <button type='submit'  >Register</button>
-
-           
+  
         </form>
-
-        <table border="1">
-		<tr bgcolor="lightgrey">
-			<th>user name </th><th>Password</th></tr>
-			<tr v-for="user in users">
-                <td> {{user.userName}}</td>
-                <td> {{user.password}}</td>
-			</tr>
-        </table>
-
-        <h1> {{newUser.userName}} </h1>
-        <h1> {{newUser.password}} </h1>
-        <h1> {{newUser.name}} </h1>
-        <h1> {{newUser.surname}} </h1>
-
-        
 
     </div>
     
@@ -157,7 +139,6 @@ Vue.component("app-register", {
     },
     mounted() {
         axios.get('rest/users/getNewUser').then(response => (this.newUser = response.data));
-        axios.get('rest/users/getJustUsers').then(response => (this.users = response.data));
     },
 
 });
