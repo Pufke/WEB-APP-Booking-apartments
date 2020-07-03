@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -13,7 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import beans.AmenitiesItem;
 import beans.User;
 import dao.AmenitiesDAO;
 import dto.AmenitiesItemAddDTO;
@@ -32,7 +30,7 @@ public class AmenitiesService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJustAmenities() {
 		
-		if(isUserAdmin()) {
+		if(isUserAdmin() || isUserHost()) {
 			return Response
 					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
 					.entity(getAmenities().getValues())
@@ -127,5 +125,14 @@ public class AmenitiesService {
 		}	
 		return false;
 	}
-	
+	private boolean isUserHost() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("HOST")) {	
+				return true;
+			}
+		}	
+		return false;
+	}
 }
