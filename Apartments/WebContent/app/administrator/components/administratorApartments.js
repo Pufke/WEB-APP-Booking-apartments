@@ -22,8 +22,38 @@ toastr.options = {
 Vue.component("administrator-apartments", {
     data() {
         return {
+        	 startDateForHost: null,
+             endDateForHost: null,
             apartments: [],
             apartmentForChange: {},
+            newApartment: {
+                apartmentAmentitiesIDs: [],
+                apartmentCommentsIDs: [],
+                availableDates: [],
+                datesForHosting: [],
+                hostID: 1,
+                id: 98989,
+                imagesPath: "empty",
+                listOfReservationsIDs: [],
+                location: {
+                    address: {
+                        number: null,
+                        populatedPlace: '',
+                        street: null,
+                        zipCode: null
+                    },
+                    latitude: null,
+                    longitude: null
+                },
+                logicalDeleted: 0,
+                numberOfGuests: null,
+                numberOfRooms: null,
+                pricePerNight: null,
+                status: "INACTIVE",
+                timeForCheckIn: "14:00",
+                timeForCheckOut: "10:00",
+                typeOfApartment: null,
+            },
             hideDialog: true,
             filterDataForApartment: {
                 typeOfApartment: "",
@@ -126,25 +156,54 @@ Vue.component("administrator-apartments", {
             </tr>
         </table>
 
-        <!-- Modal dialog section for changing -->
+   <!-- Modal dialog section for changing -->
         <div id = "dijalogDeo" v-bind:class="{bgModal: hideDialog, bgModalShow: !hideDialog}">
             <div class="modal-contents">
         
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
 
-                <form method='post'>
-
+                <form method='post'>     
+                    <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
                     
-                    <input  type="date" v-model="apartmentForChange.timeForCheckIn" placeholder="Check in...">
-                    <input  type="date" v-model="apartmentForChange.timeForCheckOut" placeholder="Check out...">
-                    <input  type="number" v-model="apartmentForChange.pricePerNight" placeholder="Price per night..." >
-                    <input  type="number" v-model="apartmentForChange.numberOfRooms" placeholder="Number of rooms ..." >
-                    <input  type="number" v-model="apartmentForChange.numberOfGuests" placeholder="Max guests in room..." >
+                    <label for="checkIn">Check in time:</label>
+                    <input  name="checkIn" type="time" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
+                   
+                    <label for="checkOut">Check out time:</label>
+                    <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
+                    
+                    
+                    <label for="startDate">Start date for host:</label>
+                    <input name="startDate" type="date" v-model="startDateForHost" >
+                
+                    <label for="endDate">End date for host:</label>
+    	            <input name="endDate" type="date" v-model="endDateForHost">
+    	            
+                    <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
+                    <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
+                    <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >    
+
+                    <!-- Address -->
+                    <input type="text" v-model="newApartment.location.address.populatedPlace" placeholder="Town name ...">
+                    <input type="text" v-model="newApartment.location.address.street" placeholder="Street ...">
+                    <input type="text" v-model="newApartment.location.address.number" placeholder="Number ...">
+                    <!-- End of address -->
+
+                    <!-- Choose image of apartment -->
+                    <input type="file" onchange="encodeImageFileAsURLForChanging(this)" />
+                    <!-- End of choose of image of apartment -->
 
                     <button type="button" @click="confirmChanging">Confirm</button>
                     <button type="button" @click="hideDialog = !hideDialog">Cancel</button>
 
                 </form>
+
+                <!--
+                     I need this to store image when someone choose and upload to site,
+                     and after that i can get src from other methods.
+
+                     And it's hidden because it's ugly to preview in change mood.
+                 -->
+                <img hidden id="imgForChangeID"  src="" alt="Image of apartment" width="11" height="11">
 
             </div>
         </div> <!-- End of modal dialog section -->
@@ -247,26 +306,27 @@ Vue.component("administrator-apartments", {
         changeApartment: function (apartment) {
             this.hideDialog = !this.hideDialog;
 
-            this.apartmentForChange = apartment;
+            this.newApartment = apartment;
 
         },
         confirmChanging: function () {
 
-            // Check is empty field input
+        	// Check is empty field input
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.apartmentForChange.identificator || !this.apartmentForChange.timeForCheckIn || !this.apartmentForChange.timeForCheckOut || !this.apartmentForChange.pricePerNight || !this.apartmentForChange.numberOfRooms || !this.apartmentForChange.numberOfGuests) {
+            if (!this.newApartment.id || !this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut
+                || !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms || !this.newApartment.numberOfGuests || !this.startDateForHost || !this.endDateForHost) {
                 toastr["warning"]("All field is required", "Watch out !");
                 return;
+
             }
+            // Get Base64 format of image 
+            this.newApartment.imagesPath = document.getElementById("imgForChangeID").src;
 
             axios
                 .post('rest/apartments/changeApartment', {
-                    "identificator": this.apartmentForChange.identificator,
-                    "timeForCheckIn": this.apartmentForChange.timeForCheckIn,
-                    "timeForCheckOut": this.apartmentForChange.timeForCheckOut,
-                    "pricePerNight": this.apartmentForChange.pricePerNight,
-                    "numberOfRooms": this.apartmentForChange.numberOfRooms,
-                    "numberOfGuests": this.apartmentForChange.numberOfGuests
+                	addedApartment: this.newApartment,
+                    "startDateForReservation": this.startDateForHost,
+                    "endDateForReservation": this.endDateForHost
                 })
                 .then(response => {
                     this.apartments = [];
