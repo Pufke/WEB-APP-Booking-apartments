@@ -62,10 +62,10 @@ public class PofileService {
 
 	}
 	
-	
-	
 	private UsersDAO getUsers() {
+		
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
+		
 		if(users == null) {
 			users = new UsersDAO();
 			users.readUsers();
@@ -74,5 +74,38 @@ public class PofileService {
 		}
 		
 		return users;
+	}
+	
+	private boolean isUserHost() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("HOST")) {	
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserAdmin() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("ADMINISTRATOR")) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserGuest() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("GUEST")) {
+				return true;
+			}
+		}	
+		return false;
 	}
 }

@@ -22,7 +22,6 @@ toastr.options = {
 Vue.component("app-login",{
     data() {
         return {
-            users: {},
             newUser: {},
             errors: []
         }
@@ -38,23 +37,7 @@ Vue.component("app-login",{
             
             <button type='submit'>Login</button>
 
-        </form>
-
-        <table border="1">
-		<tr bgcolor="lightgrey">
-			<th>user name </th><th>Password</th><th>Role</th></tr>
-			<tr v-for="user in users">
-                <td> {{user.userName}}</td>
-                <td> {{user.password}}</td>
-                <td> {{user.role}}</td>
-			</tr>
-        </table>
-
-        <h1> {{newUser.userName}} </h1>
-        <h1> {{newUser.password}} </h1>
-        <h1> {{newUser.name}} </h1>
-        <h1> {{newUser.surname}} </h1>
-        
+        </form>      
 
     </div>
     
@@ -119,13 +102,10 @@ Vue.component("app-login",{
                 toastr["error"](element, "Fail")
             });
              
-
-            
         }
         
     },
     mounted() {
         axios.get('rest/users/getNewUser').then(response => (this.newUser = response.data));
-        axios.get('rest/users/getJustUsers').then(response => (this.users = response.data));
     },
 });
