@@ -38,13 +38,8 @@ Vue.component("guest-profile",{
         <h1> name: {{user.name}} </h1>
         <input type="text" v-model="user.name" placeholder="Name">
 
-
         <h1> surname: {{user.surname}} </h1>
         <input type="text" v-model="user.surname" placeholder="Surname">
-
-
-        <h1> role: {{user.role}} </h1>
-        <input type="text" v-model="user.role" placeholder="Role" required>
 
         <br>
         <button @click="saveChanges(user)"> Save changes </button>

@@ -43,9 +43,6 @@ Vue.component("host-profile",{
         <input type="text" v-model="user.surname" placeholder="Surname">
 
 
-        <h1> role: {{user.role}} </h1>
-        <input type="text" v-model="user.role" placeholder="Role" required>
-
         <br>
         <button @click="saveChanges(user)"> Save changes </button>
 
