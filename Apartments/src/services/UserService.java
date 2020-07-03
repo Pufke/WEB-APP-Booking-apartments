@@ -84,26 +84,39 @@ public class UserService {
 	@Path("/blockUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<User> blockUser(UserDTOJSON param){
-		System.out.println("blokiram usera: " + param.user.getUserName() + " ID: " + param.user.getID());
+	public Response blockUser(UserDTOJSON param){
 		
-		UsersDAO allUsersDAO = getUsers();
-		allUsersDAO.blockUserById(param.user.getID());
-		
-		return getUsers().getValues();
+		if(isUserAdmin()) {
+			UsersDAO allUsersDAO = getUsers();
+			allUsersDAO.blockUserById(param.user.getID());
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS BLOCK")
+					.entity(getUsers().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	@POST
 	@Path("/unblockUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<User> unblockUser(UserDTOJSON param){
-		System.out.println("blokiram usera: " + param.user.getUserName() + " ID: " + param.user.getID());
+	public Response unblockUser(UserDTOJSON param){
 		
-		UsersDAO allUsersDAO = getUsers();
-		allUsersDAO.unblockUserById(param.user.getID());
+		if(isUserAdmin()) {
 		
-		return getUsers().getValues();
+			UsersDAO allUsersDAO = getUsers();
+			allUsersDAO.unblockUserById(param.user.getID());
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS UNBLOCK")
+					.entity(getUsers().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	@POST
@@ -111,9 +124,7 @@ public class UserService {
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response registration(UserDTO user) {
-		System.out.println("DODAJEM USERA" + user.username + "\nSa sifrom: " + user.password + "OVDE ZAPRAVO");
-		System.out.println("Imena: " + user.name + "\nPrezimena: " + user.surname);
-
+		
 		UsersDAO allUsersDAO = getUsers();
 
 		/* If we have already that user, we can't register him */
@@ -125,71 +136,87 @@ public class UserService {
 		
 		allUsersDAO.addNewUser(user);
 
-		System.out.println("\n\n\t\t USPESNO \n\n");
 		return Response.status(Response.Status.ACCEPTED).entity("/Apartments/#/login").build(); // redirect to login
-																								// when is registration
-																								// accepted
-	}
-
-	@GET
-	@Path("/getNewUser")
-	@Produces(MediaType.APPLICATION_JSON)
-	public User getNewUser() {
-		User user = new User();
-		user.setID(9999);
-		user.setUserName("Novi userName");
-		user.setPassword("Novi pass");
-		return user;
-
-		// TODO: promeniti da daje pametniji id useru
+																								// when is registration																							// accepted
 	}
 
 	@GET
 	@Path("/getJustUsers")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getJustUsers() {
-		System.out.println("CALLED GET JUST USERS");
-		return getUsers().getValues();
+	public Response getJustUsers() {
+		
+		if(isUserAdmin()) {
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS SHOW")
+					.entity(getUsers().getValues())
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
+	}
+	
+	@GET
+	@Path("/getNewUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getNewUser() {
+		User user = new User();
+		UsersDAO allUsersDAO = getUsers();
+		
+		Integer UserUniqueID = allUsersDAO.getValues().size() + 1;
+		user.setID(UserUniqueID);
+		user.setUserName("Username");
+		user.setPassword("password");
+		
+		return user;
+
 	}
 
 	@GET
 	@Path("/getGuestsOfHost")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getGuestsOfHost() {
-		System.out.println("\n\n\t\t get guests of host");
-
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-		UsersDAO allUsersDAO = getUsers();
+	public Response getGuestsOfHost() {
 		
-		ReservationDAO reservationDAO = getReservations();
-		
-		return allUsersDAO.getGuestsOfHost(user, reservationDAO.getValues());
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+			UsersDAO allUsersDAO = getUsers();
+			
+			ReservationDAO reservationDAO = getReservations();
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS SHOW")
+					.entity(allUsersDAO.getGuestsOfHost(user, reservationDAO.getValues()))
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	@GET
 	@Path("/getReservationsOfHost")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Reservation> getReservationsOfHost() {
-		System.out.println("\n\n\t\t get reservations of host");
-
-		// With this, we get user who is logged in.
-		// We are in UserService method login() tie user for session.
-		// And now we can get him.
-		User user = (User) request.getSession().getAttribute("loginUser");
-		UsersDAO allUsersDAO = getUsers();
+	public Response getReservationsOfHost() {
 		
-		ReservationDAO reservationDAO = getReservations();
-		
-		return allUsersDAO.getReservationsOfHost(user, reservationDAO.getValues());
+		if(isUserHost()) {
+			User user = (User) request.getSession().getAttribute("loginUser");
+			UsersDAO allUsersDAO = getUsers();
+			
+			ReservationDAO reservationDAO = getReservations();
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS SHOW")
+					.entity(allUsersDAO.getReservationsOfHost(user, reservationDAO.getValues()))
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
 	}
 	
 	
 
 	private UsersDAO getUsers() {
+	
 		UsersDAO users = (UsersDAO) ctx.getAttribute("users");
+		
 		if (users == null) {
 			users = new UsersDAO();
 			users.readUsers();
@@ -201,6 +228,7 @@ public class UserService {
 	}
 	
 	private ReservationDAO getReservations() {
+		
 		ReservationDAO reservations = (ReservationDAO) ctx.getAttribute("reservations");
 
 		if (reservations == null) {
@@ -211,4 +239,36 @@ public class UserService {
 		return reservations;
 	}
 
+	private boolean isUserHost() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("HOST")) {	
+				return true;
+			}
+		}	
+		return false;
+	}
+
+	private boolean isUserAdmin() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("ADMINISTRATOR")) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserGuest() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("GUEST")) {
+				return true;
+			}
+		}	
+		return false;
+	}
 }

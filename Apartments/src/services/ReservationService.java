@@ -162,10 +162,8 @@ public class ReservationService {
 				
 			}
 			
-			
 			double totalPrice =  reservationData.numberOfNights * apartment.getPricePerNight();
 			Integer ReservationUniqueID = reservations.size() + 1;
-	
 			
 			Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator,
 					sd, reservationData.numberOfNights, totalPrice,
