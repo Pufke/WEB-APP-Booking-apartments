@@ -18,14 +18,19 @@ import javax.ws.rs.core.Response;
 
 import beans.Apartment;
 import beans.Comment;
+import beans.Holliday;
 import beans.Reservation;
 import beans.User;
+import dao.AmenitiesDAO;
 import dao.ApartmentsDAO;
 import dao.CommentsDAO;
+import dao.HolidaysDAO;
 import dao.ReservationDAO;
 import dao.UsersDAO;
+import dto.AmenitiesItemAddDTO;
 import dto.CommentDTO;
 import dto.DeleteReservationDTO;
+import dto.HollidaysItemAddDTO;
 import dto.ReservationDTO;
 import dto.ReservationDTOJSON;
 
@@ -51,7 +56,65 @@ public class ReservationService {
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
 	}
+	
+	@GET
+	@Path("/getHollidays")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getHolidays() {
+		
+		ArrayList<java.sql.Date> listaDatuma = new ArrayList<java.sql.Date>();
+		
+		
+		
+		for (Holliday h : getHollidays().getValues()) {
+			java.sql.Date sd = new java.sql.Date(h.getHoliday().getTime());
+			listaDatuma.add(sd);
+		}
+		
+		if(isUserAdmin()) {
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS GET")
+					.entity(listaDatuma)
+					.build();
+		}	
+		
+		
+		
+		
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
+	}
 
+
+	@POST
+	@Path("/addHolliday")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addHolliday(HollidaysItemAddDTO newItem){
+		
+		if(isUserAdmin()) {
+			
+			HolidaysDAO hollidays = getHollidays();
+			hollidays.addItem(newItem);
+			
+			ArrayList<java.sql.Date> listaDatuma = new ArrayList<java.sql.Date>();
+			
+			
+			
+			for (Holliday h : getHollidays().getValues()) {
+				java.sql.Date sd = new java.sql.Date(h.getHoliday().getTime());
+				listaDatuma.add(sd);
+			}
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+					.entity(listaDatuma)
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
+	}
+	
 	@POST
 	@Path("/acceptReservation")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -342,6 +405,22 @@ public class ReservationService {
 		}
 
 		return comments;
+
+	}
+	
+	
+	private HolidaysDAO getHollidays() {
+		
+		HolidaysDAO hollidays = (HolidaysDAO) ctx.getAttribute("hollidays");
+
+		if (hollidays == null) {
+			hollidays = new HolidaysDAO();
+			hollidays.readHolidays();
+
+			ctx.setAttribute("hollidays", hollidays);
+		}
+
+		return hollidays;
 
 	}
 

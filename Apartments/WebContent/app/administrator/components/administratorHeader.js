@@ -16,6 +16,7 @@ Vue.component("administrator-header",{
                 <li><router-link to="/contents" exact> Contents of apartments </router-link></li>
                 <li><router-link to="/reservations" exact> Reservations </router-link></li>
                 <li><router-link to="/comments" exact> Comments and reviews </router-link></li>
+                <li><router-link to="/holidays" exact> Add Holidays </router-link></li>
                 <li><button @click="logout" > Log out </button></li>
                 
             </ul>

@@ -5,7 +5,7 @@ const UsersComponent = { template: '<administrator-users></administrator-users>'
 const ContentsComponent = { template: '<administrator-contents></administrator-contents>'}
 const ReservationsComponent = { template: '<administrator-reservations></administrator-reservations>'}
 const CommentsComponent = { template: '<administrator-comments></administrator-comments>'}
-
+const Holidays = { template: '<administrator-holidays></administrator-holidays>'}
 
 const router = new VueRouter({
     mode: 'hash',
@@ -18,6 +18,7 @@ const router = new VueRouter({
         {path : '/contents', component: ContentsComponent},
         {path : '/reservations', component: ReservationsComponent},
         {path : '/comments', component: CommentsComponent},
+        {path : '/holidays', component: Holidays}
     ]
 })
 
