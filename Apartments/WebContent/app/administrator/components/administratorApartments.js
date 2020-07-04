@@ -25,6 +25,7 @@ Vue.component("administrator-apartments", {
             startDateForHost: null,
             endDateForHost: null,
             apartments: [],
+            amenities: [], 
             apartmentForChange: {},
             newApartment: {
                 apartmentAmentitiesIDs: [],
@@ -57,6 +58,7 @@ Vue.component("administrator-apartments", {
             hideDialog: true,
             filterDataForApartment: {
                 typeOfApartment: "",
+                selectedAmenities: [],
                 status: ""
             },
             searchField: {
@@ -116,6 +118,17 @@ Vue.component("administrator-apartments", {
                 <option>ACTIVE</option>
                 <option>INACTIVE</option>
             </select>
+
+            <!-- List of all amenities in apartments -->
+            <select v-model="filterDataForApartment.selectedAmenities" multiple @change="onchangeAmenities()">
+
+                <option value=""> Without filter for amenities </option>
+                <option v-for="option in amenities" v-bind:value="option.id">
+                    {{ option.itemName }}
+                </option>
+
+            </select>
+            <!-- End list of all amenities in apartments -->
 
             <br><br>
             <button type="button" @click="sortAsc">SORT ASC</button>
@@ -303,6 +316,35 @@ Vue.component("administrator-apartments", {
                 this.apartments = tempApartments;
             }
         },
+        onchangeAmenities: function () {
+            if (this.filterDataForApartment.selectedAmenities == "") {
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                    .get('rest/apartments/getApartments')
+                    .then(response => {
+                        this.apartments = [];
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE" || el.status == "INACTIVE")
+                                this.apartments.push(el);
+                        });
+                        return this.apartments;
+                    });
+
+            } else {
+                /*
+                    Put apartment in list of apartments.
+                    If amenities of selected amenities in filter is subset of amenities of this apartment(which i am adding).
+
+                    ref: https://stackoverflow.com/questions/38811421/how-to-check-if-an-array-is-a-subset-of-another-array-in-javascript/48211214#48211214
+                    author: vaxi
+                */
+                let tempApartments = (this.apartments).filter(apartment => this.filterDataForApartment.selectedAmenities.every(val => apartment.apartmentAmentitiesIDs.includes(val)));
+                this.apartments = tempApartments;
+
+            }
+        },
         changeApartment: function (apartment) {
             this.hideDialog = !this.hideDialog;
 
@@ -466,6 +508,16 @@ Vue.component("administrator-apartments", {
         this.$nextTick(function () {
             this.initForMap();
         })
+
+        axios
+            .get('rest/amenities/getAmenities')
+            .then(response => {
+                this.amenities = [];
+                response.data.forEach(el => {
+                    this.amenities.push(el);
+                });
+                return this.amenities;
+            });
 
         axios
             .get('rest/apartments/getApartments')
