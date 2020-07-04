@@ -5,34 +5,12 @@ Vue.component("guest-reservation", {
             reservations: [],
             user: {},
             ocena : "",
-            komentar : "",
-            searchData: {
-                location: "",
-                checkIn: "",
-                checkOut: "",
-                price: 0.0,
-                rooms: 0,
-                maxGuests: 0
-            }
+            komentar : ""
         }
     },
 
     template: `
     <div id = "styleForApartmentsView">
-     	
-        <form @submit="searchParam" method='post'>
-
-            <input type="text" v-model="searchData.location" placeholder="Location..." >
-            <input type="date" v-model="searchData.checkIn" placeholder="Check in...">
-            <input type="date" v-model="searchData.checkOut" placeholder="Check out...">
-            <input type="number" v-model="searchData.price" placeholder="Price per night..." >
-            <input type="number" v-model="searchData.rooms" placeholder="Number of rooms ..." >
-            <input type="number" v-model="searchData.maxGuests" placeholder="Max guests in room..." >
-
-            <button type="submit" >Search</button>
-            <button type="submit" @click="cancelSearch">Cancel search</button>
-
-        </form>
         
     	<h1> Trenutno ulogovani korisnik je {{ user.userName }} i ovo su rezervacije samo za tog korisnika!! :) </h1>
         <ul>
@@ -70,22 +48,11 @@ Vue.component("guest-reservation", {
         </table>
         
          <button type="button" @click="sortAsc">SORT ASC</button>
-         <button type="button" @click="sortDesc">SORT ASC</button>
+         <button type="button" @click="sortDesc">SORT DESC</button>
         
     </div>
     
     `,
-    /*
-guestID:3
-id:2
-idOfReservedApartment:2
-logicalDeleted:0
-messageForHost:"Ako moze samo da me docekaju otvoreni prozori"
-numberOfNights:2
-startDateOfReservation:1593043200000
-statusOfReservation:"Kreirana"
-totalPrice:99
-    */
     methods: {
         sortAsc: function () {
             this.multisort(this.reservations, ['totalPrice', 'totalPrice'], ['ASC', 'DESC']);
@@ -188,49 +155,6 @@ totalPrice:99
                 .catch(err => {
                     toastr["error"]("Failed during changes :(", "Fail");
                 })
-        },
-        searchParam: function (event) {
-            event.preventDefault();
-
-            axios
-                .post('rest/search/SearchReservations', {
-                    "location": '' + this.searchData.location,
-                    "checkIn": '' + this.searchData.checkIn,
-                    "checkOut": this.searchData.checkOut,
-                    "price": this.searchData.price,
-                    "rooms": this.searchData.rooms,
-                    "maxGuests": this.searchData.maxGuests
-                })
-                .then(response => {
-                    this.reservations = [];
-                    response.data.forEach(el => {
-                        if (el.guest.userName == this.user.userName) {
-                            this.reservations.push(el);
-                        }
-                    });
-                    return this.reservations;
-                })
-        },
-        cancelSearch: function () {
-            this.searchData.location = "";
-            this.searchData.checkIn = "";
-            this.searchData.checkOut = "";
-            this.searchData.price = 0.0;
-            this.searchData.rooms = 0;
-            this.searchData.maxGuests = 0;
-
-            axios
-                .get('rest/reservation/getReservations')
-                .then(response => {
-                    this.reservations = [];
-                    response.data.forEach(el => {
-                        console.log(this.user.userName);
-                        if (el.guest.userName == this.user.userName) {
-                            this.reservations.push(el);
-                        }
-                    });
-                    return this.reservations;
-                });
         }
     },
     mounted() {
