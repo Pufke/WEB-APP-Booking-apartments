@@ -65,15 +65,16 @@ Vue.component("host-ActiveApartments", {
                 status: ""
             },
             searchField: '',
-            selected: [] // ovo sam uzeo samo privremeno dok ne sredimo u apartmanu listu sadrzaja koju on ima
-
+            previewSearch: false,
         }
     },
     template: `
     <div id = "styleForApartmentsView">
 
+        <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+
         <!-- Search & filter & sort & adding new apartment-->
-        <form method='post'>
+        <form method='post' v-if="previewSearch">
 
             <input type="text"  placeholder="Username of guest..." >
             <button type="button" @click="sortAsc">SORT ASC</button>

@@ -10,14 +10,17 @@ Vue.component("administrator-reservations", {
                 status: ""
             },
             searchField: '',
+            previewSearch: false,
         }
     },
 
     template: `
         <div id = "styleForApartmentsView">
-         	
+            
+            <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+
             <!-- Search & filter & sort -->
-            <form method='post'>
+            <form method='post' v-if="previewSearch">
 
                 <input type="text" v-model="searchField"  placeholder="Username of guest which make reservation..." >
                 <button type="button" @click="sortAsc">SORT ASC</button>

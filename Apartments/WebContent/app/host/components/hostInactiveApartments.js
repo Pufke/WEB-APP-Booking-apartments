@@ -1,7 +1,8 @@
 Vue.component("host-InactiveApartments", {
 	data() {
 		return {
-			apartments: []
+            apartments: [],
+            previewSearch: false,
 		}
 	},
 
@@ -9,8 +10,10 @@ Vue.component("host-InactiveApartments", {
 	`
 	<div id = "styleForApartmentsView">
 
+        <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+
 		<!-- Search & filter & sort & adding new apartment-->
-		<form method='post'>
+		<form method='post' v-if="previewSearch">
 
 			<button type="button" @click="sortAsc">SORT ASC</button>
 			<button type="button" @click="sortDesc">SORT DESC</button>

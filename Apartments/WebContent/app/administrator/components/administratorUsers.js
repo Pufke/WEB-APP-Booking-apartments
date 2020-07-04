@@ -9,15 +9,17 @@ Vue.component("administrator-users", {
                 role: ''
             },
             hideAddDialog: true,
-            newUser: {}
+            newUser: {},
+            previewSearch: false,
         }
     },
 
     template: `
     <div>
-        <h1> users part </h1>
 
-        <form method='post'>
+        <button type="button" @click=" previewSearch = !previewSearch "> SEARCH </button> <br><br>
+
+        <form method='post' v-if="previewSearch" >
 
             <input type="text" v-model="searchField.userName" placeholder="username..." >
             <input type="text" v-model="searchField.name" placeholder="Name..." >

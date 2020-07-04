@@ -14,15 +14,17 @@ Vue.component("view-apartments", {
                 maxNumberOfGuests: '',
             },
             previewMap: false,
+            previewSearch: false,
         }
     },
 
     template: `
     <div id = "styleForApartmentsView">
-
+        
+        <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
 
         <!-- Search, filter, sort for apartments -->
-        <form method='post'>
+        <form method='post' v-if="previewSearch">
 
             <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
             <button type="button" @click="previewMapForSearch()"> Choose on map </button>
