@@ -95,21 +95,34 @@ public class ReservationService {
 		if(isUserAdmin()) {
 			
 			HolidaysDAO hollidays = getHollidays();
-			hollidays.addItem(newItem);
 			
-			ArrayList<java.sql.Date> listaDatuma = new ArrayList<java.sql.Date>();
-			
-			
-			
-			for (Holliday h : getHollidays().getValues()) {
-				java.sql.Date sd = new java.sql.Date(h.getHoliday().getTime());
-				listaDatuma.add(sd);
+			for (Holliday holi : getHollidays().getValues()) {
+				
+				if(holi.getHoliday().toString().substring(0, 10).equals(newItem.dateForAdd.toString().substring(0, 10))) {
+					return Response
+							.status(Response.Status.BAD_REQUEST).entity("DATE EXIST")
+							.build();
+				}else {
+
+					hollidays.addItem(newItem);
+					
+					ArrayList<java.sql.Date> listaDatuma = new ArrayList<java.sql.Date>();	
+					
+					for (Holliday h : getHollidays().getValues()) {
+						java.sql.Date sd = new java.sql.Date(h.getHoliday().getTime());
+						listaDatuma.add(sd);
+					}
+					
+					return Response
+							.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+							.entity(listaDatuma)
+							.build();
+					
+				}
+				
 			}
 			
-			return Response
-					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
-					.entity(listaDatuma)
-					.build();
+			
 		}
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
