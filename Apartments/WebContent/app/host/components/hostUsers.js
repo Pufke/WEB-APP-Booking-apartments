@@ -7,6 +7,7 @@ Vue.component("host-users", {
                 userName: '',
                 gender: '',
             },
+            previewSearch: false,
         }
     },
     template: `
@@ -14,10 +15,19 @@ Vue.component("host-users", {
         
     <!-- Table of users -->
 
-        <input type="text" v-model="searchField.role"  placeholder="Guest role..." >
-        <input type="text" v-model="searchField.userName"  placeholder="Guest username..." >
-        <input type="text" v-model="searchField.gender"  placeholder="Guest gender..." >
+        <!-- Search -->
+
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> SEARCH </button><br><br>
+
+        <form method='post' v-if="previewSearch" >
+
+            <input type="text" v-model="searchField.role"  placeholder="Guest role..." >
+            <input type="text" v-model="searchField.userName"  placeholder="Guest username..." >
+            <input type="text" v-model="searchField.gender"  placeholder="Guest gender..." >
+
+        </form>
         <br><br>
+        <!-- End of search -->
 
         <table border="1">
             <tr bgcolor="lightgrey">

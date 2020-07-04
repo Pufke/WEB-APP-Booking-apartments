@@ -79,20 +79,10 @@ Vue.component("administrator-apartments", {
     template: `
     <div id = "styleForApartmentsView">
 
-        <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> <br><br>
 
         <!-- Search, filter, sort for apartments -->
         <form method='post' v-if="previewSearch">
-
-            <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
-            <button type="button" @click="previewMapForSearch()"> Choose on map </button>
-            
-            <br><br>
-            
-            <div id="mapSearch" class="mapSearch" v-if="previewMap">
-                <br><br>
-            </div>
-
 
             <input type="text" v-model="searchField.minPrice" placeholder="Min price..." >
             <input type="text" v-model="searchField.maxPrice" placeholder="Max price..." >
@@ -123,6 +113,7 @@ Vue.component("administrator-apartments", {
                 <option>INACTIVE</option>
             </select>
 
+            <br><br>
             <!-- List of all amenities in apartments -->
             <select v-model="filterDataForApartment.selectedAmenities" multiple @change="onchangeAmenities()">
 
@@ -133,6 +124,16 @@ Vue.component("administrator-apartments", {
 
             </select>
             <!-- End list of all amenities in apartments -->
+
+            <br><br>
+            <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
+            <button type="button" @click="previewMapForSearch()"> Choose on map </button>
+            
+            <br><br>
+            
+            <div id="mapSearch" class="mapSearch" v-if="previewMap">
+                
+            </div>
 
             <br><br>
             <button type="button" @click="sortAsc">SORT ASC</button>
@@ -290,6 +291,11 @@ Vue.component("administrator-apartments", {
                 // Draw map on screen
                 this.$nextTick(function () {
                     this.initForMap();
+
+                    // Seting some extra style for map
+                    let c = document.getElementById("mapSearch").childNodes;
+                    c[0].style.borderRadius  = '10px';
+                    c[0].style.border = '4px solid lightgrey';
                 })
             }
         },

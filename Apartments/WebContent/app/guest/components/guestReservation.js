@@ -12,7 +12,8 @@ Vue.component("guest-reservation", {
     template: `
     <div id = "styleForApartmentsView">
         
-    	<h1> Trenutno ulogovani korisnik je {{ user.userName }} i ovo su rezervacije samo za tog korisnika!! :) </h1>
+    	<h1> Hello {{ user.userName }} , this is your reservations. </h1>
+        
         <ul>
             <li v-for="reservation in reservations">
             	<h2> Reservation ID: {{ reservation.id }} </h2>

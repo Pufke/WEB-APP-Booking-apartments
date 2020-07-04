@@ -6,7 +6,6 @@ Vue.component("administrator-comments", {
     },
     template: `
     <div id = "styleForApartmentsView" >
-        <h1> Hello from comments </h1>
 
         <ul>
             <li v-for="comment in comments">

@@ -17,7 +17,9 @@ Vue.component("administrator-users", {
     template: `
     <div>
 
-        <button type="button" @click=" previewSearch = !previewSearch "> SEARCH </button> <br><br>
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> SEARCH </button> 
+        <button type="button" @click="addNewHost()" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW </button>
+        <br><br>
 
         <form method='post' v-if="previewSearch" >
 
@@ -28,7 +30,6 @@ Vue.component("administrator-users", {
 
         </form>
 
-        <button type="button" @click="addNewHost()"> Add new host </button>
         <br>
 
         <table border="1">

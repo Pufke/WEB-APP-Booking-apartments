@@ -161,8 +161,6 @@ public class UserService {
 		
 		Integer UserUniqueID = allUsersDAO.getValues().size() + 1;
 		user.setID(UserUniqueID);
-		user.setUserName("Username");
-		user.setPassword("password");
 		
 		return user;
 

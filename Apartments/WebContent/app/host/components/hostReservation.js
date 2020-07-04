@@ -14,7 +14,7 @@ Vue.component("host-reservation", {
     template: `
     <div id = "styleForApartmentsView" >
         
-        <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> <br><br>
 
         <!-- Search & filter & sort -->
         <form method='post' v-if="previewSearch" >
@@ -22,8 +22,6 @@ Vue.component("host-reservation", {
             <input type="text" v-model="searchField"  placeholder="Username of guest which make reservation..." >
             <button type="button" @click="sortAsc">SORT ASC</button>
             <button type="button" @click="sortDesc">SORT DESC</button>
-
-            <br><br>
 
             <!-- If user don't want use filter, check just option: Without filter for status -->
             <select v-model="filterDataForReservation.status" @change="onchangeStatus()">

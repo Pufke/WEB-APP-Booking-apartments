@@ -17,7 +17,7 @@ Vue.component("administrator-reservations", {
     template: `
         <div id = "styleForApartmentsView">
             
-            <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+            <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> <br><br>
 
             <!-- Search & filter & sort -->
             <form method='post' v-if="previewSearch">
@@ -42,7 +42,6 @@ Vue.component("administrator-reservations", {
             <!-- End of search & filter & sort -->
             <br>
             
-        	<h1> Guten tag {{ user.userName }} </h1>
             <ul>
                 <li v-for="reservation in filteredReservations">
                 	<h2> Reservation ID: {{ reservation.id }} </h2>

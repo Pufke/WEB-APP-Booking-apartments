@@ -71,7 +71,9 @@ Vue.component("host-ActiveApartments", {
     template: `
     <div id = "styleForApartmentsView">
 
-        <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> 
+        <button type="button" id="addNewItemButton" @click="addItem()" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW </button>
+        <br><br>
 
         <!-- Search & filter & sort & adding new apartment-->
         <form method='post' v-if="previewSearch">
@@ -79,9 +81,6 @@ Vue.component("host-ActiveApartments", {
             <input type="text"  placeholder="Username of guest..." >
             <button type="button" @click="sortAsc">SORT ASC</button>
             <button type="button" @click="sortDesc">SORT DESC</button>
-
-            <button type="button" id="addNewItemButton" @click="addItem()"> Add new item </button>
-            <br><br>
 
             <!-- If user don't want use filter, check just option: Without filter for type -->
             <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
@@ -96,6 +95,8 @@ Vue.component("host-ActiveApartments", {
                 <option>ACTIVE</option>
                 <option>INACTIVE</option>
             </select>
+
+            <br><br>
 
             <!-- List of all amenities in apartments -->
             <select v-model="filterDataForApartment.selectedAmenities" multiple @change="onchangeAmenities()">

@@ -33,7 +33,7 @@ Vue.component("administrator-holidays", {
         <h1> Add new Holiday date </h1>
 
         <br>
-        <button type="button" @click="addItem()"> Add new item </button>
+        <button type="button" @click="addItem()" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW</button><br><br>
 
 
         <!-- Modal dialog section for adding -->

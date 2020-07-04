@@ -56,7 +56,7 @@ Vue.component("host-mapChoose", {
             <!-- Address -->
             <button type="button" @click="previewMapChooseLocation()"> Choose on map </button> <br><br>
             
-            <div id="map" class="map" v-if="previewMap"> <br><br></div> 
+            <div id="map" class="map" v-if="previewMap">  </div> 
 
             <input type="text" id="townID" placeholder="Town name ..."> <br><br>
             <input type="text" id="streetID" placeholder="Street ..."> <br><br>
@@ -98,6 +98,11 @@ Vue.component("host-mapChoose", {
                 // Draw map on screen
                 this.$nextTick(function () {
                     this.initForMap();
+
+                    // Seting some extra style for map
+                    let c = document.getElementById("map").childNodes;
+                    c[0].style.borderRadius  = '10px';
+                    c[0].style.border = '4px solid lightgrey';
                 })
             }
         },

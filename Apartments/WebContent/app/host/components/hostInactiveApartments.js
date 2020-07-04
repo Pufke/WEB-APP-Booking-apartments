@@ -10,7 +10,7 @@ Vue.component("host-InactiveApartments", {
 	`
 	<div id = "styleForApartmentsView">
 
-        <button type="button" @click=" previewSearch = !previewSearch "> FILTERS </button> <br><br>
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> <br><br>
 
 		<!-- Search & filter & sort & adding new apartment-->
 		<form method='post' v-if="previewSearch">

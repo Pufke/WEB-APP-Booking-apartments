@@ -37,7 +37,7 @@ Vue.component("administrator-contents", {
         <h1> List of content in apartments </h1>
 
         <br>
-        <button type="button" @click="addItem()"> Add new item </button>
+        <button type="button" @click="addItem()" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW </button> <br><br>
 
 
         <!-- Modal dialog section for adding -->
