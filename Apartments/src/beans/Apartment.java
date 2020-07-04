@@ -4,8 +4,6 @@ package beans;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class Apartment {
 
 	private Integer ID;

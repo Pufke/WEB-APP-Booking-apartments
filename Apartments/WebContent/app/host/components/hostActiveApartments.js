@@ -79,7 +79,6 @@ Vue.component("host-ActiveApartments", {
             <button type="button" @click="sortAsc">SORT ASC</button>
             <button type="button" @click="sortDesc">SORT DESC</button>
 
-            <br>
             <button type="button" id="addNewItemButton" @click="addItem()"> Add new item </button>
             <br><br>
 
@@ -200,61 +199,6 @@ Vue.component("host-ActiveApartments", {
             </div>
         </div> <!-- End of modal dialog section -->
 
-
-
-        <!-- Modal DIALOG section for ADDING -->
-        <div id = "addDialogForApartments" v-bind:class="{bgModal: hideAddDialog, bgModalShow: !hideAddDialog}">
-            <div class="modal-contents">
-        
-                <div class="close" @click="hideAddDialog = !hideAddDialog">+</div>
-
-                <form method='post'>
-                    <button type="button" @click="chooseWithMap()"> Add with help of geo map </button>
-
-                    <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
-                   
-                    <label for="checkIn">Check in time:</label>
-                    <input  name="checkIn" type="time" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
-                   
-                    <label for="checkOut">Check out time:</label>
-                    <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out...">
-                   
-                    <label for="startDate">Start date for host:</label>
-                    <input name="startDate" type="date" v-model="startDateForHost" >
-                
-                    <label for="endDate">End date for host:</label>
-    	            <input name="endDate" type="date" v-model="endDateForHost">
-                
-                
-                    <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
-                    <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
-                    <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >
-
-                    <!-- Address -->
-
-                    <input type="text" id="townID" placeholder="Town name ...">
-                    <input type="text" id="streetID" placeholder="Street ...">
-                    <input type="text" id="numberID" placeholder="Number ...">
-                    <!-- End of address -->
-
-                    <!-- List of amenities in apartments -->
-                    <select v-model="newApartment.apartmentAmentitiesIDs" multiple>
-                        <option v-for="option in amenities" v-bind:value="option.id">
-                            {{ option.itemName }}
-                        </option>
-                    </select>
-                    <!-- End list of amenities in apartments -->
-
-
-
-                    <button type="button" @click="confirmAdding">Confirm</button>
-                    <button type="button" @click="hideAddDialog = !hideAddDialog">Cancel</button>
-
-                </form>
-
-            </div>
-        </div> <!-- End of modal adding dialog section -->
-
     </div>
     
     `,
@@ -285,12 +229,6 @@ Vue.component("host-ActiveApartments", {
                 }
             }
             return base64Image;
-        },
-        chooseWithMap: function () {
-            //alert("izbor preko mape");
-            // Simulate a mouse click:
-            window.location.href = "http://localhost:8080/Apartments/hostDashboard.html#/mapChoose";
-
         },
         onchangeTypeOfApartment: function () {
             if (this.filterDataForApartment.typeOfApartment == "") {
@@ -402,33 +340,7 @@ Vue.component("host-ActiveApartments", {
                 });
         },
         addItem: function () {
-            this.hideAddDialog = !this.hideAddDialog;
-        },
-        confirmAdding: function () {
-            // warning/error if some fields are null or empty
-            // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-            if (!this.newApartment.id || !this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut
-                || !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms || !this.newApartment.numberOfGuests) {
-                toastr["warning"]("All field is required", "Watch out !");
-                return;
-
-            }
-            axios
-                .post('rest/apartments/addNewApartments', {
-                    addedApartment: this.newApartment,
-                    "startDateForReservation": this.startDateForHost,
-                    "endDateForReservation": this.endDateForHost
-                })
-                .then(response => {
-                    this.apartments = [];
-                    response.data.forEach(el => {
-                        if (el.status == "ACTIVE")
-                            this.apartments.push(el);
-                    });
-                    toastr["success"]("You make success adding !!", "Success adding!");
-                    return this.apartments;
-                });
-
+            window.location.href = "http://localhost:8080/Apartments/hostDashboard.html#/mapChoose";
         },
         deleteApartment: function (apartment) {
             axios
