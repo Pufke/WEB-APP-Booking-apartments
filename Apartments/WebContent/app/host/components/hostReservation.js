@@ -137,7 +137,7 @@ Vue.component("host-reservation", {
                         return this.reservations;
                     });
 
-            } else {
+            } else { // show reservation with only this status of reservation
                 let tempReservations = (this.reservations).filter(reservation => reservation.statusOfReservation == this.filterDataForReservation.status);
                 this.reservations = tempReservations;
             }
