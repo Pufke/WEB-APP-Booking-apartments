@@ -252,4 +252,5 @@ Vue.component("host-reservation", {
             });
         }
     },
+    
 });
