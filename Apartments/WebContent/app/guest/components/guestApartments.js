@@ -1,22 +1,29 @@
 Vue.component("guest-apartments", {
     data() {
         return {
-        	startDateForReservation:null,
-        	freeDates: [], 
-        	commentForHost:"",
-            numberOfNights:"",
-        	apartments: [],
+            startDateForReservation: null,
+            freeDates: [],
+            commentForHost: "",
+            numberOfNights: "",
+            apartments: [],
+            amenities: [],  
             comments: [],
             user: {},
-            searchData: {
-                location: "",
-                checkIn: "",
-                checkOut: "",
-                price: 0.0,
-                rooms: 0,
-                maxGuests: 0
-            }
-            
+            filterDataForApartment: {
+                typeOfApartment: "",
+                selectedAmenities: []
+            },
+            searchField: {
+                populatedPlace: '',
+                maxGuests: '',
+                minPrice: '',
+                maxPrice: '',
+                minNumberOfRooms: '',
+                maxNumberOfRooms: '',
+                minNumberOfGuests: '',
+                maxNumberOfGuests: '',
+            },
+            previewMap: false,
         }
     },
 
@@ -24,24 +31,64 @@ Vue.component("guest-apartments", {
     <div id = "styleForApartmentsView">
 
 
-        <form @submit="searchParam" method='post'>
+        <!-- Search, filter, sort for apartments -->
+        <form method='post'>
 
-            <input type="text" v-model="searchData.location" placeholder="Location..." >
-            <input type="date" v-model="searchData.checkIn" placeholder="Check in...">
-            <input type="date" v-model="searchData.checkOut" placeholder="Check out...">
-            <input type="number" v-model="searchData.price" placeholder="Price per night..." >
-            <input type="number" v-model="searchData.rooms" placeholder="Number of rooms ..." >
-            <input type="number" v-model="searchData.maxGuests" placeholder="Max guests in room..." >
+            <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
+            <button type="button" @click="previewMapForSearch()"> Choose on map </button>
+            
+            <br><br>
+            
+            <div id="mapSearch" class="mapSearch" v-if="previewMap">
+                <br><br>
+            </div>
 
-            <button type="submit" >Search</button>
-            <button type="submit" @click="cancelSearch">Cancel search</button>
+
+            <input type="text" v-model="searchField.minPrice" placeholder="Min price..." >
+            <input type="text" v-model="searchField.maxPrice" placeholder="Max price..." >
+            <br><br>
+
+            <input type="text" v-model="searchField.minNumberOfRooms" placeholder="Min rooms..." >
+            <input type="text" v-model="searchField.maxNumberOfRooms" placeholder="Max rooms..." >
+            <br><br>
+
+            <input type="text" v-model="searchField.minNumberOfGuests" placeholder="Min guests..." >
+            <input type="text" v-model="searchField.maxNumberOfGuests" placeholder="Max guests..." >
+            <br><br>
+
+
+            <br><br>
+
+            <!-- If user don't want use filter, check just option: Without filter for type -->
+            <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
+                <option value="">Without filter for type </option>
+                <option>ROOM</option>
+                <option>STANDARD</option>
+            </select>
+
+            <!-- List of all amenities in apartments -->
+            <select v-model="filterDataForApartment.selectedAmenities" multiple @change="onchangeAmenities()">
+
+                <option value=""> Without filter for amenities </option>
+                <option v-for="option in amenities" v-bind:value="option.id">
+                    {{ option.itemName }}
+                </option>
+
+            </select>
+            <!-- End list of all amenities in apartments -->
+
+
+            <br><br>
+            <button type="button" @click="sortAsc">SORT ASC</button>
+            <button type="button" @click="sortDesc">SORT DESC</button>
 
         </form>
+        <!-- End of search, filter, sort for apartments -->
         <br>
 
 
         <ul>
-            <li v-for="apartment in apartments">
+            <li v-for="apartment in filteredApartments">
                 <h2> ID : {{ apartment.id }} </h2>
                 <h2> {{ apartment.typeOfApartment }} </h2>
                 <h2> {{ apartment.pricePerNight}} </h2>
@@ -95,7 +142,7 @@ Vue.component("guest-apartments", {
         <table border="1">
         <tr bgcolor="lightgrey">
         <th> ID </th> <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th> </tr>
-            <tr v-for="apartment in apartments">
+            <tr v-for="apartment in filteredApartments">
                 <td> {{ apartment.id }} </td>
                 <td> {{ apartment.status }} </td>
                 <td> {{ apartment.typeOfApartment }} </td>
@@ -109,14 +156,95 @@ Vue.component("guest-apartments", {
             </tr>
         </table>
 
-        <button type="button" @click="sortAsc">SORT ASC</button>
-        <button type="button" @click="sortDesc">SORT ASC</button>
-
     	
     </div>
     
     `,
     methods: {
+        initForMap: function () {
+
+            const mapSearch = new ol.Map({
+                target: 'mapSearch',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ],
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 2
+                })
+            })
+
+            mapSearch.on('click', function (evt) {
+                console.log(evt.coordinate);
+                //alert(evt.coordinate);
+
+                var coord = ol.proj.toLonLat(evt.coordinate);
+                reverseGeocode(coord);
+
+            })
+
+        },
+        previewMapForSearch: function () {
+            this.previewMap = !this.previewMap;
+            if (this.previewMap) {
+                // Draw map on screen
+                this.$nextTick(function () {
+                    this.initForMap();
+                })
+            }
+        },
+        onchangeTypeOfApartment: function () {
+            if (this.filterDataForApartment.typeOfApartment == "") {
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                    .get('rest/apartments/getApartments')
+                    .then(response => {
+                        this.apartments = [];
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE")
+                                this.apartments.push(el);
+                        });
+                        return this.apartments;
+                    });
+
+            } else {
+                let tempApartments = (this.apartments).filter(apartment => apartment.typeOfApartment == this.filterDataForApartment.typeOfApartment);
+                this.apartments = tempApartments;
+            }
+        },
+        onchangeAmenities: function () {
+            if (this.filterDataForApartment.selectedAmenities == "") {
+                // Reset to all apartments
+                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
+                // ne ovako da uzme sve kada se iskljuci filter
+                axios
+                    .get('rest/apartments/getApartments')
+                    .then(response => {
+                        this.apartments = [];
+                        response.data.forEach(el => {
+                            if (el.status == "ACTIVE")
+                                this.apartments.push(el);
+                        });
+                        return this.apartments;
+                    });
+
+            } else {
+                /*
+                    Put apartment in list of apartments.
+                    If amenities of selected amenities in filter is subset of amenities of this apartment(which i am adding).
+
+                    ref: https://stackoverflow.com/questions/38811421/how-to-check-if-an-array-is-a-subset-of-another-array-in-javascript/48211214#48211214
+                    author: vaxi
+                */
+                let tempApartments = (this.apartments).filter(apartment => this.filterDataForApartment.selectedAmenities.every(val => apartment.apartmentAmentitiesIDs.includes(val)));
+                this.apartments = tempApartments;
+
+            }
+        },
         sortAsc: function () {
             this.multisort(this.apartments, ['pricePerNight', 'pricePerNight'], ['ASC', 'DESC']);
         },
@@ -167,11 +295,11 @@ Vue.component("guest-apartments", {
             });
         },
         makeReseervation2: function (identificator) {
-            if (!this.startDateForReservation || !this.numberOfNights ) {
-                    toastr["warning"]("All field is required", "Watch out !");
-                    return;
+            if (!this.startDateForReservation || !this.numberOfNights) {
+                toastr["warning"]("All field is required", "Watch out !");
+                return;
 
-                }
+            }
             axios
                 .post('rest/reservation/makeReservations', {
                     "apartmentIdentificator": identificator,
@@ -183,7 +311,7 @@ Vue.component("guest-apartments", {
                 })
                 .then(response => {
                     filteredApartments = [];
-                   	this.startDateForReservation = null;
+                    this.startDateForReservation = null;
                     this.numberOfNights = "";
                     this.apartments.forEach(el => {
                         if (el.identificator != identificator) {
@@ -196,27 +324,28 @@ Vue.component("guest-apartments", {
                 .catch(err => {
                     toastr["error"]("Apartment is not free in that data interval!", "Fail");
                 })
-        }, viewFreeDates: function(id) {
-        	console.log(id);
+        },
+        viewFreeDates: function (id) {
+            console.log(id);
             axios
-                .post('rest/apartments/getApartmentFreeDates',{
-                	"apartmentID" : id
+                .post('rest/apartments/getApartmentFreeDates', {
+                    "apartmentID": id
                 })
                 .then(response => {
                     this.freeDates = [];
                     response.data.forEach(el => {
-                            this.freeDates.push(el);
+                        this.freeDates.push(el);
                     });
-                    return this.freeDates; 
+                    return this.freeDates;
                 });
 
-        	
+
         },
-        viewComments: function(apartmentCommentsIDs) {
-        	console.log(apartmentCommentsIDs);
+        viewComments: function (apartmentCommentsIDs) {
+            console.log(apartmentCommentsIDs);
             axios
-                .post('rest/comments/getCommentsForApartment',{
-                	"apartmentID" : apartmentCommentsIDs
+                .post('rest/comments/getCommentsForApartment', {
+                    "apartmentID": apartmentCommentsIDs
                 })
                 .then(response => {
                     this.comments = [];
@@ -227,51 +356,57 @@ Vue.component("guest-apartments", {
                     return this.comments;
                 });
 
-        	
+
         },
-        searchParam: function (event) {
-            event.preventDefault();
+        isMatchSearch: function (apartment) {
+            // Check for location
+            if (!apartment.location.address.populatedPlace.match(this.searchField.populatedPlace))
+                return false;
 
-            axios
-                .post('rest/search/apartments', {
-                    "location": '' + this.searchData.location,
-                    "checkIn": '' + this.searchData.checkIn,
-                    "checkOut": this.searchData.checkOut,
-                    "price": this.searchData.price,
-                    "rooms": this.searchData.rooms,
-                    "maxGuests": this.searchData.maxGuests
-                })
-                .then(response => {
-                    this.apartments = [];
-                    response.data.forEach(el => {
-                        if (el.status == "ACTIVE" && el.reservedStatus == "Nije rezervisano")
-                            this.apartments.push(el);
-                    });
-                    return this.apartments;
-                })
+            // Check for max guests
+            if (!(apartment.numberOfGuests).toString().match(this.searchField.maxGuests))
+                return false;
+
+            // Check for price
+            if (apartment.pricePerNight < parseInt(this.searchField.minPrice, 10))
+                return false;
+            if (apartment.pricePerNight > parseInt(this.searchField.maxPrice, 10))
+                return false;
+
+            // Check for number of rooms
+            if (apartment.numberOfRooms < parseInt(this.searchField.minNumberOfRooms, 10))
+                return false;
+            if (apartment.numberOfRooms > parseInt(this.searchField.maxNumberOfRooms, 10))
+                return false;
+
+            // Check for number of guests in room
+            if (apartment.numberOfGuests < parseInt(this.searchField.minNumberOfGuests, 10))
+                return false;
+            if (apartment.numberOfGuests > parseInt(this.searchField.maxNumberOfGuests, 10))
+                return false;
+
+
+            // If i survive all if's now i am matched search
+            return true;
         },
-        cancelSearch: function () {
-            this.searchData.location = "";
-            this.searchData.checkIn = "";
-            this.searchData.checkOut = "";
-            this.searchData.price = 0.0;
-            this.searchData.rooms = 0;
-            this.searchData.maxGuests = 0;
 
-            axios
-                .get('rest/apartments/getApartments')
-                .then(response => {
-                    this.apartments = [];
-                    response.data.forEach(el => {
-                        if (el.status == "ACTIVE" && el.reservedStatus == "Nije rezervisano")
-                            this.apartments.push(el);
-                    });
-                    return this.apartments;
-                });
-
-        }
     },
     mounted() {
+        // Draw map on screen
+        this.$nextTick(function () {
+            this.initForMap();
+        })
+
+        axios
+            .get('rest/amenities/getAmenities')
+            .then(response => {
+                this.amenities = [];
+                response.data.forEach(el => {
+                    this.amenities.push(el);
+                });
+                return this.amenities;
+            });
+
         let one = 'rest/apartments/getApartments';
         let two = 'rest/edit/profileUser';
 
@@ -290,4 +425,47 @@ Vue.component("guest-apartments", {
             console.log("Greska brt");
         })
     },
+    computed: {
+        filteredApartments: function () {
+            return this.apartments.filter((apartment) => {
+                return this.isMatchSearch(apartment);
+            });
+        }
+    },
+
+
 })
+
+/**
+ * From coords get real address and put that value in form. 
+ * @param coords cords (x,y)
+ */
+function reverseGeocode(coords) {
+    fetch('http://nominatim.openstreetmap.org/reverse?format=json&lon=' + coords[0] + '&lat=' + coords[1])
+        .then(function (response) {
+            return response.json();
+        }).then(function (json) {
+
+            // TOWN 
+            console.log(json.address);
+            if (json.address.city) {
+                let el = document.getElementById("cityID");
+                /*
+                    I need this new Event because.
+                    The idea is that when I change cityID, i need to update 
+                    data in Vue, and only way i found is this.
+
+                    author: Vaxi
+
+                    ref: https://stackoverflow.com/questions/56348513/how-to-change-v-model-value-from-js
+                */
+                el.value = json.address.city;
+                el.dispatchEvent(new Event('input'));
+            } else if (json.address.city_district) {
+                let el = document.getElementById("cityID");
+                el.value = json.address.city_district;
+                el.dispatchEvent(new Event('input'));
+            }
+
+        });
+}

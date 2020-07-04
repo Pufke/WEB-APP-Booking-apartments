@@ -30,7 +30,7 @@ public class AmenitiesService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJustAmenities() {
 		
-		if(isUserAdmin() || isUserHost()) {
+		if(isUserAdmin() || isUserHost() || isUserGuest()) {
 			return Response
 					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
 					.entity(getAmenities().getValues())
@@ -130,6 +130,17 @@ public class AmenitiesService {
 		
 		if(user!= null) {
 			if(user.getRole().equals("HOST")) {	
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	private boolean isUserGuest() {
+		User user = (User) request.getSession().getAttribute("loginUser");
+		
+		if(user!= null) {
+			if(user.getRole().equals("GUEST")) {	
 				return true;
 			}
 		}	

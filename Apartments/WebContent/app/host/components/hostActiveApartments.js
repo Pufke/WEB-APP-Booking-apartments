@@ -25,7 +25,7 @@ Vue.component("host-ActiveApartments", {
             startDateForHost: null,
             endDateForHost: null,
             apartments: [],
-            amenities: [],          // need it for adding form of new apartment ( we need available amenities )
+            amenities: [],          
             images: [],
             apartmentForChange: {},
             hideDialog: true,

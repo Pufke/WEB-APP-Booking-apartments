@@ -22,8 +22,8 @@ toastr.options = {
 Vue.component("administrator-apartments", {
     data() {
         return {
-        	 startDateForHost: null,
-             endDateForHost: null,
+            startDateForHost: null,
+            endDateForHost: null,
             apartments: [],
             apartmentForChange: {},
             newApartment: {
@@ -72,11 +72,10 @@ Vue.component("administrator-apartments", {
             previewMap: false,
         }
     },
-// v-model="searchField.populatedPlace"
     template: `
     <div id = "styleForApartmentsView">
 
-
+        <!-- Search, filter, sort for apartments -->
         <form method='post'>
 
             <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
@@ -123,6 +122,7 @@ Vue.component("administrator-apartments", {
             <button type="button" @click="sortDesc">SORT DESC</button>
 
         </form>
+        <!-- End of search, filter, sort for apartments -->
         <br>
 
 
@@ -237,17 +237,17 @@ Vue.component("administrator-apartments", {
             })
 
         },
-        previewMapForSearch: function(){
+        previewMapForSearch: function () {
             this.previewMap = !this.previewMap;
-            if(this.previewMap){
+            if (this.previewMap) {
                 // Draw map on screen
                 this.$nextTick(function () {
                     this.initForMap();
                 })
             }
         },
-        activateApartment(apartment){
-			axios
+        activateApartment(apartment) {
+            axios
                 .post('rest/apartments/adminActivationApartment', {
                     addedApartment: apartment
                 })
@@ -260,7 +260,7 @@ Vue.component("administrator-apartments", {
                     toastr["success"]("You make success activation !!", "Success activation!");
                     return this.apartments;
                 });
-		},
+        },
         onchangeTypeOfApartment: function () {
             if (this.filterDataForApartment.typeOfApartment == "") {
                 // Reset to all apartments
@@ -311,7 +311,7 @@ Vue.component("administrator-apartments", {
         },
         confirmChanging: function () {
 
-        	// Check is empty field input
+            // Check is empty field input
             // ref: https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
             if (!this.newApartment.id || !this.newApartment.timeForCheckIn || !this.newApartment.timeForCheckOut
                 || !this.newApartment.pricePerNight || !this.newApartment.numberOfRooms || !this.newApartment.numberOfGuests || !this.startDateForHost || !this.endDateForHost) {
@@ -324,7 +324,7 @@ Vue.component("administrator-apartments", {
 
             axios
                 .post('rest/apartments/changeApartment', {
-                	addedApartment: this.newApartment,
+                    addedApartment: this.newApartment,
                     "startDateForReservation": this.startDateForHost,
                     "endDateForReservation": this.endDateForHost
                 })
