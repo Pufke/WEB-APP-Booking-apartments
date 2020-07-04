@@ -3,8 +3,12 @@ Vue.component("administrator-reservations", {
         return {
             reservations: [],
             user: {},
+            users: [],
             ocena: "",
             komentar: "",
+            filterDataForReservation: {
+                status: ""
+            },
             searchField: '',
         }
     },
@@ -27,6 +31,7 @@ Vue.component("administrator-reservations", {
                     <option>KREIRANA</option>
                     <option>PRIHVACENA</option>
                     <option>ODBIJENA</option>
+                    <option>ZAVRSENA</option>
                 </select>
 
             </form>
@@ -66,7 +71,7 @@ Vue.component("administrator-reservations", {
         `,
     methods: {
         onchangeStatus: function () {
-            if (this.statusOfReservation == "") {
+            if (this.filterDataForReservation.status == "") {
                 // Reset for filter to all reservations
 
                 //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
@@ -82,7 +87,7 @@ Vue.component("administrator-reservations", {
                     });
 
             } else {  // show reservation with only this status of reservation
-                let tempReservations = (this.reservations).filter(reservation => reservation.statusOfReservation == this.statusOfReservation);
+                let tempReservations = (this.reservations).filter(reservation => reservation.statusOfReservation == this.filterDataForReservation.status);
                 this.reservations = tempReservations;
             }
         },
@@ -151,14 +156,17 @@ Vue.component("administrator-reservations", {
                 return multisort_recursive(a, b, columns, order_by, 0);
             });
         },
-        getGuestUserNameById : function(idOfGuest){
-            let UserObj = this.users.find( user => user.id == idOfGuest);
-            if(UserObj)
+        getGuestUserNameById: function (idOfGuest) {
+            let UserObj = this.users.find(user => user.id == idOfGuest);
+            if (UserObj)
                 return UserObj.userName;
             return '';
         },
     },
     mounted() {
+
+        axios.get('rest/users/getJustUsers').then(response => (this.users = response.data));
+
         let one = 'rest/reservation/getReservations';
         let two = 'rest/edit/profileUser';
 
@@ -175,6 +183,9 @@ Vue.component("administrator-reservations", {
         })).catch(errors => {
             console.log("Greska brt");
         })
+
+
+
     },
     computed: {
         filteredReservations: function () {

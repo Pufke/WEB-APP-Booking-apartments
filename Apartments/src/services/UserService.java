@@ -1,7 +1,5 @@
 package services;
 
-import java.util.Collection;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -13,7 +11,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import beans.Reservation;
 import beans.User;
 import dao.ReservationDAO;
 import dao.UsersDAO;
@@ -261,6 +258,7 @@ public class UserService {
 		return false;
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean isUserGuest() {
 		User user = (User) request.getSession().getAttribute("loginUser");
 		
