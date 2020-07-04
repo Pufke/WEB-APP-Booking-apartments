@@ -95,34 +95,21 @@ public class ReservationService {
 		if(isUserAdmin()) {
 			
 			HolidaysDAO hollidays = getHollidays();
+			hollidays.addItem(newItem);
 			
-			for (Holliday holi : getHollidays().getValues()) {
-				
-				if(holi.getHoliday().toString().substring(0, 10).equals(newItem.dateForAdd.toString().substring(0, 10))) {
-					return Response
-							.status(Response.Status.BAD_REQUEST).entity("DATE EXIST")
-							.build();
-				}else {
-
-					hollidays.addItem(newItem);
-					
-					ArrayList<java.sql.Date> listaDatuma = new ArrayList<java.sql.Date>();	
-					
-					for (Holliday h : getHollidays().getValues()) {
-						java.sql.Date sd = new java.sql.Date(h.getHoliday().getTime());
-						listaDatuma.add(sd);
-					}
-					
-					return Response
-							.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
-							.entity(listaDatuma)
-							.build();
-					
-				}
-				
+			ArrayList<java.sql.Date> listaDatuma = new ArrayList<java.sql.Date>();
+			
+			
+			
+			for (Holliday h : getHollidays().getValues()) {
+				java.sql.Date sd = new java.sql.Date(h.getHoliday().getTime());
+				listaDatuma.add(sd);
 			}
 			
-			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS CHANGED")
+					.entity(listaDatuma)
+					.build();
 		}
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
@@ -205,9 +192,11 @@ public class ReservationService {
 		if(isUserGuest()) {
 			ReservationDAO reservationsCTX = getReservations();
 			ApartmentsDAO apartmentsCTX = getApartments();
+			HolidaysDAO holidaysCTX = getHollidays();
 	
 			ArrayList<Apartment> apartments = apartmentsCTX.getValues();
 			ArrayList<Reservation> reservations = reservationsCTX.getValues();
+			ArrayList<Holliday> holidays = holidaysCTX.getValues();
 	
 			Apartment apartment = new Apartment();
 	
@@ -222,23 +211,43 @@ public class ReservationService {
 			java.sql.Date sd = new java.sql.Date(reservationData.dateOfReservation.getTime());
 	
 			ArrayList<Date> listaSlobodnihDatuma = apartment.getAvailableDates();
+			ArrayList<Date> listaPraznika = new ArrayList<Date>();
+			
+			for (Holliday h : holidays) {
+				listaPraznika.add(h.getHoliday());
+			}
+			
+			double totalPrice = 0;
 			
 			for(int i = 0; i < reservationData.numberOfNights; i++) {
-				System.out.println("Uporedjivanje");
+			
 					if(isContains(listaSlobodnihDatuma, reservationData.dateOfReservation)){
 						listaSlobodnihDatuma = removeDateFromList(listaSlobodnihDatuma, reservationData.dateOfReservation);
+						
+						if(isContains(listaPraznika, reservationData.dateOfReservation)) {
+							//Ako je praznik uvecaj cenu za 5%
+							System.out.println("PRAZNIKKK ");
+							totalPrice = totalPrice +  ( apartment.getPricePerNight() * 1.05);
+						}else if(isHoliday(reservationData.dateOfReservation)) {
+						
+							totalPrice = totalPrice +  ( apartment.getPricePerNight() * 0.9);
+						}
+						else {
+							totalPrice = totalPrice  +  apartment.getPricePerNight();
+						}
+						
 						Calendar calendar = Calendar.getInstance();
 						calendar.setTime(reservationData.dateOfReservation);
 						calendar.add(Calendar.DATE, 1);
-						System.out.println("Povecava datum");
 						reservationData.dateOfReservation =  calendar.getTime();
+							
 					}else {
 						return Response.status(Response.Status.EXPECTATION_FAILED).entity("APARTMENT IS NOT FREE").build();
 					}
 				
 			}
 			
-			double totalPrice =  reservationData.numberOfNights * apartment.getPricePerNight();
+			//double totalPrice =  reservationData.numberOfNights * apartment.getPricePerNight();
 			Integer ReservationUniqueID = reservations.size() + 1;
 			
 			Reservation newReservation = new Reservation(ReservationUniqueID, 0, reservationData.apartmentIdentificator,
@@ -261,6 +270,14 @@ public class ReservationService {
 		}
 		return Response.status(403).type("text/plain")
 				.entity("You do not have permission to access!").build();
+	}
+
+	private boolean isHoliday(Date dateOfReservation) {
+		
+		if(dateOfReservation.toString().substring(0, 3).equals("Sun") || dateOfReservation.toString().substring(0, 3).equals("Fri") || dateOfReservation.toString().substring(0, 3).equals("Sat")) {
+			return true;
+		}
+		return false;
 	}
 
 	@POST
