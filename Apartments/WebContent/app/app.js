@@ -38,7 +38,7 @@ setInterval(slid, 3500);
 /*setInterval(para, 7200);
 setInterval(head, 7200);
 setInterval(line, 7300);*/
-setTimeout(marg1, 2000);
+setTimeout(marg1, 2500);
 setInterval(slid2, 4500);
 /*setInterval(head2, 8700);
 setInterval(para2, 8700);

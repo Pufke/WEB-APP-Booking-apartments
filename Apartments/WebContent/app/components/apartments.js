@@ -37,30 +37,18 @@ Vue.component("view-apartments", {
 
         <ul>
             <li v-for="apartment in apartments">
-                <h2> {{ apartment.typeOfApartment }} </h2>
-                <h2> {{ apartment.pricePerNight}} </h2>
+                <h2> Type of Appartment: {{ apartment.typeOfApartment }} </h2>
+        
+                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
+                <h2> Number of rooms: {{ apartment.numberOfRooms}} </h2>
+                <h2> Number of guests: {{ apartment.numberOfGuests}} </h2>
+                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
+                <h2> Psopulated place: {{ apartment.location.address.populatedplace}} </h2>
+                <h2> Time For CheckIn: {{ apartment.timeForCheckIn}} </h2>
+                <h2> Time For CheckOut: {{ apartment.timeForCheckOut}} </h2>
             </li>
         </ul>
         
-        <br>
-        <table border="1">
-        <tr bgcolor="lightgrey">
-            <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th> </tr>
-            <tr v-for="apartment in apartments">
-                <td> {{ apartment.status }} </td>
-                <td> {{ apartment.typeOfApartment }} </td>
-                <td> {{ apartment.pricePerNight}} </td>
-                <td> {{ apartment.numberOfRooms}} </td>
-                <td> {{ apartment.numberOfGuests}} </td>
-                <td> {{ apartment.timeForCheckIn}} </td>
-                <td> {{ apartment.timeForCheckOut}} </td>
-                <td> {{ apartment.location}} </td>
-
-            </tr>
-        </table>
-
-       
-
     </div>
     
     `,
