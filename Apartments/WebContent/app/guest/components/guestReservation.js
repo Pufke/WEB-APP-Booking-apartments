@@ -47,7 +47,7 @@ Vue.component("guest-reservation", {
     	       
           
             	    <button v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" type="button" @click="submitKomentar(reservation.idOfReservedApartment,komentar,ocena)">SUBMIT</button>
-            
+              <button v-if="reservation.statusOfReservation == 'KREIRANA' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="cancelReservation(reservation.id, reservation.idOfReservedApartment)">CANCEL</button>
             </li>
         </ul>
         
@@ -182,6 +182,30 @@ Vue.component("guest-reservation", {
                     });
                     this.reservations = filteredReservations;
                     toastr["success"]("Success deleted!!", "Success!");
+                })
+                .catch(err => {
+                    toastr["error"]("Failed during changes :(", "Fail");
+                })
+        },
+        cancelReservation: function (identificator, apartmentID) {
+            axios
+                .post('rest/reservation/cancelReservation', {
+                    "reservationID": identificator,
+                    "apartmentIdentificator": apartmentID,
+                })
+                .then(response => {
+                	   filteredReservations = [];
+                       this.reservations.forEach(el => {
+
+                           if (el.id == identificator) {
+                        	   el.statusOfReservation = "ODUSTANAK";
+                               filteredReservations.push(el);
+                           }else{
+                        	   filteredReservations.push(el);
+                           }
+                       });
+                       this.reservations = filteredReservations;
+                    toastr["success"]("Success canceled!!", "Success!");
                 })
                 .catch(err => {
                     toastr["error"]("Failed during changes :(", "Fail");

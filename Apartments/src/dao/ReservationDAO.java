@@ -99,6 +99,17 @@ public class ReservationDAO {
 		saveReservationsJSON();
 		
 	}
+	
+	public void cancelReservation(Reservation reservation) {
+
+		for (Reservation currReservation : reservations) {
+			if(currReservation.getID().equals(reservation.getID())) {
+				currReservation.setStatusOfReservation("ODUSTANAK");
+			}
+		}
+		saveReservationsJSON();
+		
+	}
 
 	public void declineReservation(Reservation reservation) {
 

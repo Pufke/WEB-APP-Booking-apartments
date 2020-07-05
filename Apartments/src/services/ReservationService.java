@@ -330,6 +330,35 @@ public class ReservationService {
 	}
 
 	@POST
+	@Path("/cancelReservation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response cancelReservation(DeleteReservationDTO reservationData) {
+		
+		if(isUserGuest()) {
+			
+			ReservationDAO reservationsCTX = getReservations();
+			ArrayList<Reservation> reservations = reservationsCTX.getValues();
+	
+			Reservation reservation = new Reservation();
+			for (Reservation r : reservations) {
+				if (r.getID().equals(Integer.parseInt(reservationData.reservationID))) {
+					reservation = r;
+					break;
+				}
+			}
+
+			reservationsCTX.cancelReservation(reservation);
+			
+			return Response
+					.status(Response.Status.ACCEPTED).entity("SUCCESS RESERVED APARTMENT")				
+					.build();
+		}
+		return Response.status(403).type("text/plain")
+				.entity("You do not have permission to access!").build();
+	}
+	
+	@POST
 	@Path("/makeComment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
