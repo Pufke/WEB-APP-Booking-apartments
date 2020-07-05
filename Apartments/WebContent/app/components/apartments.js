@@ -60,15 +60,47 @@ Vue.component("view-apartments", {
             <li v-for="apartment in filteredApartments">
                 <img class="imagesOfApartment" v-bind:src="getImagesPath(apartment)">
 
-                <h2> Type of Appartment: {{ apartment.typeOfApartment }} </h2>
-        
-                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
-                <h2> Number of rooms: {{ apartment.numberOfRooms}} </h2>
-                <h2> Number of guests: {{ apartment.numberOfGuests}} </h2>
-                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
-                <h2> Populated place: {{ apartment.location.address.populatedPlace}} </h2>
-                <h2> Time For CheckIn: {{ apartment.timeForCheckIn}} </h2>
-                <h2> Time For CheckOut: {{ apartment.timeForCheckOut}} </h2>
+                <table class="tableInCards">
+                    <tr>
+                        <td> Type of apartment: </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Price per night: </td>
+                        <td> {{ apartment.pricePerNight}} $ </td>
+                    </tr>
+
+                    <tr>
+                        <td> Number of rooms: </td>
+                        <td> {{ apartment.numberOfRooms}} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Number of guests: </td>
+                        <td> {{ apartment.numberOfGuests}} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Location: </td>
+                        <td> 
+                            {{ apartment.location.address.populatedPlace }},
+                            {{ apartment.location.address.street }},
+                            {{ apartment.location.address.number }}, 
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> Time for check-in:: </td>
+                        <td> {{ apartment.timeForCheckIn}}  </td>
+                    </tr>
+
+                    <tr>
+                        <td> Time for check-out:: </td>
+                        <td> {{ apartment.timeForCheckOut}}  </td>
+                    </tr>
+                </table>
+
             </li>
         </ul>
         <!-- End of cards for apartments -->

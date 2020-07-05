@@ -144,13 +144,18 @@ Vue.component("host-ActiveApartments", {
         <ul>
             <li v-for="apartment in apartments">
                 <img class="imagesOfApartment" v-bind:src="getImagesPath(apartment)">
-                <h2> Type of apartment: {{ apartment.typeOfApartment }} </h2>
-                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
-                <h2> ID of apartment: {{apartment.id }}  </h2>
 
-                <h2 v-for="amenitiesID in apartment.apartmentAmentitiesIDs">
-                    Amenities ID: {{ amenitiesID }}
-                </h2>
+                <table class="tableInCards">
+                    <tr>
+                        <td> Type of apartment: </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Price per night: </td>
+                        <td> {{ apartment.pricePerNight}} $ </td>
+                    </tr>
+                </table>
 
                 <button type="button" @click="changeApartment(apartment)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i> Change </button><br>
                 <button type="button" @click="deleteApartment(apartment)" class="deleteButtonStyle" ><i class="fa fa-trash" aria-hidden="true"></i> Delete </button>

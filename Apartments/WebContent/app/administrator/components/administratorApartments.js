@@ -165,9 +165,18 @@ Vue.component("administrator-apartments", {
         <ul>
             <li v-for="apartment in filteredApartments">
                 <img class="imagesOfApartment" v-bind:src="getImagesPath(apartment)">
-                <h2> Type of apartment: {{ apartment.typeOfApartment }} </h2>
-                <h2> Price per night: {{ apartment.pricePerNight}} </h2>
-                <h2> ID of apartment: {{apartment.id }}  </h2>
+
+                <table class="tableInCards">
+                    <tr>
+                        <td> Type of apartment: </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Price per night: </td>
+                        <td> {{ apartment.pricePerNight}} $ </td>
+                    </tr>
+                </table>
 
                 <button type="button" v-if="apartment.status == 'INACTIVE' " @click="activateApartment(apartment)"><i class="fa fa-check-circle" aria-hidden="true"></i> Activate </button> <br>
                 <button type="button" @click="changeApartment(apartment)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i>  Change </button> <br>

@@ -10,10 +10,18 @@ Vue.component("host-CommentsAndReviews", {
 
         <ul>
             <li v-for="comment in comments">
-                <h2> Author ID: {{ comment.guestAuthorOfCommentID}} </h2>
-                <h2> Apartment ID: {{ comment.commentForApartmentID }} </h2>
-                <h2> Text: {{ comment.txtOfComment }} </h2>
-                <h2> Rating: {{ comment.ratingForApartment }} </h2>
+                
+                <table class="tableInCards">
+                    <tr>
+                        <td> Comment: </td>
+                        <td> {{ comment.txtOfComment }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Rating </td>
+                        <td> {{ comment.ratingForApartment }}/10 </td>
+                    </tr>
+                </table>
 
                 <button v-if="comment.isAvailableToSee" type="button" @click="hideComment(comment)"> Hide </button>
                 <button v-if="!comment.isAvailableToSee" type="button" @click="showComment(comment)"> Show </button>

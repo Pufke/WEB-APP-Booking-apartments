@@ -111,30 +111,58 @@ Vue.component("guest-apartments", {
             <li v-for="apartment in filteredApartments">
                 <img class="imagesOfApartment" v-bind:src="getImagesPath(apartment)">
 
-                <h2> ID : {{ apartment.id }} </h2>
-                <h2> {{ apartment.typeOfApartment }} </h2>
-                <h2> {{ apartment.pricePerNight}} </h2>
-                <h2> ADRESA: </h2> 
-                <h3> Mesto: {{ apartment.location.address.populatedPlace }} </h3>
-                <h3> Ulica: {{ apartment.location.address.street }} </h3>
-                <h3> Broj: {{ apartment.location.address.number }} </h3>
-                <h3> ZIP code: {{ apartment.location.address.zipCode }} </h3>
-                
-                <h2> Lokacija: </h2> 
-                <h3> Geografska duzina: {{ apartment.location.longitude }} </h3>
-                <h3> Geografska sirina: {{ apartment.location.latitude }} </h3>
+                <table class="tableInCards">
+                    <tr>
+                        <td> Type of apartment: </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Price per night: </td>
+                        <td> {{ apartment.pricePerNight}} $ </td>
+                    </tr>
+
+                    <tr>
+                        <td> Number of rooms: </td>
+                        <td> {{ apartment.numberOfRooms}} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Number of guests: </td>
+                        <td> {{ apartment.numberOfGuests}} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Location: </td>
+                        <td> 
+                            {{ apartment.location.address.populatedPlace }},
+                            {{ apartment.location.address.street }},
+                            {{ apartment.location.address.number }}, 
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> Time for check-in:: </td>
+                        <td> {{ apartment.timeForCheckIn}}  </td>
+                    </tr>
+
+                    <tr>
+                        <td> Time for check-out:: </td>
+                        <td> {{ apartment.timeForCheckOut}}  </td>
+                    </tr>
+                </table>
+
                 
                 <label for="fromDate">Pocetni datum rezervacije:</label>
                 <input type="date" v-model="startDateForReservation" id="fromDate" name="fromDate">
                 <input type="number" v-model="numberOfNights" placeholder="Number of nights..." >
                 
-                 <input type="text" v-model="commentForHost" placeholder="Comment for host..." >
+                <input type="text" v-model="commentForHost" placeholder="Comment for host..." >
                  
-                <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button>
-                
-                <button @click="viewComments(apartment.id)">VIEW COMMENTS</button>
-                
-                 <button @click="viewFreeDates(apartment.id)">VIEW FREE DATES</button>
+
+                <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button> <br>
+                <button @click="viewComments(apartment.id)">VIEW COMMENTS</button><br>
+                <button @click="viewFreeDates(apartment.id)">VIEW FREE DATES</button><br>
                 <br>
                 
     			
@@ -198,21 +226,19 @@ Vue.component("guest-apartments", {
 
                 <thead>
                     <tr>
-                        <th> ID </th>
                         <th> Status </th>
                         <th> Type </th>
                         <th> Price </th>
                         <th> Rooms </th>
-                        <th> Guests</th>
+                        <th> Guests </th>
                         <th> Check in</th>
                         <th> Check out</th>
-                        <th>Location</th>
+                        <th> Location </th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr v-for="apartment in filteredApartments">
-                        <td> {{ apartment.id }} </td>
                         <td> {{ apartment.status }} </td>
                         <td> {{ apartment.typeOfApartment }} </td>
                         <td> {{ apartment.pricePerNight}} </td>
@@ -220,7 +246,11 @@ Vue.component("guest-apartments", {
                         <td> {{ apartment.numberOfGuests}} </td>
                         <td> {{ apartment.timeForCheckIn}} </td>
                         <td> {{ apartment.timeForCheckOut}} </td>
-                        <td> {{ apartment.location}} </td>
+                        <td> 
+                            {{ apartment.location.address.populatedPlace }},
+                            {{ apartment.location.address.street }},
+                            {{ apartment.location.address.number }}, 
+                        </td>
                     </tr>
                 </tbody>                
 

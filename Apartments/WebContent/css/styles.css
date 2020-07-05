@@ -78,9 +78,7 @@ nav{
 	justify-content: space-between;
 }
 h2{
-	text-transform: uppercase;
 	color: #000;
-	font-size: 25px;
 }
 #menu{
 	width: 50%;
@@ -221,6 +219,19 @@ table{
     text-align: center;
 }
 
+.tableInCards{
+	border-collapse: separate !important;
+    background-color: #cdf3b9;
+    color: black;
+    font-weight: bold;
+    border: 3px solid white;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.tableInCards td{
+	border:none !important;
+}
 .deleteButtonStyle{
 	background-color: #f6825b !important;
 }

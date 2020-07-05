@@ -32,22 +32,35 @@ Vue.component("guest-reservation", {
 
         <ul>
             <li v-for="reservation in reservations">
-            	<h2> Reservation ID: {{ reservation.id }} </h2>
-                <h2> Apartment ID: {{ reservation.idOfReservedApartment }} </h2>
-                <h2> Total price: {{ reservation.totalPrice }} </h2>
-                <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
-                <h2> Guest ID: {{ reservation.guestID }} </h2>
-                <h2> Message for Host: {{ reservation.messageForHost }} </h2>
-                <h2> Status of reservation: {{ reservation.statusOfReservation }} </h2>
+                <table class="tableInCards">
+                    <tr>
+                        <td> Total price: </td>
+                        <td> {{ reservation.totalPrice }} $ </td>
+                    </tr>
+
+                    <tr>
+                        <td> Message for host: </td>
+                        <td> {{ reservation.messageForHost }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Start date: </td>
+                        <td> {{ reservation.startDateOfReservation }}  </td>
+                    </tr>  
+
+                    <tr>
+                        <td> Status of reservation: </td>
+                        <td> {{ reservation.statusOfReservation }}  </td>
+                    </tr>   
+                </table>
+
                 <button @click="deleteReservation(reservation.id, reservation.idOfReservedApartment)">DELETE RESERVATION</button>
     	       
-    	        <input  v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" v-model="komentar" placeholder="Vas komentar o apartmanu">
+    	        <input  v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" v-model="komentar" placeholder="Vas komentar o apartmanu"> 
     	        <input  v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" v-model="ocena" placeholder="Vasa ocena o apartmanu">
     	        
-    	       
-          
-            	    <button v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" type="button" @click="submitKomentar(reservation.idOfReservedApartment,komentar,ocena)">SUBMIT</button>
-              <button v-if="reservation.statusOfReservation == 'KREIRANA' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="cancelReservation(reservation.id, reservation.idOfReservedApartment)">CANCEL</button>
+            	<button v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" type="button" @click="submitKomentar(reservation.idOfReservedApartment,komentar,ocena)">SUBMIT</button>
+                <button v-if="reservation.statusOfReservation == 'KREIRANA' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="cancelReservation(reservation.id, reservation.idOfReservedApartment)">CANCEL</button>
             </li>
         </ul>
         
@@ -59,19 +72,19 @@ Vue.component("guest-reservation", {
 
                 <thead>
                     <tr>
-                        <th> Apartment ID</th> 
-                        <th> Status  </th>
-                        <th> startDateOfReservation </th>
-                        <th> Guest ID </th>
+                        <th> Total price </th> 
+                        <th> Start date </th>
+                        <th> Status of reservation </th>
+                        <th> Message for host </th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr v-for="reservation in reservations">
-                        <td> {{ reservation.idOfReservedApartment }} </td>
-                        <td> {{ reservation.statusOfReservation }} </td>
-                        <td>  {{ reservation.startDateOfReservation }} </td>
-                        <td> {{ reservation.guestID }}  </td>    
+                        <td> {{ reservation.totalPrice }}$ </td>
+                        <td> {{ reservation.startDateOfReservation }} </td>
+                        <td>  {{ reservation.statusOfReservation }} </td>
+                        <td> {{ reservation.messageForHost }}  </td>    
                     </tr>
                 </tbody>                
 

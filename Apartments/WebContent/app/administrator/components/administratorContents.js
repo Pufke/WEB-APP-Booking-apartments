@@ -60,7 +60,7 @@ Vue.component("administrator-contents", {
 
         <ul>
             <li v-for="item in amenities">
-                <h2> {{ item.id }} </h2>
+
                 <h2> {{ item.itemName }} </h2>
 
                 <button type="button" @click="changeItem(item)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i> Change </button><br>

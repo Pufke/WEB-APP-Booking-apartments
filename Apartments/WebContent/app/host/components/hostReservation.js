@@ -59,17 +59,35 @@ Vue.component("host-reservation", {
         <br><br>
 
 
-
         <ul>
             <li v-for="reservation in filteredReservations">
-                <h2> Guest ID: {{ reservation.guestID }} </h2>
-                <h2> Guest userName: {{ getGuestUserNameById(reservation.guestID) }} </h2>
-                <h2> ID of reserved apartment: {{ reservation.idOfReservedApartment }} </h2>
-                
-                <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
-                <h2> Message for host: {{ reservation.messageForHost }} </h2>
-                <h2> Total price: {{ reservation.totalPrice }} </h2>
-                <h2> Status : {{ reservation.statusOfReservation }} </h2>
+
+                <table class="tableInCards">
+                    <tr>
+                        <td> Guest username: </td>
+                        <td> {{ getGuestUserNameById(reservation.guestID) }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Total price: </td>
+                        <td> {{ reservation.totalPrice }} $ </td>
+                    </tr>
+
+                    <tr>
+                        <td> Message for host: </td>
+                        <td> {{ reservation.messageForHost }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Start date: </td>
+                        <td> {{ reservation.startDateOfReservation }}  </td>
+                    </tr>   
+
+                    <tr>
+                        <td> Status of reservation: </td>
+                        <td> {{ reservation.statusOfReservation }}  </td>
+                    </tr>   
+                </table> 
 
                 <button v-if="reservation.statusOfReservation == 'KREIRANA' " type="button" @click="acceptReservation(reservation)"> Accept </button>
                 <button v-if="reservation.statusOfReservation == 'KREIRANA' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="declineReservation(reservation)"> Decline </button>

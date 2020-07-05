@@ -64,13 +64,23 @@ Vue.component("administrator-reservations", {
             
             <ul>
                 <li v-for="reservation in filteredReservations">
-                	<h2> Reservation ID: {{ reservation.id }} </h2>
-                    <h2> Apartment ID: {{ reservation.idOfReservedApartment }} </h2>
-                    <h2> Total price: {{ reservation.totalPrice }} </h2>
-                    <h2> Start date: {{ reservation.startDateOfReservation }} </h2>
-                    <h2> Guest ID: {{ reservation.guestID }} </h2>
-                    <h2> Message for Host: {{ reservation.messageForHost }} </h2>
-                    <h2> Status of reservation: {{ reservation.statusOfReservation }} </h2>                	   
+
+                    <table class="tableInCards">
+                        <tr>
+                            <td> Total price: </td>
+                            <td> {{ reservation.totalPrice }} $ </td>
+                        </tr>
+
+                        <tr>
+                            <td> Message for host: </td>
+                            <td> {{ reservation.messageForHost }} </td>
+                        </tr>
+
+                        <tr>
+                            <td> Status of reservation: </td>
+                            <td> {{ reservation.statusOfReservation }}  </td>
+                        </tr>   
+                    </table>       	   
                 
                 </li>
             </ul>

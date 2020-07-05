@@ -26,9 +26,19 @@ Vue.component("host-InactiveApartments", {
 
 		<br><br>
 		<ul>
-			<li v-for="apartment in apartments">
-				<h2> {{ apartment.typeOfApartment }} </h2>
-				<h2> {{ apartment.pricePerNight}} </h2>
+            <li v-for="apartment in apartments">
+                
+                <table class="tableInCards">
+                    <tr>
+                        <td> Type of apartment: </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Price per night: </td>
+                        <td> {{ apartment.pricePerNight}} $ </td>
+                    </tr>
+                </table>
 
 				<button type="button" @click="activateApartment(apartment)"><i class="fa fa-check-circle" aria-hidden="true"></i> Activate </button><br>
 			</li>
