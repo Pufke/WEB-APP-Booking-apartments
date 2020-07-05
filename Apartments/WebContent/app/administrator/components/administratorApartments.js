@@ -169,9 +169,9 @@ Vue.component("administrator-apartments", {
                 <h2> Price per night: {{ apartment.pricePerNight}} </h2>
                 <h2> ID of apartment: {{apartment.id }}  </h2>
 
-                <button type="button" @click="changeApartment(apartment)"> Change </button>
-                <button type="button" v-if="apartment.status == 'INACTIVE' " @click="activateApartment(apartment)"> Activate </button>
-                <button type="button" v-if=" apartment.logicalDeleted == '0' " @click="deleteApartment(apartment)"> Delete </button>
+                <button type="button" v-if="apartment.status == 'INACTIVE' " @click="activateApartment(apartment)"><i class="fa fa-check-circle" aria-hidden="true"></i> Activate </button> <br>
+                <button type="button" @click="changeApartment(apartment)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i>  Change </button> <br>
+                <button type="button" v-if=" apartment.logicalDeleted == '0' " @click="deleteApartment(apartment)" class="deleteButtonStyle" ><i class="fa fa-trash" aria-hidden="true"></i>  Delete </button> <br>
             
             </li>
         </ul>
@@ -205,7 +205,11 @@ Vue.component("administrator-apartments", {
                         <td> {{ apartment.numberOfGuests}} </td>
                         <td> {{ apartment.timeForCheckIn}} </td>
                         <td> {{ apartment.timeForCheckOut}} </td>
-                        <td> {{ apartment.location}} </td>
+                        <td> 
+                            {{ apartment.location.address.populatedPlace }},
+                            {{ apartment.location.address.street }},
+                            {{ apartment.location.address.number }}, 
+                        </td>
                     </tr>
                 </tbody>                
 

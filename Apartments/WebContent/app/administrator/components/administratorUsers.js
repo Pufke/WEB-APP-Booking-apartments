@@ -59,8 +59,8 @@ Vue.component("administrator-users", {
                         <td> {{ user.surname }} </td>
                         <td> {{ user.role }} </td>
                         <td align ="center" >
-                            <button v-if="user.blocked == '0' && user.role != 'ADMINISTRATOR' " type="button" @click="blockUser(user)" > Block </button>
-                            <button v-if="user.blocked == '1' && user.role != 'ADMINISTRATOR' " type="button" @click="unblockUser(user)" > Unblock </button>
+                            <button v-if="user.blocked == '1' && user.role != 'ADMINISTRATOR' " type="button" @click="unblockUser(user)" ><i class="fa fa-check" aria-hidden="true"></i> Unblock </button>
+                            <button v-if="user.blocked == '0' && user.role != 'ADMINISTRATOR' " type="button" @click="blockUser(user)" class="blockUser" ><i class="fa fa-ban" aria-hidden="true"></i> Block </button>
                         </td>
                     </tr>
                 </tbody>                

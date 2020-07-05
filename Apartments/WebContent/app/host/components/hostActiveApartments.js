@@ -152,8 +152,8 @@ Vue.component("host-ActiveApartments", {
                     Amenities ID: {{ amenitiesID }}
                 </h2>
 
-                <button type="button" @click="changeApartment(apartment)"> Change </button>
-                <button type="button" @click="deleteApartment(apartment)"> Delete </button>
+                <button type="button" @click="changeApartment(apartment)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i> Change </button><br>
+                <button type="button" @click="deleteApartment(apartment)" class="deleteButtonStyle" ><i class="fa fa-trash" aria-hidden="true"></i> Delete </button>
             </li>
         </ul> 
         <!-- End of cards for apartments -->

@@ -200,7 +200,7 @@ table{
     padding: 0;
 }
 #styleForApartmentsView li{
-    flex-grow: 1;
+	flex-grow: 1;
     flex-basis: 300px;
     text-align: center;
     padding: 30px;
@@ -210,6 +210,23 @@ table{
     background-color: #e6fbef;
 }
 
+#styleForApartmentsView li button{
+	height: 30px;
+    border-radius: 10px;
+    width: 150px;
+    border: 2px solid white;
+    background-color: #95ffaa;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+
+.deleteButtonStyle{
+	background-color: #f6825b !important;
+}
+.changeButtonStyle{
+	background-color: rgb(255, 201, 100) !important;
+}
 /* Style for apartments view */
 
 /* Style for dialog part */
@@ -454,6 +471,22 @@ th, td {
 	padding: 15px;
 	text-align: left;
 }
+
+td button{
+	height: 40px;
+	border-radius: 10px;
+	width: 100%;
+	border: 2px solid white;
+	color: black;
+	font-weight: bold;
+	text-align: center;
+	background-color: #95ffaa;
+}
+
+.blockUser{
+	background-color: #f6825b !important;
+}
+
 .styleForTable {
 	width: 100%;    
 	border-radius: 15px;

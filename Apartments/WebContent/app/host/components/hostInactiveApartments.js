@@ -30,7 +30,7 @@ Vue.component("host-InactiveApartments", {
 				<h2> {{ apartment.typeOfApartment }} </h2>
 				<h2> {{ apartment.pricePerNight}} </h2>
 
-				<button type="button" @click="activateApartment(apartment)"> Activate </button>
+				<button type="button" @click="activateApartment(apartment)"><i class="fa fa-check-circle" aria-hidden="true"></i> Activate </button><br>
 			</li>
 		</ul>
 		

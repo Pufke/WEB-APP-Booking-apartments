@@ -63,8 +63,8 @@ Vue.component("administrator-contents", {
                 <h2> {{ item.id }} </h2>
                 <h2> {{ item.itemName }} </h2>
 
-                <button type="button" @click="changeItem(item)"> Change </button>
-                <button type="button" @click="deleteItem(item.id)"> Delete </button>
+                <button type="button" @click="changeItem(item)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i> Change </button><br>
+                <button type="button" @click="deleteItem(item.id)" class="deleteButtonStyle" ><i class="fa fa-trash" aria-hidden="true"></i> Delete </button>
             
 
             </li>
