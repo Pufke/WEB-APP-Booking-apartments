@@ -14,18 +14,19 @@ Vue.component("host-users", {
     <div>
         
     <!-- Table of users -->
-
+    
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> SEARCH </button><br><br>
         <!-- Search -->
 
-        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> SEARCH </button><br><br>
+        <div class="searchUsers" v-if="previewSearch" >
+            <form method='post'>
 
-        <form method='post' v-if="previewSearch" >
+                <input type="text" v-model="searchField.role" v-bind:class="{filledInput: searchField.role != '' }" placeholder="guest role..." >
+                <input type="text" v-model="searchField.userName" v-bind:class="{filledInput: searchField.userName != '' }" placeholder="guest username..." >
+                <input type="text" v-model="searchField.gender" v-bind:class="{filledInput: searchField.gender != '' }" placeholder="guest gender..." >
 
-            <input type="text" v-model="searchField.role"  placeholder="Guest role..." >
-            <input type="text" v-model="searchField.userName"  placeholder="Guest username..." >
-            <input type="text" v-model="searchField.gender"  placeholder="Guest gender..." >
-
-        </form>
+            </form>
+        </div>
         <br><br>
         <!-- End of search -->
 

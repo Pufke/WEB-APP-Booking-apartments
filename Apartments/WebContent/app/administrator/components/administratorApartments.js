@@ -74,75 +74,93 @@ Vue.component("administrator-apartments", {
             },
             previewMap: false,
             previewSearch: false,
+            previewFilters: false,
+            previewSort: false,
         }
     },
     template: `
     <div id = "styleForApartmentsView">
 
-        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> <br><br>
-
-        <!-- Search, filter, sort for apartments -->
-        <form method='post' v-if="previewSearch">
-
-            <input type="text" v-model="searchField.minPrice" placeholder="Min price..." >
-            <input type="text" v-model="searchField.maxPrice" placeholder="Max price..." >
-            <br><br>
-
-            <input type="text" v-model="searchField.minNumberOfRooms" placeholder="Min rooms..." >
-            <input type="text" v-model="searchField.maxNumberOfRooms" placeholder="Max rooms..." >
-            <br><br>
-
-            <input type="text" v-model="searchField.minNumberOfGuests" placeholder="Min guests..." >
-            <input type="text" v-model="searchField.maxNumberOfGuests" placeholder="Max guests..." >
-            <br><br>
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> SEARCH </button>
+        <button type="button" @click=" previewFilters = !previewFilters " class="btn"><i class="fa fa-filter" aria-hidden="true"></i> FILTERS </button>
+        <button type="button" @click=" previewSort = !previewSort " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button>
 
 
-            <br><br>
+        <br><br>
+        <!-- Search for apartments -->
+        <div class="searchFilterSortApartmentsUnregister" v-if="previewSearch" >
+            <form method='post'>
 
-            <!-- If user don't want use filter, check just option: Without filter for type -->
-            <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
-                <option value="">Without filter for type </option>
-                <option>ROOM</option>
-                <option>STANDARD</option>
-            </select>
+                <input type="text" v-model="searchField.minPrice" placeholder="min price..." >
+                <input type="text" v-model="searchField.maxPrice" placeholder="max price..." >
+                <br><br>
 
-            <!-- If user don't want use filter, check just option: Without filter for status -->
-            <select v-model="filterDataForApartment.status" @change="onchangeStatus()">
-                <option value="">Without filter for status </option>
-                <option>ACTIVE</option>
-                <option>INACTIVE</option>
-            </select>
+                <input type="text" v-model="searchField.minNumberOfRooms" placeholder="min rooms..." >
+                <input type="text" v-model="searchField.maxNumberOfRooms" placeholder="max rooms..." >
+                <br><br>
 
-            <br><br>
-            <!-- List of all amenities in apartments -->
-            <select v-model="filterDataForApartment.selectedAmenities" multiple @change="onchangeAmenities()">
+                <input type="text" v-model="searchField.minNumberOfGuests" placeholder="min guests..." >
+                <input type="text" v-model="searchField.maxNumberOfGuests" placeholder="max guests..." >
+                <br><br>
 
-                <option value=""> Without filter for amenities </option>
-                <option v-for="option in amenities" v-bind:value="option.id">
-                    {{ option.itemName }}
-                </option>
+                <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="city..." >
+                <button type="button" @click="previewMapForSearch()"><i class="fa fa-map-marker" aria-hidden="true"></i> Choose on map </button>
+            </form>
+        </div>
+        <!-- End search for apartments -->
 
-            </select>
-            <!-- End list of all amenities in apartments -->
+        <br><br>
+        <!-- Filter for apartments -->
+        <div class="filterForAdminApartments" v-if="previewFilters">
+            <form method='post' 
+                <!-- If user don't want use filter, check just option: Without filter for type -->
+                <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
+                    <option value="">Without filter for type </option>
+                    <option>ROOM</option>
+                    <option>STANDARD</option>
+                </select>
 
-            <br><br>
-            <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
-            <button type="button" @click="previewMapForSearch()"> Choose on map </button>
-            
-            <br><br>
-            
-            <div id="mapSearch" class="mapSearch" v-if="previewMap">
+                <!-- If user don't want use filter, check just option: Without filter for status -->
+                <select v-model="filterDataForApartment.status" @change="onchangeStatus()">
+                    <option value="">Without filter for status </option>
+                    <option>ACTIVE</option>
+                    <option>INACTIVE</option>
+                </select>
+
+                <br><br>
+                <!-- List of all amenities in apartments -->
+                <select v-model="filterDataForApartment.selectedAmenities" class="multipleSelectAmenities" multiple @change="onchangeAmenities()">
+
+                    <option value=""> Without filter for amenities </option>
+                    <option v-for="option in amenities" v-bind:value="option.id">
+                        {{ option.itemName }}
+                    </option>
+
+                </select>
+                <!-- End list of all amenities in apartments -->
+
                 
-            </div>
+                
+                <br><br>
+            </form>
+        </div>
+        <!-- End filters for apartments -->
 
-            <br><br>
-            <button type="button" @click="sortAsc">SORT ASC</button>
-            <button type="button" @click="sortDesc">SORT DESC</button>
+        <br><br>
+        <!-- Sort for apartments -->
+        <div v-if="previewSort" class="sortInApp">
+            <form method='post'>
 
-        </form>
-        <!-- End of search, filter, sort for apartments -->
+                <button type="button" @click="sortAsc"><i class="fa fa-sort" aria-hidden="true"></i> PRICE UP</button>
+                <button type="button" @click="sortDesc"><i class="fa fa-sort" aria-hidden="true"></i> PRICE DOWN</button>
+
+            </form>
+        </div>
+        <!-- End sort for apartments -->
         <br>
 
+        <!-- Map for search city -->
+        <div id="mapSearch" class="mapSearch" v-if="previewMap"></div>
 
         <!-- Cards for apartments -->
         <ul>

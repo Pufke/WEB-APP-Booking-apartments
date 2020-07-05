@@ -21,36 +21,39 @@ Vue.component("view-apartments", {
     template: `
     <div id = "styleForApartmentsView">
         
-        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i>  FILTERS </button> <br><br>
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i>  SEARCH </button> <br><br>
 
         <!-- Search, filter, sort for apartments -->
-        <form method='post' v-if="previewSearch">
+        <div class="searchFilterSortApartmentsUnregister" v-if="previewSearch" >
+            <form method='post'>
 
-            <input type="text" v-model="searchField.minPrice" placeholder="Min price..." >
-            <input type="text" v-model="searchField.maxPrice" placeholder="Max price..." >
-            <br><br>
+                <input type="text" v-model="searchField.minPrice" placeholder="Min price..." v-bind:class="{filledInput: searchField.minPrice != '' }" >
+                <input type="text" v-model="searchField.maxPrice" placeholder="Max price..." v-bind:class="{filledInput: searchField.maxPrice != '' }" >
+                <br><br>
 
-            <input type="text" v-model="searchField.minNumberOfRooms" placeholder="Min rooms..." >
-            <input type="text" v-model="searchField.maxNumberOfRooms" placeholder="Max rooms..." >
-            <br><br>
+                <input type="text" v-model="searchField.minNumberOfRooms" placeholder="Min rooms..." v-bind:class="{filledInput: searchField.minNumberOfRooms != '' }" >
+                <input type="text" v-model="searchField.maxNumberOfRooms" placeholder="Max rooms..." v-bind:class="{filledInput: searchField.maxNumberOfRooms != '' }" >
+                <br><br>
 
-            <input type="text" v-model="searchField.minNumberOfGuests" placeholder="Min guests..." >
-            <input type="text" v-model="searchField.maxNumberOfGuests" placeholder="Max guests..." >
-            <br><br>
+                <input type="text" v-model="searchField.minNumberOfGuests" placeholder="Min guests..." v-bind:class="{filledInput: searchField.minNumberOfGuests != '' }" >
+                <input type="text" v-model="searchField.maxNumberOfGuests" placeholder="Max guests..." v-bind:class="{filledInput: searchField.maxNumberOfGuests != '' }" >
+                <br><br>
 
-            <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." >
-            <button type="button" @click="previewMapForSearch()"> Choose on map </button>
-            
-            <br><br>
-            
-            <div id="mapSearch" class="mapSearch" v-if="previewMap">
-            </div>
+                <input type="text" id="cityID" v-model="searchField.populatedPlace" placeholder="City..." v-bind:class="{filledInput: searchField.populatedPlace != '' }" >
+                <button type="button" @click="previewMapForSearch()"><i class="fa fa-map-marker" aria-hidden="true"></i> Choose on map </button>
+                
+                <br><br>
+                
+                
 
 
-        </form>
+            </form>
+        </div>
         <!-- End of search, filter, sort for apartments -->
         <br>
 
+        <div id="mapSearch" class="mapSearch" v-if="previewMap">
+        </div>
 
         <!-- Cards for apartments -->
         <ul>

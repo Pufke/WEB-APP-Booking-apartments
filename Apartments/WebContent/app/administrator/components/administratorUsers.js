@@ -21,20 +21,23 @@ Vue.component("administrator-users", {
         <button type="button" @click="addNewHost()" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW </button>
         <br><br>
 
-        <form method='post' v-if="previewSearch" >
+        <!-- Search users -->
+        <div class="searchUsersAdmin" v-if="previewSearch" >
+            <form method='post' >
 
-            <input type="text" v-model="searchField.userName" placeholder="username..." >
-            <input type="text" v-model="searchField.name" placeholder="Name..." >
-            <input type="text" v-model="searchField.surname" placeholder="surname..." >
-            <input type="text" v-model="searchField.role" placeholder="role..." >            
+                <input type="text" v-model="searchField.userName" v-bind:class="{filledInput: searchField.userName != '' }" placeholder="username..." >
+                <input type="text" v-model="searchField.name" v-bind:class="{filledInput: searchField.name != '' }" placeholder="name..." >
+                <input type="text" v-model="searchField.surname" v-bind:class="{filledInput: searchField.surname != '' }" placeholder="surname..." >
+                <input type="text" v-model="searchField.role" v-bind:class="{filledInput: searchField.role != '' }" placeholder="role..." >            
 
-        </form>
-
+            </form>
+        </div>
+        <!-- End of search for users -->
         <br>
 
 
         <!-- Table of all users -->
-        <div class="styleForTable">
+        <div class="styleForTable" style="width: 70%;" >
             <table style="width:100%">
 
                 <thead>

@@ -207,7 +207,7 @@ table{
     border: 2px solid #222;
 	margin: 10px;
 	border-radius: 15px;
-    background-color: #d4ffe6;
+    background-color: #e6fbef;
 }
 
 /* Style for apartments view */
@@ -461,3 +461,156 @@ th, td {
   }
 
 /* End of style for tables */
+
+
+/* Style for search, sort, filters */
+
+/* Search on home page for unregister users */
+.searchFilterSortApartmentsUnregister{
+	width: 500px;
+    height: 230px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #e1f7df;
+}
+
+.searchFilterSortApartmentsUnregister input{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid white;
+    text-align: center;
+}
+
+.searchFilterSortApartmentsUnregister button{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid white;
+    background-color: #95ffaa;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+/* End of search on home page for unregister users */
+
+/* Start style for search of users HOST */
+
+.searchUsers{
+	width: 700px;
+    height: 88px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #e1f7df;
+}
+
+.searchUsers input{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid white;
+    text-align: center;
+}
+
+.searchUsers button{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid gray;
+    background-color: #95dfff;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+/* End style for search of users HOST */
+
+/* Start style for search of users ADMIN */
+
+.searchUsersAdmin{
+	width: 900px;
+    height: 88px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #e1f7df;
+}
+
+.searchUsersAdmin input{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid white;
+    text-align: center;
+}
+
+.searchUsersAdmin button{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid gray;
+    background-color: #95dfff;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+/* End style for search of users ADMIN */
+
+/* filterForAdminApartments */
+
+/* Start style filter for ADMIN apartments */
+.filterForAdminApartments{
+	width: 500px;
+    height: 200px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #e1f7df;
+}
+
+.filterForAdminApartments select{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid white;
+    text-align: center;
+}
+
+.multipleSelectAmenities {
+	height: 90px !important;
+    width: 400px !important;
+}
+
+/* End style filter for ADMIN apartments */
+
+/* Sort in app */
+.sortInApp{
+	width: 500px;
+    height: 80px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #e1f7df;
+}
+
+.sortInApp button{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+	border: 2px solid white;
+    background-color: #95ffaa;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* End of sort in app */
+
+
+.filledInput{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid gray;
+    text-align: center;
+    background-color: #a4f4ff;
+    font-size: 14px;
+    font-weight: bold;
+}
+/* End of style for search, sort, filters */
