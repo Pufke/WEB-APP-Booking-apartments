@@ -21,16 +21,28 @@ Vue.component("host-CommentsAndReviews", {
         </ul>
 
         <br>
-        <table border="1">
-            <tr bgcolor="lightgrey">
-                <th> Text </th>
-                <th> Rating </th>
-            </tr>
-            <tr v-for="comment in comments">
-                <td> {{ comment.txtOfComment }} </td>
-                <td> {{ comment.ratingForApartment }} </td>
-            </tr>
-        </table>
+
+        <!-- Table of comments for host apartments -->
+        <div class="styleForTable">
+            <table style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th> Text </th>
+                        <th> Rating </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="comment in comments">
+                        <td> {{ comment.txtOfComment }} </td>
+                        <td> {{ comment.ratingForApartment }} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for comments of host apartments -->
 
     </div>
     `,

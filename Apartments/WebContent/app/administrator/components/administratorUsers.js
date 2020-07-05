@@ -32,32 +32,39 @@ Vue.component("administrator-users", {
 
         <br>
 
-        <table border="1">
-            <tr bgcolor="lightgrey">
-                <th> Username </th>
-                <th> Password</th>
-                <th> Name </th>
-                <th> Surname </th>
-                <th> Role </th>
-                <th> Blocking </th>
-            </tr>
 
-            <tr v-for="user in filteredUsers">
-                <td> {{user.userName}}</td>
-                <td> {{user.password}}</td>
-                <td> {{user.name}} </td>
-                <td> {{ user.surname }} </td>
-                <td> {{ user.role }} </td>
-                <td align ="center" >
-                    <button v-if="user.blocked == '0' && user.role != 'ADMINISTRATOR' " type="button" @click="blockUser(user)" > Block </button>
-                    <button v-if="user.blocked == '1' && user.role != 'ADMINISTRATOR' " type="button" @click="unblockUser(user)" > Unblock </button>
-                </td>
-			</tr>
-        
-        </table>
+        <!-- Table of all users -->
+        <div class="styleForTable">
+            <table style="width:100%">
 
+                <thead>
+                    <tr>
+                        <th> Username </th>
+                        <th> Password</th>
+                        <th> Name </th>
+                        <th> Surname </th>
+                        <th> Role </th>
+                        <th> Blocking </th>
+                    </tr>
+                </thead>
 
+                <tbody>
+                    <tr v-for="user in filteredUsers">
+                        <td> {{user.userName}}</td>
+                        <td> {{user.password}}</td>
+                        <td> {{user.name}} </td>
+                        <td> {{ user.surname }} </td>
+                        <td> {{ user.role }} </td>
+                        <td align ="center" >
+                            <button v-if="user.blocked == '0' && user.role != 'ADMINISTRATOR' " type="button" @click="blockUser(user)" > Block </button>
+                            <button v-if="user.blocked == '1' && user.role != 'ADMINISTRATOR' " type="button" @click="unblockUser(user)" > Unblock </button>
+                        </td>
+                    </tr>
+                </tbody>                
 
+            </table>
+        </div>
+        <!-- End of table for all users -->
 
         <!-- Modal DIALOG section for ADDING HOST -->
         <div id = "addDialogForUsers" v-bind:class="{bgModal: hideAddDialog, bgModalShow: !hideAddDialog}">

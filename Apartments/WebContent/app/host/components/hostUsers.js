@@ -29,25 +29,34 @@ Vue.component("host-users", {
         <br><br>
         <!-- End of search -->
 
-        <table border="1">
-            <tr bgcolor="lightgrey">
-                <th> Username </th>
-                <th> Password</th>
-                <th> Name </th>
-                <th> Surname </th>
-                <th> Role </th>
-            </tr>
 
-            <tr v-for="user in filteredUsers">
-                <td> {{user.userName}}</td>
-                <td> {{user.password}}</td>
-                <td> {{user.name}} </td>
-                <td> {{ user.surname }} </td>
-                <td> {{ user.role }} </td>
-            </tr>
+        <!-- Table of guest of this host -->
+        <div class="styleForTable" style="width: 70%;">
+            <table style="width:100%">
 
-        </table>
-        <!-- End of table of users -->
+                <thead>
+                    <tr>
+                        <th> Username </th>
+                        <th> Password</th>
+                        <th> Name </th>
+                        <th> Surname </th>
+                        <th> Role </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="user in filteredUsers">
+                        <td> {{user.userName}}</td>
+                        <td> {{user.password}}</td>
+                        <td> {{user.name}} </td>
+                        <td> {{ user.surname }} </td>
+                        <td> {{ user.role }} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for guest of this host -->
 
     </div>
     `,

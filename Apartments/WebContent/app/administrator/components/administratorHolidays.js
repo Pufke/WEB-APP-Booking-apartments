@@ -54,15 +54,26 @@ Vue.component("administrator-holidays", {
         </div> <!-- End of modal adding dialog section -->
 
         <br>
-        <table border="1">
-            <tr bgcolor="lightgrey">
-                <th> Holidays </th>
-            </tr>
-            <tr v-for="holliday in hollidays">
-                <td> {{ holliday }} </td>
 
-            </tr>
-        </table>
+        <!-- Table of holidays -->
+        <div class="styleForTable">
+            <table style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th> Holidays </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="holliday in hollidays">
+                        <td> {{ holliday }} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for holidays -->
 
     </div>
 

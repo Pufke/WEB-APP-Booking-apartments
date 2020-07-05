@@ -56,17 +56,32 @@ Vue.component("administrator-reservations", {
             </ul>
             
             <br>
-            <table border="1">
-            <tr bgcolor="lightgrey">
-            <th> ID apartmana</th> <th> Status rezervacije </th><th> startDateOfReservation </th><th> Guest ID </th> </tr>
-                <tr v-for="reservation in filteredReservations">
-                    <td> {{ reservation.idOfReservedApartment }} </td>
-                    <td> {{ reservation.statusOfReservation }} </td>
-                    <td>  {{ reservation.startDateOfReservation }} </td>
-                    <td> {{ reservation.guestID }}  </td>
-        				
-                </tr>
-            </table>
+
+            <!-- Table of apartments reservations -->
+            <div class="styleForTable">
+                <table style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th> ID apartmana</th> 
+                            <th> Status rezervacije </th>
+                            <th> startDateOfReservation </th>
+                            <th> Guest ID </th> </tr>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="reservation in filteredReservations">
+                            <td> {{ reservation.idOfReservedApartment }} </td>
+                            <td> {{ reservation.statusOfReservation }} </td>
+                            <td>  {{ reservation.startDateOfReservation }} </td>
+                            <td> {{ reservation.guestID }}  </td>        
+                        </tr>
+                    </tbody>                
+
+                </table>
+            </div>
+            <!-- End of table reservations of apartments -->
             
         </div>
         

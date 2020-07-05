@@ -5,7 +5,8 @@ Vue.component("guest-reservation", {
             reservations: [],
             user: {},
             ocena : "",
-            komentar : ""
+            komentar : "",
+            previewSearch: false,
         }
     },
 
@@ -13,7 +14,16 @@ Vue.component("guest-reservation", {
     <div id = "styleForApartmentsView">
         
     	<h1> Hello {{ user.userName }} , this is your reservations. </h1>
-        
+        <br><br>
+
+        <!-- Sort -->
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button><br><br>
+        <form method='post' v-if="previewSearch">
+            <button type="button" @click="sortAsc">SORT ASC</button>
+            <button type="button" @click="sortDesc">SORT DESC</button>
+        </form>
+        <!-- End of sort -->
+
         <ul>
             <li v-for="reservation in reservations">
             	<h2> Reservation ID: {{ reservation.id }} </h2>
@@ -35,21 +45,35 @@ Vue.component("guest-reservation", {
             </li>
         </ul>
         
-        <br>
-        <table border="1">
-        <tr bgcolor="lightgrey">
-        <th> ID apartmana</th> <th> Status rezervacije </th><th> startDateOfReservation </th><th> Guest ID </th> </tr>
-            <tr v-for="reservation in reservations">
-                <td> {{ reservation.idOfReservedApartment }} </td>
-                <td> {{ reservation.statusOfReservation }} </td>
-                <td>  {{ reservation.startDateOfReservation }} </td>
-                <td> {{ reservation.guestID }}  </td>
-    			
-            </tr>
-        </table>
+        <br><br>
+
+        <!-- Table of guest reservations -->
+        <div class="styleForTable">
+            <table style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th> Apartment ID</th> 
+                        <th> Status  </th>
+                        <th> startDateOfReservation </th>
+                        <th> Guest ID </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="reservation in reservations">
+                        <td> {{ reservation.idOfReservedApartment }} </td>
+                        <td> {{ reservation.statusOfReservation }} </td>
+                        <td>  {{ reservation.startDateOfReservation }} </td>
+                        <td> {{ reservation.guestID }}  </td>    
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for guest reservations -->
         
-         <button type="button" @click="sortAsc">SORT ASC</button>
-         <button type="button" @click="sortDesc">SORT DESC</button>
+        
         
     </div>
     

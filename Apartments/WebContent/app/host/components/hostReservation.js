@@ -58,22 +58,34 @@ Vue.component("host-reservation", {
         </ul>
 
         <br>
-        <table border="1">
-            <tr bgcolor="lightgrey">
-                <th> ID apartmana</th>
-                <th> Status rezervacije </th>
-                <th> startDateOfReservation </th>
-                <th> Guest ID</th>
-                <th> Total price </th>
-            </tr>
-            <tr v-for="reservation in filteredReservations">
-                <td> {{ reservation.idOfReservedApartment }} </td>
-                <td> {{ reservation.statusOfReservation }} </td>
-                <td>  {{ reservation.startDateOfReservation }} </td>
-                <td> {{ reservation.guestID }}  </td>
-                <td> {{ reservation.totalPrice }} </td>
-            </tr>
-        </table>
+
+        <!-- Table of host reservations -->
+        <div class="styleForTable" >
+            <table style="width:100%">
+
+            <thead>
+                <tr>
+                    <th> ID apartmana</th>
+                    <th> Status rezervacije </th>
+                    <th> startDateOfReservation </th>
+                    <th> Guest ID</th>
+                    <th> Total price </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="reservation in filteredReservations">
+                    <td> {{ reservation.idOfReservedApartment }} </td>
+                    <td> {{ reservation.statusOfReservation }} </td>
+                    <td>  {{ reservation.startDateOfReservation }} </td>
+                    <td> {{ reservation.guestID }}  </td>
+                    <td> {{ reservation.totalPrice }} </td>
+                </tr>
+            </tbody> 
+
+            </table>
+        </div>
+        <!-- End of table for host reservations -->
 
     </div>
     `,

@@ -128,43 +128,90 @@ Vue.component("guest-apartments", {
         </ul>
         <!-- End of cards for apartments -->
 
-        
-         <table border="1">
-        			<tr bgcolor="lightgrey"><th> Free dates for choosen apartment </th> </tr>
-    				<tr v-for="date in freeDates">
-    					<td> {{ date }} </td>
-            		</tr>
-        </table>
-        
-         <table border="1">
-        	<tr bgcolor="lightgrey">
-        <th> ID </th> <th> Comment </th> <th> Rating for apartment </th><th> Author </th></tr>
-            <tr v-for="comment in comments">
-                <td> {{ comment.id }} </td>
-                <td> {{ comment.txtOfComment }} </td>
-                <td> {{ comment.ratingForApartment }} </td>
-    		    <td> {{ comment.guestAuthorOfCommentID }} </td>
-            </tr>
-        </table>
-        
-        
-        <br>
-        <table border="1">
-        <tr bgcolor="lightgrey">
-        <th> ID </th> <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th> </tr>
-            <tr v-for="apartment in filteredApartments">
-                <td> {{ apartment.id }} </td>
-                <td> {{ apartment.status }} </td>
-                <td> {{ apartment.typeOfApartment }} </td>
-                <td> {{ apartment.pricePerNight}} </td>
-                <td> {{ apartment.numberOfRooms}} </td>
-                <td> {{ apartment.numberOfGuests}} </td>
-                <td> {{ apartment.timeForCheckIn}} </td>
-                <td> {{ apartment.timeForCheckOut}} </td>
-                <td> {{ apartment.location}} </td>
+        <br><br>
+        <!-- Table of free dates for choosen apartment -->
+        <div class="styleForTable">
+            <table style="width:100%">
 
-            </tr>
-        </table>
+                <thead>
+                    <tr>
+                        <th> Free dates for choosen apartment </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="date in freeDates">
+                        <td> {{ date }} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for free dates for choosen apartment  -->
+        
+        <br><br>
+        <!-- Table of comments on selected apartment -->
+        <div class="styleForTable">
+            <table style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th> ID </th>
+                        <th> Comment </th> 
+                        <th> Rating for apartment </th>
+                        <th> Author </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="comment in comments">
+                        <td> {{ comment.id }} </td>
+                        <td> {{ comment.txtOfComment }} </td>
+                        <td> {{ comment.ratingForApartment }} </td>
+                        <td> {{ comment.guestAuthorOfCommentID }} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for comments on selected apartment -->
+                
+        <br><br>
+        <!-- Table of active apartments -->
+        <div class="styleForTable">
+            <table style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th> ID </th>
+                        <th> Status </th>
+                        <th> Type </th>
+                        <th> Price </th>
+                        <th> Rooms </th>
+                        <th> Guests</th>
+                        <th> Check in</th>
+                        <th> Check out</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="apartment in filteredApartments">
+                        <td> {{ apartment.id }} </td>
+                        <td> {{ apartment.status }} </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                        <td> {{ apartment.pricePerNight}} </td>
+                        <td> {{ apartment.numberOfRooms}} </td>
+                        <td> {{ apartment.numberOfGuests}} </td>
+                        <td> {{ apartment.timeForCheckIn}} </td>
+                        <td> {{ apartment.timeForCheckOut}} </td>
+                        <td> {{ apartment.location}} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for active apartments -->
 
     	
     </div>

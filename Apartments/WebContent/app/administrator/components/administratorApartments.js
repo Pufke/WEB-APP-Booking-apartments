@@ -161,23 +161,42 @@ Vue.component("administrator-apartments", {
         <!-- End of cards for apartments -->
         
         <br>
-        <table border="1">
-        <tr bgcolor="lightgrey">
-            <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th><th> Guests</th><th> Check in</th><th> Check out</th><th>Location</th> </tr>
-            <tr v-for="apartment in filteredApartments">
-                <td> {{ apartment.status }} </td>
-                <td> {{ apartment.typeOfApartment }} </td>
-                <td> {{ apartment.pricePerNight}} </td>
-                <td> {{ apartment.numberOfRooms}} </td>
-                <td> {{ apartment.numberOfGuests}} </td>
-                <td> {{ apartment.timeForCheckIn}} </td>
-                <td> {{ apartment.timeForCheckOut}} </td>
-                <td> {{ apartment.location}} </td>
 
-            </tr>
-        </table>
+        <!-- Table of all apartments -->
+        <div class="styleForTable">
+            <table style="width:100%">
 
-   <!-- Modal dialog section for changing -->
+                <thead>
+                    <tr>
+                        <th> Status </th>
+                        <th> Type </th>
+                        <th> Price </th>
+                        <th> Rooms </th>
+                        <th> Guests</th>
+                        <th> Check in</th>
+                        <th> Check out</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="apartment in filteredApartments">
+                        <td> {{ apartment.status }} </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                        <td> {{ apartment.pricePerNight}} </td>
+                        <td> {{ apartment.numberOfRooms}} </td>
+                        <td> {{ apartment.numberOfGuests}} </td>
+                        <td> {{ apartment.timeForCheckIn}} </td>
+                        <td> {{ apartment.timeForCheckOut}} </td>
+                        <td> {{ apartment.location}} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for all apartments -->
+
+        <!-- Modal dialog section for changing -->
         <div id = "dijalogDeo" v-bind:class="{bgModal: hideDialog, bgModalShow: !hideDialog}">
             <div class="modal-contents">
         

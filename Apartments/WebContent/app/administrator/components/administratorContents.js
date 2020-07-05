@@ -89,17 +89,28 @@ Vue.component("administrator-contents", {
 
 
         <br>
-        <table border="1">
-            <tr bgcolor="lightgrey">
-                <th> ID </th>
-                <th> name </th> 
-            </tr>
-            <tr v-for="item in amenities">
-                <td> {{ item.id }} </td>
-                <td> {{ item.itemName}} </td>
 
-            </tr>
-        </table>
+        <!-- Table of amenities in apartments -->
+        <div class="styleForTable">
+            <table style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th> ID </th>
+                        <th> name </th> 
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="item in amenities">
+                        <td> {{ item.id }} </td>
+                        <td> {{ item.itemName}} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for amenities in apartments -->
 
     </div>
 
