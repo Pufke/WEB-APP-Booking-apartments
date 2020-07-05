@@ -178,8 +178,8 @@ Vue.component("administrator-apartments", {
                     </tr>
                 </table>
 
-                <button type="button" v-if="apartment.status == 'INACTIVE' " @click="activateApartment(apartment)"><i class="fa fa-check-circle" aria-hidden="true"></i> Activate </button> <br>
-                <button type="button" @click="changeApartment(apartment)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i>  Change </button> <br>
+                <button type="button" v-if=" apartment.status == 'INACTIVE'  "  @click="activateApartment(apartment)"><i class="fa fa-check-circle" aria-hidden="true"></i> Activate </button> <br>
+                <button type="button" v-if=" apartment.logicalDeleted == '0' " @click="changeApartment(apartment)" class="changeButtonStyle" ><i class="fa fa-pencil" aria-hidden="true"></i>  Change </button> <br>
                 <button type="button" v-if=" apartment.logicalDeleted == '0' " @click="deleteApartment(apartment)" class="deleteButtonStyle" ><i class="fa fa-trash" aria-hidden="true"></i>  Delete </button> <br>
             
             </li>

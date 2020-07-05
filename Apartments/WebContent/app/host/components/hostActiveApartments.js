@@ -99,13 +99,6 @@ Vue.component("host-ActiveApartments", {
                     <option>STANDARD</option>
                 </select>
 
-                <!-- If user don't want use filter, check just option: Without filter for status -->
-                <select v-model="filterDataForApartment.status" @change="onchangeStatus()">
-                    <option value="">Without filter for status </option>
-                    <option>ACTIVE</option>
-                    <option>INACTIVE</option>
-                </select>
-
                 <br><br>
                 <!-- List of all amenities in apartments -->
                 <select v-model="filterDataForApartment.selectedAmenities" class="multipleSelectAmenities" multiple @change="onchangeAmenities()">
@@ -323,27 +316,6 @@ Vue.component("host-ActiveApartments", {
                 let tempApartments = (this.apartments).filter(apartment => this.filterDataForApartment.selectedAmenities.every(val => apartment.apartmentAmentitiesIDs.includes(val)));
                 this.apartments = tempApartments;
 
-            }
-        },
-        onchangeStatus: function () {
-            if (this.filterDataForApartment.status == "") {
-                // Reset to all apartments
-                //TODO: Staviti ovde logiku da pokaze one koji su prethodno bili
-                // ne ovako da uzme sve kada se iskljuci filter
-                axios
-                    .get('rest/apartments/getMyApartments')
-                    .then(response => {
-                        this.apartments = [];
-                        response.data.forEach(el => {
-                            if (el.status == "ACTIVE")
-                                this.apartments.push(el);
-                        });
-                        return this.apartments;
-                    });
-
-            } else {
-                let tempApartments = (this.apartments).filter(apartment => apartment.status == this.filterDataForApartment.status);
-                this.apartments = tempApartments;
             }
         },
         changeApartment: function (apartment) {

@@ -21,7 +21,6 @@ Vue.component("host-users", {
         <div class="searchUsers" v-if="previewSearch" >
             <form method='post'>
 
-                <input type="text" v-model="searchField.role" v-bind:class="{filledInput: searchField.role != '' }" placeholder="guest role..." >
                 <input type="text" v-model="searchField.userName" v-bind:class="{filledInput: searchField.userName != '' }" placeholder="guest username..." >
                 <input type="text" v-model="searchField.gender" v-bind:class="{filledInput: searchField.gender != '' }" placeholder="guest gender..." >
 
@@ -64,13 +63,10 @@ Vue.component("host-users", {
     methods: {
         isMatchSearch: function (user) {
 
-            if(!user.role.match(this.searchField.role))
-                return false;
-
-            if(!user.userName.match(this.searchField.userName))
+            if(!user.userName.toLowerCase().match(this.searchField.userName.toLowerCase()))
                 return false;
             
-            if(!user.gender.match(this.searchField.gender))
+            if(!user.gender.toLowerCase().match(this.searchField.gender.toLowerCase()))
                 return false;
 
             // If i survive all if's now i am matched search

@@ -159,19 +159,19 @@ Vue.component("administrator-users", {
         isMatchSearch: function (user) {
 
             // Check for username
-            if (!user.userName.match(this.searchField.userName))
+            if (!user.userName.toLowerCase().match(this.searchField.userName.toLowerCase()))
                 return false;
 
             // Check for name
-            if (!user.name.match(this.searchField.name))
+            if (!user.name.toLowerCase().match(this.searchField.name.toLowerCase()))
                 return false;
 
             // Check for surname
-            if (!user.surname.match(this.searchField.surname))
+            if (!user.surname.toLowerCase().match(this.searchField.surname.toLowerCase()))
                 return false;
 
             // Check for role
-            if (!user.role.match(this.searchField.role))
+            if (!user.role.toLowerCase().match(this.searchField.role.toLowerCase()))
                 return false;
 
             // If i survive all if's now i am matched search
