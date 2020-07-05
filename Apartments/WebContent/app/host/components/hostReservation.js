@@ -140,7 +140,7 @@ Vue.component("host-reservation", {
                     response.data.forEach(el => {
                         this.reservations.push(el);
                     });
-                    toastr["success"]("You make success accept for reservation !!", "Success accept!");
+                    toastr["success"]("You make successful accept for reservation !!", "Successful  accept!");
 
                     return this.reservations;
                 });
@@ -155,7 +155,7 @@ Vue.component("host-reservation", {
                     response.data.forEach(el => {
                         this.reservations.push(el);
                     });
-                    toastr["success"]("You make success decline for reservation !!", "Success decline!");
+                    toastr["success"]("You make successful decline for reservation !!", "Successful decline!");
 
                     return this.reservations;
                 });
@@ -170,7 +170,7 @@ Vue.component("host-reservation", {
                     response.data.forEach(el => {
                         this.reservations.push(el);
                     });
-                    toastr["success"]("You make success end for reservation !!", "Success end of Reservation!");
+                    toastr["success"]("You make successful end for reservation !!", "Successful end of Reservation!");
 
                     return this.reservations;
                 });

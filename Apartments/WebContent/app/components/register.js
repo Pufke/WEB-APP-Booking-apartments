@@ -24,7 +24,8 @@ Vue.component("app-register", {
         return {
             newUser: {},
             errors: [],
-            message: null
+            message: null,
+            rePassword: ''
         }
     },
     template: `
@@ -36,7 +37,7 @@ Vue.component("app-register", {
             <input type="text" v-model="newUser.name" placeholder="Name" >
             <input type="text" v-model="newUser.surname" placeholder="Surname">
             <input type="password" v-model="newUser.password" placeholder="Password" required>
-            <input type="password" placeholder="Re Password" required>
+            <input type="password" v-model="rePassword" placeholder="Re Password" required>
 
             <br><br>
             <button type='submit' class="btn"><i class="fa fa-sign-in" aria-hidden="true"></i> REGISTER </button>
@@ -62,19 +63,23 @@ Vue.component("app-register", {
              * TODO: Make better validation!
              */
             if (!this.newUser.userName) {
-                this.errors.push('Field user name is required.');
+                this.errors.push('Field user name is required!');
             }
 
             if (!this.newUser.password) {
-                this.errors.push('Field password is required.');
+                this.errors.push('Field password is required!');
             }
 
             if (!this.newUser.name) {
-                this.errors.push('Field name is required.');
+                this.errors.push('Field name is required!');
             }
 
             if (!this.newUser.surname) {
-                this.errors.push('Field surname is required.');
+                this.errors.push('Field surname is required!');
+            }
+
+            if(this.rePassword != this.newUser.password){
+                this.errors.push('Password & re-password must be same!')
             }
 
             if (!this.errors.length) {

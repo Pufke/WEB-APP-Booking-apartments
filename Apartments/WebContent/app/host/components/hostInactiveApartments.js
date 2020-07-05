@@ -86,7 +86,7 @@ Vue.component("host-InactiveApartments", {
                         if (el.status == "INACTIVE")
                             this.apartments.push(el);
                     });
-                    toastr["success"]("You make success activation !!", "Success activation!");
+                    toastr["success"]("You make successful activation !!", "Successful activation!");
                     return this.apartments;
                 });
 		},

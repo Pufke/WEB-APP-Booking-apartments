@@ -13,7 +13,7 @@ Vue.component("guest-reservation", {
     template: `
     <div id = "styleForApartmentsView">
         
-    	<h1> Hello {{ user.userName }} , this is your reservations. </h1>
+    	<h1> Hello {{ user.userName }} , these are your reservations. </h1>
         <br><br>
 
         <button type="button" @click=" previewSort = !previewSort " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button>

@@ -359,7 +359,7 @@ Vue.component("administrator-apartments", {
                         if (el.status == "ACTIVE" || el.status == "INACTIVE")
                             this.apartments.push(el);
                     });
-                    toastr["success"]("You make success activation !!", "Success activation!");
+                    toastr["success"]("You make successful activation !!", "Successful activation!");
                     return this.apartments;
                 });
         },
@@ -465,7 +465,7 @@ Vue.component("administrator-apartments", {
                         if (el.status == "ACTIVE" || el.status == "INACTIVE")
                             this.apartments.push(el);
                     });
-                    toastr["success"]("You make success change !!", "Success changes!");
+                    toastr["success"]("You make successful change !!", "Successful  changes!");
 
                     return this.apartments;
                 });
@@ -490,7 +490,7 @@ Vue.component("administrator-apartments", {
                         if (el.status == "ACTIVE" || el.status == "INACTIVE")
                             this.apartments.push(el);
                     });
-                    toastr["success"]("You make success delete !!", "Success delete!");
+                    toastr["success"]("You make successful delete !!", "Successful delete!");
 
                     return this.apartments;
                 });

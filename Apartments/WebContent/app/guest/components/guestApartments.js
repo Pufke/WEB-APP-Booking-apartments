@@ -453,7 +453,7 @@ Vue.component("guest-apartments", {
                         }
                     });
                     this.apartments = filteredApartments;
-                    toastr["success"]("Apartment is reserved! ", "Success!");
+                    toastr["success"]("Apartment is successful reserved! ", "Successful reserved !");
                 })
                 .catch(err => {
                     toastr["error"]("Apartment is not free in that data interval!", "Fail");

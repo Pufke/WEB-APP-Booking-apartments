@@ -379,7 +379,7 @@ Vue.component("host-ActiveApartments", {
                         if (el.status == "ACTIVE")
                             this.apartments.push(el);
                     });
-                    toastr["success"]("You make success change !!", "Success changes!");
+                    toastr["success"]("You make successful change !!", "Successful changes!");
                     location.reload();
                     return this.apartments;
                 });

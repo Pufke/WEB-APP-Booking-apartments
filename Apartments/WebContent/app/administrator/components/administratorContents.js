@@ -130,7 +130,7 @@ Vue.component("administrator-contents", {
                     response.data.forEach(el => {
                         this.amenities.push(el);
                     });
-                    toastr["success"]("You make success adding !!", "Success adding!");
+                    toastr["success"]("You make successful adding !!", "Successful adding!");
                     return this.amenities;
                 });
 
@@ -154,7 +154,7 @@ Vue.component("administrator-contents", {
                     response.data.forEach(el => {
                         this.amenities.push(el);
                     });
-                    toastr["success"]("You make success change !!", "Success changes!");
+                    toastr["success"]("You make successful change !!", "Successful changes!");
                     return this.amenities;
                 });
 
@@ -172,7 +172,7 @@ Vue.component("administrator-contents", {
                     response.data.forEach(el => {
                         this.amenities.push(el);
                     });
-                    toastr["success"]("You make success delete !!", "Success delete!");
+                    toastr["success"]("You make successful delete !!", "Successful  delete!");
                     return this.amenities;
                 });
 

@@ -9,11 +9,11 @@ Vue.component("guest-header",{
     <div id="divHeaderGuest">
         <nav>
             <ul>
-                <li><router-link to="/home" exact>Home Page</router-link></li>
-                <li><router-link to="/" exact>View apartments & rooms</router-link></li>
-                <li><router-link to="/reservations" exact>Reservations</router-link></li>
-                <li><router-link to="/profile" exact>Profile</router-link></li>
-                <li><button @click="logout" > Log out </button></li>
+
+                <li><router-link to="/" exact> Apartments & rooms </router-link></li>
+                <li><router-link to="/reservations" exact> Reservations </router-link></li>
+                <li><router-link to="/profile" exact> Profile </router-link></li>
+                <li><button @click="logout"> Log out </button></li>
                 
             </ul>
         </nav>

@@ -93,9 +93,9 @@ Vue.component("administrator-reservations", {
 
                     <thead>
                         <tr>
-                            <th> ID apartmana</th> 
-                            <th> Status rezervacije </th>
-                            <th> startDateOfReservation </th>
+                            <th> Apartment ID</th> 
+                            <th> Status </th>
+                            <th> Start date </th>
                             <th> Guest ID </th> </tr>
                         </tr>
                     </thead>

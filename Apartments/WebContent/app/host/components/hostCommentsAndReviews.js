@@ -65,7 +65,7 @@ Vue.component("host-CommentsAndReviews", {
                     response.data.forEach(el => {
                         this.comments.push(el);
                     });
-                    toastr["success"]("You make success hide of comment !!", "Success hiding!");
+                    toastr["success"]("You make successful hide of comment !!", "Successful hiding!");
 
                     return this.comments;
                 });
@@ -80,7 +80,7 @@ Vue.component("host-CommentsAndReviews", {
                     response.data.forEach(el => {
                         this.comments.push(el);
                     });
-                    toastr["success"]("You make success show of comment !!", "Success showing!");
+                    toastr["success"]("You make successful show of comment !!", "Successful showing!");
 
                     return this.comments;
                 });

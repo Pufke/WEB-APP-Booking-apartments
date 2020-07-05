@@ -116,7 +116,7 @@ Vue.component("administrator-users", {
                 })
                 .then(response => {
                     location.reload();
-                    toastr["success"]("Success created host, try and make one more !!", "Success registration!");
+                    toastr["success"]("Successful  created host, try and make one more !!", "Successful  registration!");
                 })
                 .catch(err => {
                     console.log("\n\n ------- ERROR -------\n");
@@ -137,7 +137,7 @@ Vue.component("administrator-users", {
                     response.data.forEach(el => {
                         this.users.push(el);
                     });
-                    toastr["success"]("You make success blocking user !!", "Success blocking!");
+                    toastr["success"]("You make successful blocking user !!", "Successful  blocking!");
                     return this.users;
                 });
 
@@ -152,7 +152,7 @@ Vue.component("administrator-users", {
                     response.data.forEach(el => {
                         this.users.push(el);
                     });
-                    toastr["success"]("You make success unblocking user !!", "Success unblocking!");
+                    toastr["success"]("You make successful unblocking user !!", "Successful unblocking!");
                     return this.users;
                 });
         },
