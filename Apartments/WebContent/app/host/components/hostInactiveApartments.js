@@ -2,7 +2,7 @@ Vue.component("host-InactiveApartments", {
 	data() {
 		return {
             apartments: [],
-            previewSearch: false,
+            previewSort: false,
 		}
 	},
 
@@ -10,21 +10,21 @@ Vue.component("host-InactiveApartments", {
 	`
 	<div id = "styleForApartmentsView">
 
-        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> <br><br>
+        <button type="button" @click=" previewSort = !previewSort " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button>
 
-		<!-- Search & filter & sort & adding new apartment-->
-		<form method='post' v-if="previewSearch">
+        <br><br>
+        <!-- Sort for apartments -->
+        <div v-if="previewSort" class="sortInApp">
+            <form method='post'>
 
-			<button type="button" @click="sortAsc">SORT ASC</button>
-			<button type="button" @click="sortDesc">SORT DESC</button>
+                <button type="button" @click="sortAsc"><i class="fa fa-sort" aria-hidden="true"></i> PRICE UP</button>
+                <button type="button" @click="sortDesc"><i class="fa fa-sort" aria-hidden="true"></i> PRICE DOWN</button>
 
-			<br>
+            </form>
+        </div>
+        <!-- End sort for apartments -->
 
-		</form>
-
-		<!-- End of search & filter & sort & adding new apartment -->
-		<br>
-
+		<br><br>
 		<ul>
 			<li v-for="apartment in apartments">
 				<h2> {{ apartment.typeOfApartment }} </h2>

@@ -430,6 +430,8 @@ img.imagesOfApartment{
 	padding: 12px 16px;
 	font-size: 12px;
 	cursor: pointer;
+	width: 150px;
+    margin: 3px;
   }
   
   /* Darker background on mouse-over */

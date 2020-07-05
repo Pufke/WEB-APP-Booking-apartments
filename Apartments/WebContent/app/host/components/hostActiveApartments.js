@@ -66,58 +66,81 @@ Vue.component("host-ActiveApartments", {
             },
             searchField: '',
             previewSearch: false,
+            previewFilters: false,
+            previewSort: false,
         }
     },
     template: `
     <div id = "styleForApartmentsView">
 
-        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> 
+        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> SEARCH </button>
+        <button type="button" @click=" previewFilters = !previewFilters " class="btn"><i class="fa fa-filter" aria-hidden="true"></i> FILTERS </button>
+        <button type="button" @click=" previewSort = !previewSort " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button>
         <button type="button" id="addNewItemButton" @click="addItem()" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW </button>
+        
         <br><br>
-
-        <!-- Search & filter & sort & adding new apartment-->
-        <form method='post' v-if="previewSearch">
-
-            <input type="text"  placeholder="Username of guest..." >
-            <button type="button" @click="sortAsc">SORT ASC</button>
-            <button type="button" @click="sortDesc">SORT DESC</button>
-
-            <!-- If user don't want use filter, check just option: Without filter for type -->
-            <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
-                <option value="">Without filter for type </option>
-                <option>ROOM</option>
-                <option>STANDARD</option>
-            </select>
-
-            <!-- If user don't want use filter, check just option: Without filter for status -->
-            <select v-model="filterDataForApartment.status" @change="onchangeStatus()">
-                <option value="">Without filter for status </option>
-                <option>ACTIVE</option>
-                <option>INACTIVE</option>
-            </select>
-
-            <br><br>
-
-            <!-- List of all amenities in apartments -->
-            <select v-model="filterDataForApartment.selectedAmenities" multiple @change="onchangeAmenities()">
-
-                <option value=""> Without filter for amenities </option>
-                <option v-for="option in amenities" v-bind:value="option.id">
-                    {{ option.itemName }}
-                </option>
-
-            </select>
-            <!-- End list of all amenities in apartments -->
-
-        </form>
-
-        <!-- End of search & filter & sort & adding new apartment -->
-        <br>
-
-
+        <!-- Search guests -->
+        <div class="searchGuestsByUsername" v-if="previewSearch" >
+            <form method='post'>
+                <input type="text" v-model="searchField"  placeholder="Username of guest..." >
+            </form>
+        </div>
+        <!-- End of search of guests -->
         
 
-        <!-- Cards for apartments -->
+        <br><br>
+        <!-- Filter for apartments -->
+        <div class="filterForAdminApartments" v-if="previewFilters">
+            <form method='post' 
+                <!-- If user don't want use filter, check just option: Without filter for type -->
+                <select v-model="filterDataForApartment.typeOfApartment" @change="onchangeTypeOfApartment()">
+                    <option value="">Without filter for type </option>
+                    <option>ROOM</option>
+                    <option>STANDARD</option>
+                </select>
+
+                <!-- If user don't want use filter, check just option: Without filter for status -->
+                <select v-model="filterDataForApartment.status" @change="onchangeStatus()">
+                    <option value="">Without filter for status </option>
+                    <option>ACTIVE</option>
+                    <option>INACTIVE</option>
+                </select>
+
+                <br><br>
+                <!-- List of all amenities in apartments -->
+                <select v-model="filterDataForApartment.selectedAmenities" class="multipleSelectAmenities" multiple @change="onchangeAmenities()">
+
+                    <option value=""> Without filter for amenities </option>
+                    <option v-for="option in amenities" v-bind:value="option.id">
+                        {{ option.itemName }}
+                    </option>
+
+                </select>
+                <!-- End list of all amenities in apartments -->
+
+                
+                
+                <br><br>
+            </form>
+        </div>
+        <!-- End filters for apartments -->
+
+
+        <br><br>
+        <!-- Sort for apartments -->
+        <div v-if="previewSort" class="sortInApp">
+            <form method='post'>
+
+                <button type="button" @click="sortAsc"><i class="fa fa-sort" aria-hidden="true"></i> PRICE UP</button>
+                <button type="button" @click="sortDesc"><i class="fa fa-sort" aria-hidden="true"></i> PRICE DOWN</button>
+
+            </form>
+        </div>
+        <!-- End sort for apartments -->
+
+
+        <br><br>
+        <!-- Cards for apartments -->  
         <ul>
             <li v-for="apartment in apartments">
                 <img class="imagesOfApartment" v-bind:src="getImagesPath(apartment)">

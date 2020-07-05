@@ -60,7 +60,7 @@ Vue.component("administrator-reservations", {
             </div>
             <!-- End of sort for reservations -->
 
-            <br>
+            <br><br>
             
             <ul>
                 <li v-for="reservation in filteredReservations">
