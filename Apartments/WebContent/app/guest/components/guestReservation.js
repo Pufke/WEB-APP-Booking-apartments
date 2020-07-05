@@ -6,7 +6,7 @@ Vue.component("guest-reservation", {
             user: {},
             ocena : "",
             komentar : "",
-            previewSearch: false,
+            previewSort: false,
         }
     },
 
@@ -16,13 +16,19 @@ Vue.component("guest-reservation", {
     	<h1> Hello {{ user.userName }} , this is your reservations. </h1>
         <br><br>
 
-        <!-- Sort -->
-        <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button><br><br>
-        <form method='post' v-if="previewSearch">
-            <button type="button" @click="sortAsc">SORT ASC</button>
-            <button type="button" @click="sortDesc">SORT DESC</button>
-        </form>
-        <!-- End of sort -->
+        <button type="button" @click=" previewSort = !previewSort " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button>
+
+        <br><br>
+        <!-- Sort for reservations -->
+        <div v-if="previewSort" class="sortInApp">
+            <form method='post'>
+
+                <button type="button" @click="sortAsc"><i class="fa fa-sort" aria-hidden="true"></i>PRICE UP</button>
+                <button type="button" @click="sortDesc"><i class="fa fa-sort" aria-hidden="true"></i>PRICE DOWN</button>
+
+            </form> 
+        </div>
+        <!-- End of sort for reservations -->
 
         <ul>
             <li v-for="reservation in reservations">

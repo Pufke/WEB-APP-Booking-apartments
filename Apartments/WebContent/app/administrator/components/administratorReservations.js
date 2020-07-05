@@ -11,35 +11,55 @@ Vue.component("administrator-reservations", {
             },
             searchField: '',
             previewSearch: false,
+            previewFilters: false,
+            previewSort: false,
         }
     },
 
     template: `
         <div id = "styleForApartmentsView">
             
-            <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> FILTERS </button> <br><br>
+            <button type="button" @click=" previewSearch = !previewSearch " class="btn"><i class="fa fa-search" aria-hidden="true"></i> SEARCH </button>
+            <button type="button" @click=" previewFilters = !previewFilters " class="btn"><i class="fa fa-filter" aria-hidden="true"></i> FILTERS </button>
+            <button type="button" @click=" previewSort = !previewSort " class="btn"><i class="fa fa-sort" aria-hidden="true"></i> SORT </button>
 
-            <!-- Search & filter & sort -->
-            <form method='post' v-if="previewSearch">
+            <br><br>
+            <!-- Search reservations -->
+            <div class="searchGuestsByUsername" v-if="previewSearch" >
+                <form method='post'>
+                    <input type="text" v-model="searchField"  placeholder="Username of guest..." >
+                </form>
+            </div>
+            <!-- End of search for reservations -->
+            
+            <br><br>
+            <!-- Filter for reservations -->
+            <div v-if="previewFilters" class="filterForReservationsStatus">
+                <form method='post'>
+                    <!-- If user don't want use filter, check just option: Without filter for status -->
+                    <select v-model="filterDataForReservation.status" @change="onchangeStatus()">
+                        <option value="">Without filter for status </option>
+                        <option>KREIRANA</option>
+                        <option>PRIHVACENA</option>
+                        <option>ODBIJENA</option>
+                        <option>ZAVRSENA</option>
+                    </select>
+                </form>
+            </div>
+            <!-- End of filters for reservations -->
 
-                <input type="text" v-model="searchField"  placeholder="Username of guest which make reservation..." >
-                <button type="button" @click="sortAsc">SORT ASC</button>
-                <button type="button" @click="sortDesc">SORT DESC</button>
+            <br><br>
+            <!-- Sort for reservations -->
+            <div v-if="previewSort" class="sortInApp">
+                <form method='post'>
 
-                <br><br>
+                    <button type="button" @click="sortAsc"><i class="fa fa-sort" aria-hidden="true"></i>PRICE UP</button>
+                    <button type="button" @click="sortDesc"><i class="fa fa-sort" aria-hidden="true"></i>PRICE DOWN</button>
 
-                <!-- If user don't want use filter, check just option: Without filter for status -->
-                <select v-model="filterDataForReservation.status" @change="onchangeStatus()">
-                    <option value="">Without filter for status </option>
-                    <option>KREIRANA</option>
-                    <option>PRIHVACENA</option>
-                    <option>ODBIJENA</option>
-                    <option>ZAVRSENA</option>
-                </select>
+                </form>
+            </div>
+            <!-- End of sort for reservations -->
 
-            </form>
-
-            <!-- End of search & filter & sort -->
             <br>
             
             <ul>

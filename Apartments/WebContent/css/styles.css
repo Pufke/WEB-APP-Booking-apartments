@@ -554,7 +554,26 @@ th, td {
 }
 /* End style for search of users ADMIN */
 
-/* filterForAdminApartments */
+
+/* Start of style for search of guest in reservations */
+
+.searchGuestsByUsername{
+	width: 500px;
+    height: 88px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #e1f7df;
+}
+.searchGuestsByUsername input{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid white;
+    text-align: center;
+}
+
+/* End of style for search of guest in reservations */
+
 
 /* Start style filter for ADMIN apartments */
 .filterForAdminApartments{
@@ -579,6 +598,24 @@ th, td {
 }
 
 /* End style filter for ADMIN apartments */
+
+/* Start style filter for reservations */
+.filterForReservationsStatus{
+	width: 500px;
+    height: 85px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #e1f7df;
+}
+
+.filterForReservationsStatus select{
+	height: 30px;
+    border-radius: 10px;
+    width: 200px;
+    border: 2px solid white;
+    text-align: center;
+}
+/* End of style for filter reservations (status of reservation) */
 
 /* Sort in app */
 .sortInApp{
