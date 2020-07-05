@@ -35,7 +35,8 @@ Vue.component("app-login",{
             <input type="text" v-model="newUser.userName" placeholder="Username" required>
             <input type="password" v-model="newUser.password" placeholder="Password" required>
             
-            <button type='submit'>Login</button>
+            <br><br>
+            <button type='submit' class="btn"><i class="fa fa-sign-in" aria-hidden="true"></i> LOGIN </button>
 
         </form>      
 

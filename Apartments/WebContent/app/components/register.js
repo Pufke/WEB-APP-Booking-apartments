@@ -38,7 +38,8 @@ Vue.component("app-register", {
             <input type="password" v-model="newUser.password" placeholder="Password" required>
             <input type="password" placeholder="Re Password" required>
 
-            <button type='submit'  >Register</button>
+            <br><br>
+            <button type='submit' class="btn"><i class="fa fa-sign-in" aria-hidden="true"></i> REGISTER </button>
   
         </form>
 

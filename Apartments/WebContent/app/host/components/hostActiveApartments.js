@@ -136,17 +136,32 @@ Vue.component("host-ActiveApartments", {
         <!-- End of cards for apartments -->
         
         <br>
-        <table border="1">
-        <tr bgcolor="lightgrey">
-            <th> Status </th><th> Type </th><th> Price </th><th> Rooms </th></tr>
-            <tr v-for="apartment in apartments">
-                <td> {{ apartment.status }} </td>
-                <td> {{ apartment.typeOfApartment }} </td>
-                <td> {{ apartment.pricePerNight}} </td>
-                <td> {{ apartment.numberOfRooms}} </td>
-            </tr>
-        </table>
 
+        <!-- Table of host apartments -->
+        <div class="styleForTable">
+            <table style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th> Status </th>
+                        <th> Type </th>
+                        <th> Price </th>
+                        <th> Rooms </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="apartment in apartments">
+                        <td> {{ apartment.status }} </td>
+                        <td> {{ apartment.typeOfApartment }} </td>
+                        <td> {{ apartment.pricePerNight}} </td>
+                        <td> {{ apartment.numberOfRooms}} </td>
+                    </tr>
+                </tbody>                
+
+            </table>
+        </div>
+        <!-- End of table for host apartments -->
 
 
         <!-- Modal dialog section for changing -->

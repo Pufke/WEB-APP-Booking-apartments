@@ -148,7 +148,8 @@ nav{
 }
 
 table{
-	background-color: burlywood;
+	opacity: 0.7;
+
 }
 
 /* End of style for navbar & header */
@@ -438,3 +439,25 @@ img.imagesOfApartment{
 
 
 /* End of style for buttons */
+
+
+/* Style for tables */
+
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 15px;
+	text-align: left;
+}
+.styleForTable {
+	width: 100%;    
+	border-radius: 15px;
+	background-color: #cdf3b9;
+	font-weight: bold;
+	font-size: 16px;
+  }
+
+/* End of style for tables */
