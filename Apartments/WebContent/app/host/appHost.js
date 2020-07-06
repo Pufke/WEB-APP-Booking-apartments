@@ -11,6 +11,7 @@ const MapChoose = { template : '<host-mapChoose></host-mapChoose>' }
 const router = new VueRouter({
     mode: 'hash',
     routes:[
+    	{ path: '/', component: ActiveApartmentsComponent },
         { path: '/users', component: UsersComponent },
         { path: '/home', component: HomeComponent},
         { path: '/reservations', component: ReservationComponent},
