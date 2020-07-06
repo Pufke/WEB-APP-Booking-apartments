@@ -230,10 +230,14 @@ Vue.component("administrator-apartments", {
         <div id = "dijalogDeo" v-bind:class="{bgModal: hideDialog, bgModalShow: !hideDialog}">
             <div class="modal-contents">
         
+             <h2> Chanage apartment</h2>
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
 
-                <form method='post'>     
-                    <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
+                <form method='post'>   
+                	
+                  
+                	<label for="type">Type of apartment:</label>
+                    <input  name="type" type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment...">
                     
                     <label for="checkIn">Check in time:</label>
                     <input  name="checkIn" type="time" v-model="newApartment.timeForCheckIn" placeholder="Check in...">
@@ -248,14 +252,24 @@ Vue.component("administrator-apartments", {
                     <label for="endDate">End date for host:</label>
     	            <input name="endDate" type="date" v-model="endDateForHost">
     	            
-                    <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
-                    <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
-                    <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >    
+    	            <label for="price">Price per night:</label>
+                    <input  name="price" type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." >
+                    
+                    <label for="rooms">Number of rooms:</label>
+                    <input   name="rooms"  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." >
+                    
+                    <label for="guests">Number of guests:</label>
+                    <input  name="guests" type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." >    
 
                     <!-- Address -->
-                    <input type="text" v-model="newApartment.location.address.populatedPlace" placeholder="Town name ...">
-                    <input type="text" v-model="newApartment.location.address.street" placeholder="Street ...">
-                    <input type="text" v-model="newApartment.location.address.number" placeholder="Number ...">
+                    <label for="place">Populated place:</label>
+                    <input name="place" type="text" v-model="newApartment.location.address.populatedPlace" placeholder="Town name ...">
+                    
+                    <label for="street">Street:</label>
+                    <input name="street" type="text" v-model="newApartment.location.address.street" placeholder="Street ...">
+                    
+                    <label for="number">Number:</label>
+                    <input  name="number" type="text" v-model="newApartment.location.address.number" placeholder="Number ...">
                     <!-- End of address -->
 
                     <!-- Choose image of apartment -->
