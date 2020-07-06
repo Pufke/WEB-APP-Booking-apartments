@@ -58,10 +58,16 @@ Vue.component("host-mapChoose", {
             
             <div id="map" class="map" v-if="previewMap">  </div> 
             
+            <!-- I use those inputs field for geting data from map -->
+            <input type="text" id="latitudeID" hidden> 
+            <input type="text" id="longitudeID" hidden>
+            <!-- End of getind data for long i lat -->
+            
             <input type="text" id="townID" placeholder="Town name ..."> <br><br>
             <input type="text" id="streetID" placeholder="Street ..."> <br><br>
             <input type="text" id="numberID" placeholder="Number ..."> <br><br>
             <input type="text" id="zipcodeID" placeHolder="Zipcode ..."> <br><br>
+
             <!-- End of address -->
 
             <!-- List of amenities in apartments -->
@@ -114,9 +120,11 @@ Vue.component("host-mapChoose", {
             this.newApartment.location.address.number = document.getElementById("numberID").value;
             this.newApartment.location.address.zipCode = document.getElementById("zipcodeID").value;
 
+            this.newApartment.location.latitude = document.getElementById("latitudeID").value;
+            this.newApartment.location.longitude = document.getElementById("longitudeID").value;
+
             // Get codeForImage 
             this.codeForImage = document.getElementById("imgSampleID").src;
-
             this.newApartment.imagesPath = this.codeForImage;
 
             // warning/error if some fields are null or empty
@@ -199,8 +207,7 @@ Vue.component("host-mapChoose", {
 
 });
 
-// postcode
-// zipCode
+
 /**
  * From coords get real address and put that value in form. 
  * @param coords cords (x,y)
@@ -210,6 +217,11 @@ function reverseGeocode(coords) {
         .then(function (response) {
             return response.json();
         }).then(function (json) {
+            // LATITUDE & LONGITUDE
+            console.log(coords);
+            document.getElementById("longitudeID").value = coords[0];
+            document.getElementById("latitudeID").value = coords[1];
+
             // TOWN 
             console.log(json.address);
             if (json.address.city) {
