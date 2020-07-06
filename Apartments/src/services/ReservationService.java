@@ -205,9 +205,18 @@ public class ReservationService {
 				}
 			}
 			
+			
+			if(reservationData.dateOfReservation.before(new Date())) {
+				return Response.status(400).type("text/plain")
+						.entity("Datum is passed!").build();
+			}
+				
+				
+				
 			//Convert java.util.Date to java.Sql.date, reason why i do this i beacuse frontend doesnt format well java.util.Date format 
 			java.sql.Date sd = new java.sql.Date(reservationData.dateOfReservation.getTime());
 	
+			
 			ArrayList<Date> listaSlobodnihDatuma = apartment.getAvailableDates();
 			ArrayList<Date> listaPraznika = new ArrayList<Date>();
 			
@@ -338,8 +347,11 @@ public class ReservationService {
 		if(isUserGuest()) {
 			
 			ReservationDAO reservationsCTX = getReservations();
+			ApartmentsDAO apartmentsCTX = getApartments();
+			
 			ArrayList<Reservation> reservations = reservationsCTX.getValues();
-	
+			ArrayList<Apartment> apartments = apartmentsCTX.getValues();
+			
 			Reservation reservation = new Reservation();
 			for (Reservation r : reservations) {
 				if (r.getID().equals(Integer.parseInt(reservationData.reservationID))) {
@@ -348,6 +360,26 @@ public class ReservationService {
 				}
 			}
 
+			for (Apartment a : apartments) {
+				if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {
+					ArrayList<Date> avaliableDates = a.getAvailableDates();
+					
+					Date pocetniDatum = reservation.getStartDateOfReservation();
+					
+					for(int i =0; i<reservation.getNumberOfNights(); i++) {
+						java.util.Date utilDate = new java.util.Date(pocetniDatum.getTime());
+						avaliableDates.add(utilDate);
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(pocetniDatum);
+						calendar.add(Calendar.DATE, 1);
+						pocetniDatum =  calendar.getTime();
+					}
+					
+					break;
+				}
+			}
+			
+			apartmentsCTX.saveApartmentsJSON();
 			reservationsCTX.cancelReservation(reservation);
 			
 			return Response
@@ -485,7 +517,7 @@ public class ReservationService {
 	// I made this two functions beacuse i have problem with comparing and removing dates after deserialization from JSON, date time is not same
 	private boolean isContains(ArrayList<Date> listaDatuma, Date datum) {
 		for(Date d : listaDatuma) {
-	
+	System.out.println(d.toString().substring(0, 10) + " UPOREDI SA " + datum.toString().substring(0, 10) );
 			if(d.toString().substring(0, 10).equals(datum.toString().substring(0, 10))) {
 				return true;
 			}

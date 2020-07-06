@@ -182,6 +182,27 @@ table{
     border-radius: 10px;
 }
 
+/* Style for Profile */
+
+#styleForProfile{
+	background-color: #cdf3b9;
+	 width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20 100px;
+    box-sizing: border-box;
+    border-radius: 50px;
+}
+#styleForProfile h1{
+	color: black;
+	font-size: 50px; 
+	padding: 20px;
+}
+#styleForProfile h2{
+	font-size: 30px;
+	padding: 20px;
+}
+
 /* End of style for button at navbar in guest mode */
 
 #styleForApartmentsView{

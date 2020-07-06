@@ -27,19 +27,21 @@ Vue.component("guest-profile",{
         }
     },
     template:`
-    <div>
-        <h1> Hello from profile </h1>
+        <div id = "styleForProfile">
+        <h1> Profile </h1>
         <br>
-        <h1> user name: {{user.userName}} </h1>
+        <h2> Username: {{user.userName}} </h2>
 
-        <h1> password: {{user.password}} </h1>
+        <h2> Password: {{user.password}} </h2>
         <input type="text" v-model="user.password" placeholder="Password">
 
-        <h1> name: {{user.name}} </h1>
+        <h2> Name: {{user.name}} </h2>
         <input type="text" v-model="user.name" placeholder="Name">
 
-        <h1> surname: {{user.surname}} </h1>
+
+        <h2> Surname: {{user.surname}} </h2>
         <input type="text" v-model="user.surname" placeholder="Surname">
+
 
         <br>
         <button @click="saveChanges(user)"> Save changes </button>

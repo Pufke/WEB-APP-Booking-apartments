@@ -53,9 +53,7 @@ Vue.component("guest-reservation", {
                         <td> {{ reservation.statusOfReservation }}  </td>
                     </tr>   
                 </table>
-
-                <button @click="deleteReservation(reservation.id, reservation.idOfReservedApartment)">DELETE RESERVATION</button>
-    	       
+      
     	        <input  v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" v-model="komentar" placeholder="Vas komentar o apartmanu"> 
     	        <input  v-if="reservation.statusOfReservation == 'ODBIJENA' || reservation.statusOfReservation == 'ZAVRSENA'" v-model="ocena" placeholder="Vasa ocena o apartmanu">
     	        
