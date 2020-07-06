@@ -180,12 +180,12 @@ table{
 
 #styleForProfile{
 	background-color: #cdf3b9;
-	 width: 80%;
+	width: 80%;
     max-width: 1000px;
     margin: 40px auto;
-    padding: 20 100px;
+    padding: 20px 100px;
     box-sizing: border-box;
-    border-radius: 50px;
+    border-radius: 30px;
 }
 #styleForProfile h1{
 	color: black;
@@ -794,3 +794,46 @@ td button{
     font-weight: bold;
 }
 /* End of style for search, sort, filters */
+
+/* Adding new apartment */
+
+.addingNewApartment{
+	background-color: #cdf3b9;
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 100px;
+    box-sizing: border-box;
+    border-radius: 30px;
+}
+
+.tableForAddingNewApartment {
+    border-collapse: separate !important;
+    background-color: #cdf3b9;
+    color: black;
+    font-weight: bold;
+    border: 3px solid white;
+    width: 96%;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.tableForAddingNewApartment input {
+    height: 30px;
+    border-radius: 10px;
+    width: 100%;
+    border: 2px solid white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.tableForAddingNewApartment select {
+    height: 80px;
+    border-radius: 10px;
+    width: 100%;
+    border: 2px solid white;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* End of adding new apartment style */

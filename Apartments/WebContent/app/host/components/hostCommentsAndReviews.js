@@ -23,8 +23,8 @@ Vue.component("host-CommentsAndReviews", {
                     </tr>
                 </table>
 
-                <button v-if="comment.isAvailableToSee" type="button" @click="hideComment(comment)"> Hide </button>
-                <button v-if="!comment.isAvailableToSee" type="button" @click="showComment(comment)"> Show </button>
+                <button v-if="!comment.isAvailableToSee" type="button" @click="showComment(comment)"><i class="fa fa-eye" aria-hidden="true"></i> Show </button>
+                <button v-if="comment.isAvailableToSee" type="button" @click="hideComment(comment)"><i class="fa fa-eye-slash" aria-hidden="true"></i> Hide </button>
             </li>
         </ul>
 

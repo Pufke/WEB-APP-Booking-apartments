@@ -38,63 +38,128 @@ Vue.component("host-mapChoose", {
     },
     template: `
     <div>
-        <!-- Form for adding apartment -->
-        <form method='post'>
-            <input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment..."><br><br>
-                    
-            <input  name="checkIn" type="time" v-model="newApartment.timeForCheckIn" placeholder="Check in..."><br><br>
-            <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out..."><br><br>
-        
-            <input name="startDate" type="date" v-model="startDateForHost" placeholder="Start date for host..." ><br><br>
-            <input name="endDate" type="date" v-model="endDateForHost" placeholder="End date for host..."> <br><br>
+        <div class="addingNewApartment">
+            <h1 style="color:black;"> Adding new apartment </h1>
+            <!-- Form for adding apartment -->
+            <form method='post'>
 
-            <input  type="number" v-model="newApartment.pricePerNight" placeholder="Price per night..." > <br><br>
-            <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." > <br><br>
-            <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." > <br><br>
+                <table class="tableForAddingNewApartment">
+                    <tr>
+                        <th> Label </th>
+                        <th> Data </th>
+                    </tr>
 
-            
-            <!-- Address -->
-            <button type="button" @click="previewMapChooseLocation()"> Choose on map </button> <br><br>
-            
+                    <tr>
+                        <td> Type of apartment </td>
+                        <td><input type="text" v-model="newApartment.typeOfApartment" placeholder="Type of apartment ..."></td>
+                    </tr>
+
+                    <tr>
+                        <td> Check in </td>
+                        <td><input  name="checkIn" type="time" v-model="newApartment.timeForCheckIn" placeholder="Check in ..."></td>
+                    </tr>
+
+                    <tr>
+                        <td> Check out </td>
+                        <td> <input name="checkOut"  type="time" v-model="newApartment.timeForCheckOut" placeholder="Check out ..."></td>
+                    </tr>
+
+                    <tr>
+                        <td> Start date </td>
+                        <td><input name="startDate" type="date" min="2020-07-09" max="2020-08-09" v-model="startDateForHost" placeholder="Start date for hosting ..." ></td>
+                    </tr>
+
+                    <tr>
+                        <td> End date </td>
+                        <td><input name="endDate" type="date" min="2020-07-09" max="2020-08-09" v-model="endDateForHost" placeholder="End date for hosting ..."></td>
+                    </tr>
+
+                    <tr>
+                        <td> Price per night </td>
+                        <td><input  type="number" v-model="newApartment.pricePerNight" min="1" max="5000" placeholder="Price per night ..." ></td>
+                    </tr>
+
+                    <tr>
+                        <td> Number of rooms </td>
+                        <td><input  type="number" v-model="newApartment.numberOfRooms" min="1" max="20" placeholder="Number of rooms ..." ></td>
+                    </tr>
+
+                    <tr>
+                        <td> Max guests in room </td>
+                        <td><input  type="number" v-model="newApartment.numberOfGuests" min="1" max="100" placeholder="Max guests in room ..." ></td>
+                    </tr>
+
+                    <tr>
+                        <td> Location </td>
+                        <td><button type="button" @click="previewMapChooseLocation()"><i class="fa fa-map-marker" aria-hidden="true"></i> Choose on map </button></td>
+                    </tr>
+
+                    <tr>
+                        <td> Town name </td>
+                        <td> <input type="text" id="townID" placeholder="Town name ..."> </td>
+                    </tr>
+
+                    <tr>
+                        <td> Street </td>
+                        <td><input type="text" id="streetID" placeholder="Street ..."></td>
+                    </tr>
+
+                    <tr>
+                        <td> Number </td>
+                        <td><input type="text" id="numberID" placeholder="Number ..."> </td>
+                    </tr>
+
+                    <tr>
+                        <td> Zipcode </td>
+                        <td> <input type="text" id="zipcodeID" placeHolder="Zipcode ..."></td>
+                    </tr>
+
+                    <tr>
+                        <td> Amenities in apartment </td>
+                        <td> 
+                            <!-- List of amenities in apartments -->
+                            <select v-model="newApartment.apartmentAmentitiesIDs" multiple>
+                                <option v-for="option in amenities" v-bind:value="option.id">
+                                    {{ option.itemName }}
+                                </option>
+                            </select>
+                            <!-- End list of amenities in apartments -->
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> Image  </td>
+                        <td> 
+                            <!-- Choose image of apartment -->
+                            <input type="file" onchange="encodeImageFileAsURL(this)" /><br><br>
+                            <!-- End of choose of image of apartment --> <br><br>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <br><br>
+                <button type="button" @click="confirmAdding()" class="saveChanges" ><i class="fa fa-check" aria-hidden="true"></i>Confirm</button> <br><br>
+                 
+
+                <!-- I use those inputs field for geting data from map -->
+                <input type="text" id="latitudeID" hidden> 
+                <input type="text" id="longitudeID" hidden>
+                <!-- End of getind data for long i lat -->
+
+
+            </form>
+            <!-- End of form for adding apartment -->
+
             <div id="map" class="map" v-if="previewMap">  </div> 
-            
-            <!-- I use those inputs field for geting data from map -->
-            <input type="text" id="latitudeID" hidden> 
-            <input type="text" id="longitudeID" hidden>
-            <!-- End of getind data for long i lat -->
-            
-            <input type="text" id="townID" placeholder="Town name ..."> <br><br>
-            <input type="text" id="streetID" placeholder="Street ..."> <br><br>
-            <input type="text" id="numberID" placeholder="Number ..."> <br><br>
-            <input type="text" id="zipcodeID" placeHolder="Zipcode ..."> <br><br>
-
-            <!-- End of address -->
-
-            <!-- List of amenities in apartments -->
-            <select v-model="newApartment.apartmentAmentitiesIDs" multiple>
-                <option v-for="option in amenities" v-bind:value="option.id">
-                    {{ option.itemName }}
-                </option>
-            </select>
-            <!-- End list of amenities in apartments -->
-            <br><br>
-
-            <!-- Choose image of apartment -->
-            <input type="file" onchange="encodeImageFileAsURL(this)" /><br><br>
-            <!-- End of choose of image of apartment --> <br><br>
-
-            <button type="button" @click="confirmAdding()">Confirm</button> <br><br>
-
-        </form>
-        <!-- End of form for adding apartment -->
-
+        </div>
         <br><br>
         
         
-        <img id="imgSampleID" src="" alt="Image of apartment" width="300" height="200"> 
+        <img id="imgSampleID" src="" alt="Image of apartment" width="300" height="200" hidden> 
 
         <br><br>
-        <button type="button" @click="endAddingApartments()"> End adding apartments </button>
+        <button type="button" @click="endAddingApartments()" hidden > End adding apartments </button>
 
     </div>
     `,
