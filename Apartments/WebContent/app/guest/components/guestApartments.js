@@ -161,8 +161,8 @@ Vue.component("guest-apartments", {
                  
 
                 <button @click="makeReseervation2(apartment.id)">MAKE RESERVATION</button> <br>
-                <button @click="viewComments(apartment.id)">VIEW COMMENTS</button><br>
-                <button @click="viewFreeDates(apartment.id)">VIEW FREE DATES</button><br>
+                <button onclick="scroolComments()" @click="viewComments(apartment.id)">VIEW COMMENTS</button><br>
+                <button onclick="scroolFreeDates()" @click="viewFreeDates(apartment.id)">VIEW FREE DATES</button><br>
                 <br>
                 
     			
@@ -173,7 +173,7 @@ Vue.component("guest-apartments", {
 
         <br><br>
         <!-- Table of free dates for choosen apartment -->
-        <div class="styleForTable">
+        <div id="tableFreeDates" class="styleForTable">
             <table style="width:100%">
 
                 <thead>
@@ -194,7 +194,7 @@ Vue.component("guest-apartments", {
         
         <br><br>
         <!-- Table of comments on selected apartment -->
-        <div class="styleForTable">
+        <div id="tableCommnets" class="styleForTable">
             <table style="width:100%">
 
                 <thead>
@@ -220,43 +220,6 @@ Vue.component("guest-apartments", {
         <!-- End of table for comments on selected apartment -->
                 
         <br><br>
-        <!-- Table of active apartments -->
-        <div class="styleForTable">
-            <table style="width:100%">
-
-                <thead>
-                    <tr>
-                        <th> Status </th>
-                        <th> Type </th>
-                        <th> Price </th>
-                        <th> Rooms </th>
-                        <th> Guests </th>
-                        <th> Check in</th>
-                        <th> Check out</th>
-                        <th> Location </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr v-for="apartment in filteredApartments">
-                        <td> {{ apartment.status }} </td>
-                        <td> {{ apartment.typeOfApartment }} </td>
-                        <td> {{ apartment.pricePerNight}} </td>
-                        <td> {{ apartment.numberOfRooms}} </td>
-                        <td> {{ apartment.numberOfGuests}} </td>
-                        <td> {{ apartment.timeForCheckIn}} </td>
-                        <td> {{ apartment.timeForCheckOut}} </td>
-                        <td> 
-                            {{ apartment.location.address.populatedPlace }},
-                            {{ apartment.location.address.street }},
-                            {{ apartment.location.address.number }}, 
-                        </td>
-                    </tr>
-                </tbody>                
-
-            </table>
-        </div>
-        <!-- End of table for active apartments -->
 
     	
     </div>
