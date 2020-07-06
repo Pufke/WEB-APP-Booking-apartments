@@ -89,9 +89,9 @@ Vue.component("host-reservation", {
                     </tr>   
                 </table> 
 
-                <button v-if="reservation.statusOfReservation == 'KREIRANA' " type="button" @click="acceptReservation(reservation)"> Accept </button>
-                <button v-if="reservation.statusOfReservation == 'KREIRANA' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="declineReservation(reservation)"> Decline </button>
-                <button v-if="reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="endReservation(reservation)"> End </button>
+                <button v-if="reservation.statusOfReservation == 'KREIRANA' " type="button" @click="acceptReservation(reservation)"><i class="fa fa-check" aria-hidden="true"></i> Accept </button>
+                <button v-if="reservation.statusOfReservation == 'KREIRANA' || reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="declineReservation(reservation)" class="deleteButtonStyle" ><i class="fa fa-times" aria-hidden="true"></i> Decline </button>
+                <button v-if="reservation.statusOfReservation == 'PRIHVACENA'" type="button" @click="endReservation(reservation)" class="endButtonStyle" ><i class="fa fa-handshake-o" aria-hidden="true"></i> End </button>
 
 
             </li>
@@ -105,20 +105,16 @@ Vue.component("host-reservation", {
 
             <thead>
                 <tr>
-                    <th> ID apartmana</th>
-                    <th> Status rezervacije </th>
-                    <th> startDateOfReservation </th>
-                    <th> Guest ID</th>
+                    <th> Status </th>
+                    <th> Start date of reservation </th>
                     <th> Total price </th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr v-for="reservation in filteredReservations">
-                    <td> {{ reservation.idOfReservedApartment }} </td>
                     <td> {{ reservation.statusOfReservation }} </td>
                     <td>  {{ reservation.startDateOfReservation }} </td>
-                    <td> {{ reservation.guestID }}  </td>
                     <td> {{ reservation.totalPrice }} </td>
                 </tr>
             </tbody> 

@@ -91,12 +91,12 @@ Vue.component("view-apartments", {
                     </tr>
 
                     <tr>
-                        <td> Time for check-in:: </td>
+                        <td> Time for check-in: </td>
                         <td> {{ apartment.timeForCheckIn}}  </td>
                     </tr>
 
                     <tr>
-                        <td> Time for check-out:: </td>
+                        <td> Time for check-out: </td>
                         <td> {{ apartment.timeForCheckOut}}  </td>
                     </tr>
                 </table>

@@ -20,58 +20,79 @@ toastr.options = {
 }
 
 
-Vue.component("guest-profile",{
-    data(){
+Vue.component("guest-profile", {
+    data() {
         return {
             user: {},
+            changedUser: {
+                password: '',
+                name: '',
+                surname: '',
+            },
         }
     },
-    template:`
-        <div id = "styleForProfile">
-        <h1> Profile </h1>
-        <br>
-        <h2> Username: {{user.userName}} </h2>
+    template: `
+    <div id = "styleForProfile">
+        <h1> Hello {{user.userName}}, this is your profile. </h1>
+        
+        <table class="tableInProfil">
+            <tr>
+                <th> Label </th>
+                <th> Current </th>
+                <th> New </th>
+            </tr>
 
-        <h2> Password: {{user.password}} </h2>
-        <input type="text" v-model="user.password" placeholder="Password">
+            <tr>
+                <td> Password </td>
+                <td>  {{user.password}} </td>
+                <td> <input type="text" v-model="changedUser.password" placeholder="Password"> </td>
+            </tr>
 
-        <h2> Name: {{user.name}} </h2>
-        <input type="text" v-model="user.name" placeholder="Name">
+            <tr>
+                <td> Name </td>
+                <td> {{user.name}} </td>
+                <td> <input type="text" v-model="changedUser.name" placeholder="Name"> </td>
+            </tr>
 
+            <tr>
+                <td> Surname </td>
+                <td> {{user.surname}} </td>
+                <td> <input type="text" v-model="changedUser.surname" placeholder="Surname"> </td>
+            </tr>
 
-        <h2> Surname: {{user.surname}} </h2>
-        <input type="text" v-model="user.surname" placeholder="Surname">
+        </table>
 
-
-        <br>
-        <button @click="saveChanges(user)"> Save changes </button>
+        <br><br>
+        <button @click="saveChanges()" class="saveChanges" ><i class="fa fa-check" aria-hidden="true"></i> Save changes </button>
 
     </div>
     `,
     methods: {
-        saveChanges:function(_user){
+        saveChanges: function () {
             axios
-            .post('rest/edit/saveUserChanges',{
-                "username":'' + _user.userName,
-                "password":'' + _user.password,
-                "name": ''+ _user.name,
-                "surname": '' + _user.surname,
-                "role": '' + _user.role
-            
-            })
-            .then(response =>{
-                toastr["success"]("Success changes!!", "Success!");
-            })
-            .catch(err => {
-                toastr["error"]("Failed during changes :(", "Fail");
-            })
+                .post('rest/edit/saveUserChanges', {
+                    "username": this.user.userName,
+                    "password": this.changedUser.password,
+                    "name": this.changedUser.name,
+                    "surname": this.changedUser.surname,
+                    "role": this.user.role
+
+                })
+                .then(response => {
+                    toastr["success"]("Success changes!!", "Success!");
+                })
+                .catch(err => {
+                    toastr["error"]("Failed during changes :(", "Fail");
+                })
         }
     },
-    mounted () {
+    mounted() {
         axios
-        .get('rest/edit/profileUser')
-        .then( response => this.user = response.data)
+            .get('rest/edit/profileUser')
+            .then(response => {
+                this.user = response.data;
+            });
     },
-    
+
 
 });

@@ -41,7 +41,7 @@ Vue.component("administrator-contents", {
 
 
         <!-- Modal dialog section for adding -->
-        <div id = "addDialogForAmenities" v-bind:class="{bgModal: hideAddDialog, bgModalShow: !hideAddDialog}">
+        <div id = "addDialogForAmenities" v-bind:class="{bgModal: hideAddDialog, bgModalShowAmenities: !hideAddDialog}">
             <div class="modal-contents">
         
                 <div class="close" @click="hideAddDialog = !hideAddDialog">+</div>
@@ -71,7 +71,7 @@ Vue.component("administrator-contents", {
         </ul>
 
         <!-- Modal dialog section for changing -->
-        <div id = "dialogForAmenities" v-bind:class="{bgModal: hideDialog, bgModalShow: !hideDialog}">
+        <div id = "dialogForAmenities" v-bind:class="{bgModal: hideDialog, bgModalShowAmenities: !hideDialog}">
             <div class="modal-contents">
         
                 <div class="close" @click="hideDialog = !hideDialog">+</div>
