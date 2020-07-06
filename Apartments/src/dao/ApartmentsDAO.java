@@ -227,9 +227,9 @@ public class ApartmentsDAO {
 		}
 		apartment.setAvailableDates(freeData);
 		
-		newItem.addedApartment.getLocation().getAddress().setZipCode("");
 		//apartment.setImagesPath("withoutPath");
 		apartment.setListOfReservationsIDs(new ArrayList<Integer>());
+		apartment.setApartmentCommentsIDs(new ArrayList<Integer>());
 		
 		apartments.add(apartment);
 		saveApartmentsJSON();

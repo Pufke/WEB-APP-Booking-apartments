@@ -52,15 +52,16 @@ Vue.component("host-mapChoose", {
             <input  type="number" v-model="newApartment.numberOfRooms" placeholder="Number of rooms ..." > <br><br>
             <input  type="number" v-model="newApartment.numberOfGuests" placeholder="Max guests in room..." > <br><br>
 
-
+            
             <!-- Address -->
             <button type="button" @click="previewMapChooseLocation()"> Choose on map </button> <br><br>
             
             <div id="map" class="map" v-if="previewMap">  </div> 
-
+            
             <input type="text" id="townID" placeholder="Town name ..."> <br><br>
             <input type="text" id="streetID" placeholder="Street ..."> <br><br>
             <input type="text" id="numberID" placeholder="Number ..."> <br><br>
+            <input type="text" id="zipcodeID" placeHolder="Zipcode ..."> <br><br>
             <!-- End of address -->
 
             <!-- List of amenities in apartments -->
@@ -111,6 +112,7 @@ Vue.component("host-mapChoose", {
             this.newApartment.location.address.populatedPlace = document.getElementById("townID").value;
             this.newApartment.location.address.street = document.getElementById("streetID").value;
             this.newApartment.location.address.number = document.getElementById("numberID").value;
+            this.newApartment.location.address.zipCode = document.getElementById("zipcodeID").value;
 
             // Get codeForImage 
             this.codeForImage = document.getElementById("imgSampleID").src;
@@ -197,6 +199,8 @@ Vue.component("host-mapChoose", {
 
 });
 
+// postcode
+// zipCode
 /**
  * From coords get real address and put that value in form. 
  * @param coords cords (x,y)
@@ -222,6 +226,11 @@ function reverseGeocode(coords) {
             // NUMBER OF HOUSE
             if (json.address.house_number) {
                 document.getElementById("numberID").value = json.address.house_number;
+            }
+
+            // ZIP CODE
+            if(json.address.postcode){
+                document.getElementById("zipcodeID").value = json.address.postcode;
             }
 
         });

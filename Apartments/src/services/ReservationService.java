@@ -315,7 +315,7 @@ public class ReservationService {
 				if (a.getID().equals((reservationData.apartmentIdentificator).intValue())) {
 					ArrayList<Integer> rezervacije = a.getListOfReservationsIDs();
 					for (Integer s : rezervacije) {
-						if (s.equals(reservationData.reservationID)) {
+						if (s.equals(Integer.parseInt(reservationData.reservationID))) {
 							rezervacije.remove(s);
 							break;
 						}
