@@ -138,9 +138,28 @@ user type
   
   ○ Example: A guest tries to access a page to add the contents of an apartment that
     is the sole responsibility of the administrator.
-    
-● The examples in Figures 1-3 are given as a guide, your application is not expected to have
-identical, but not a similar look - the style is left to you
+  
 
-● *** Depending on the specific implementation, students can arbitrarily
-expand given entities or add others. ***
+## Functionalities
+
+#### ● Registration
+
+● As a non-logged in user:
+
+○ If I want to register:
+
+■ It is necessary to enter a unique username, first name, last name, gender, password
+and a password control field
+
+■ If a field is left blank or the passwords do not match, next to
+an error message is printed in the corresponding field
+
+■ Pressing the send button sends a request to the server
+
+■ In case of successful creation of a new Guest (username is
+unique and the Guest has been successfully created and logged into the application):
+
+● The user is redirected to view the page accordingly
+his role
+
+■ In case of failure to create a new Guest, an error message is displayed
