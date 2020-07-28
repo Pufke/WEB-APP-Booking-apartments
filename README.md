@@ -198,3 +198,21 @@ remains on the login page
   ○ Pressing the send button sends a session invalidation request to the server
 
   ○ Upon successful logout, the login page opens
+  
+### Modification of personal data
+
+#### ● As a logged in user of any type:
+
+##### ○ I have insight into my personal data
+
+##### ○ I can change my personal data as well as my password (except username)
+
+###### ■ All changes must be valid - if a field is not filled in or passwords
+are not appropriate (old is not good or new and control are not the same), in addition
+an error message is printed in the corresponding field
+
+###### ■ Pressing the send button sends a change request to the server
+
+###### ■ In the event of a successful change, the user is notified
+
+###### ■ In case of unsuccessful change of the data to the user, an error is printed
