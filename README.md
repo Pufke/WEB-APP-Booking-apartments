@@ -20,7 +20,7 @@ The application handles the following entities:
 
 - Surname
 
-- Pol
+- Gender
 
 - Role (Administrator, Home, Away)
 
@@ -263,9 +263,16 @@ with the status ACTIVE:
 ○ View, sort and filter by all criteria, but only your own
 apartments with the status ACTIVE
 
+![HostActiveApartments](https://user-images.githubusercontent.com/49925421/88682238-be348f00-d0f2-11ea-967d-4e978c1aa587.jpg)
+
 ○ I have an overview of my apartments with the status INACTIVE
 
+![InactiveApartments](https://user-images.githubusercontent.com/49925421/88682699-42871200-d0f3-11ea-9053-f325eb2abba5.jpg)
+
+
 ○ I can change the information about my apartment:
+
+![ChangeApartment](https://user-images.githubusercontent.com/49925421/88682940-8c6ff800-d0f3-11ea-8e4e-d27bdc1ffd65.jpg)
 
 ■ All changes must be valid - if a required field is not filled in,
 an error message is displayed next to the corresponding field
@@ -276,7 +283,11 @@ an error message is displayed next to the corresponding field
 
 ■ In case of unsuccessful data change, an error is displayed to the user
 
-○ I can wipe my apartment
+![Eroor](https://user-images.githubusercontent.com/49925421/88683659-5717da00-d0f4-11ea-80db-87c5b25b2d46.jpg)
+
+○ I can delete my apartment
+
+![image](https://user-images.githubusercontent.com/49925421/88684467-300dd800-d0f5-11ea-99ca-e61a409f0a49.png)
 
 ● As an Administrator you can:
 
