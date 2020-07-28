@@ -349,3 +349,179 @@ content and all apartments that have it)
 
 ![image](https://user-images.githubusercontent.com/49925421/88687353-74e73e00-d0f8-11ea-8165-30be0bcf1fc0.png)
 
+## Booking overview
+
+● As a guest:
+
+○ I want to have an overview of all our reservations:
+
+![image](https://user-images.githubusercontent.com/49925421/88689783-31da9a00-d0fb-11ea-8ba2-98001eb6d127.png)
+
+■ I also have the option to cancel reservations, but only those with status
+CREATED or ACCEPTED, whereby the new status becomes DECLINED
+
+● As Host:
+
+I have overview of reservations for all my apartments (regardless of status):
+
+■ It is possible to accept a reservation that is in the status CREATED, pri
+that the reservation changes status to ACCEPTED
+
+![image](https://user-images.githubusercontent.com/49925421/88690747-44a19e80-d0fc-11ea-926b-96bf0fb8353a.png)
+
+■ It is possible to reject a reservation if it is in the status CREATED or
+ACCEPTED, whereby the reservation changes status to REJECTED
+
+![image](https://user-images.githubusercontent.com/49925421/88690688-33f12880-d0fc-11ea-9614-4ba51bd4c0c2.png)
+
+■ After the overnight date is over, I can set the reservation to
+status COMPLETED
+
+![image](https://user-images.githubusercontent.com/49925421/88690849-61d66d00-d0fc-11ea-98d5-160da6309161.png)
+
+● As Administrator:
+
+○ Enabled to view all bookings in the system
+
+## Creating reservations
+
+● As a guest, I can only create reservations:
+
+○ Reservation of apartments is made by the following steps:
+
+■ Apartment I choose which one I want to book, and then we let
+review the date when it is available
+
+![image](https://user-images.githubusercontent.com/49925421/88692508-6dc32e80-d0fe-11ea-9b2f-d18d4b1e0608.png)
+
+■ I select the date of initial bookings and enter the number of nights
+
+■ Enter the message intended for the host
+
+■ Clicking the button sends a request to create reservations on the server
+(it is necessary to check the availability of the apartment)
+
+■ If you have created everything correctly, you have reserved the status CREATED
+
+■ If the check did not pass, a message was written to the guest that it was not reserved
+possible to execute for the specified dates
+
+## Leaving a comment
+
+● As a Guest:
+
+○ I can leave a comment on the apartment for which I have a reservation with status
+DECLINED or ENDED:
+
+![image](https://user-images.githubusercontent.com/49925421/88692818-cdb9d500-d0fe-11ea-9fbc-15680ef986ff.png)
+
+■ I enter a comment in the field
+
+■ I assign a grade to the apartment
+
+■ Clicking the button sends the comment to the server
+
+■ If the comment is sent successfully, the user is notified
+
+■ In case of unsuccessful sending of comments to the user, an error is printed
+
+## Review comments
+
+● As Host:
+
+○ I have an overview of all the comments on my apartments:
+
+![image](https://user-images.githubusercontent.com/49925421/88693298-69e3dc00-d0ff-11ea-847b-2de9ac3bbb99.png)
+
+■ I can choose which comment will be shown to Guests and which will not
+(so Guests only see comments selected by Host)
+
+![image](https://user-images.githubusercontent.com/49925421/88693364-7cf6ac00-d0ff-11ea-97b7-83de1a2a30c5.png)
+
+● As Administrator:
+
+○ I can see all the comments on all the apartments in the system (regardless of whether
+selected by the Host or not)
+
+
+## Search / Filter / Sort
+
+● As any user (unregistered user or registered user with any
+which role):
+
+○ I want to search for apartments by the following criteria:
+
+![image](https://user-images.githubusercontent.com/49925421/88693728-eb3b6e80-d0ff-11ea-9cae-d25071c2b1c0.png)0
+
+■ by date - by setting the date of arrival and departure from the apartment
+
+■ by location - I specify the name of the city or country
+
+■ by price - the range from-to is set
+
+■ by number of rooms - the range from-to is set
+
+■ by the number of people who can stay in the apartment
+
+All users need to carry out a ***combined search*** of the apartment as before
+specified criteria in the apartment search.
+Combined or multiple search means that the user may be able to select multiple options per
+which he will search. For example. the user can choose to search by number of rooms,
+prices and date.
+
+● As a Guest:
+
+○ I want to sort apartments and my reservations by price:
+
+■ Ascending
+
+■ Descending
+
+○ I want to filter apartments by type and by apartment content
+
+● As Host / Administrator:
+
+○ I want to search for reservations by the username of the guest who created
+reservation, as well as users by:
+
+■ Stakes
+
+■ Semi
+
+■ Username
+
+(Note: The host searches only users (ie guests) who have a reservation
+in his apartments, and the Administrator can search all users)
+
+○ I want to sort apartments and reservations by price:
+
+■ Ascending
+
+■ Descending
+
+○ I want to filter reservations by status, and apartments by:
+
+■ Type
+
+■ The contents of the apartment
+
+■ Status
+
+## Additional tasks for higher grades
+
+The price of reservations varies depending on the date of reservation. If the reservation is on a weekend (Friday,
+Saturday and / or Sunday) the reservation price is reduced by 10%. If the reservation is during the holidays
+the price is increased by 5% per holiday (Administrators define a list of holidays)
+
+![image](https://user-images.githubusercontent.com/49925421/88694356-ba0f6e00-d100-11ea-991a-269f106ef3d5.png)
+
+Use OpenLayers folders (http://openlayers.org/) or an alternative when choosing a location.
+maps to search for apartments by location and specify location when creating apartments.
+
+![image](https://user-images.githubusercontent.com/49925421/88694549-f9d65580-d100-11ea-9f43-cfdd8d669486.png)
+
+Administrators have the ability to block registered users (if they are not Administrators).
+A blocked user cannot log in to their account and does not have the ability to execute any
+action depending on its role.
+
+![image](https://user-images.githubusercontent.com/49925421/88694626-14103380-d101-11ea-837f-a8be266b14f9.png)
