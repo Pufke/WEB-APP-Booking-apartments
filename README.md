@@ -1,16 +1,16 @@
 <h1 align = "center"> WEB APP Booking apartments </h1>
 
-## About
+# About
 
 This is an web application for booking apartments and rooms with reliance on the Jersey RESTful Web Services framework on backend, and the Progressive JavaScript Framework-Vue.js on frontend.  
 
-## Specification
+# Specification
 
 Web application for a system that supports apartment reservations (such as Airbnb
 application). Using three user groups (roles): Guest, Host and Administrator.
 The application handles the following entities:
 
-#### ● User
+### ● User
 
 - Username (unique)
 
@@ -30,7 +30,7 @@ The application handles the following entities:
 
 - Reservation list (if the user is a Guest)
 
-#### ● Location
+### ● Location
 
 - Latitude
 
@@ -38,12 +38,12 @@ The application handles the following entities:
 
 - Address
 
-#### ● Address
+### ● Address
 
 - in the format: Street and number, City, Postal code (eg Sutjeska 3, Novi Sad
 21000)
 
-#### ● Apartment
+### ● Apartment
 
 - Tip (whole apartment, room)
 
@@ -78,14 +78,14 @@ date of issue and created provisions)
 - Reservation list
 
 
-#### ● Contents of the apartment 
+### ● Contents of the apartment 
 
 - id
 
 - Name (eg parking, kitchen, iron, washing machine, etc.)
 
 
-#### ● Reservation
+### ● Reservation
 
 - Apartment that is reserved
 
@@ -104,7 +104,7 @@ date of issue and created provisions)
 Note: The guest can book a number of free / available dates only if they do not have them
 interrupts
 
-#### ● Comment for the apartment
+### ● Comment for the apartment
 
 - Guest who left a comment
 
@@ -114,7 +114,7 @@ interrupts
 
 - Rating for the apartment
 
-## Non-functional requirements and notes
+# Non-functional requirements and notes
 
 ● Administrators are programmatically loaded from a text file and cannot be retrieved later
 add. Hosts can only be created by Administrators.
@@ -140,9 +140,9 @@ user type
     is the sole responsibility of the administrator.
   
 
-## Functionalities
+# Functionalities
 
-#### ● Registration
+## ● Registration
 ![SingUp](https://user-images.githubusercontent.com/49925421/88675446-3e56f680-d0eb-11ea-9e86-44c1947a8d59.jpg)
 
 ● As a non-logged in user:
@@ -166,7 +166,7 @@ his role
 ■ In case of failure to create a new Guest, an error message is displayed
 
 
-#### Log in
+## Log in
 
 ![LogIn](https://user-images.githubusercontent.com/49925421/88675620-63e40000-d0eb-11ea-9635-0d2568c4fe70.jpg)
 
@@ -187,7 +187,7 @@ pages in accordance with its role
 ■ If the login fails, an error message and the user are displayed
 remains on the login page
 
-#### Logout
+## Logout
 
 ![logOut](https://user-images.githubusercontent.com/49925421/88675872-b6252100-d0eb-11ea-8254-f955c0bcacd6.jpg)
 
@@ -199,7 +199,7 @@ remains on the login page
 
   ○ Upon successful logout, the login page opens
   
-#### Modification of personal data
+## Modification of personal data
 
 ![Profile](https://user-images.githubusercontent.com/49925421/88676776-c7226200-d0ec-11ea-84f6-d47596cceb5a.jpg)
 
@@ -218,3 +218,70 @@ an error message is printed in the corresponding field
  ■ In the event of a successful change, the user is notified
 
  ■ In case of unsuccessful change of the data to the user, an error is printed
+  
+## View all users
+
+● As Administrator:
+
+![image](https://user-images.githubusercontent.com/49925421/88678244-888da700-d0ee-11ea-95bb-953a70d13c3b.png)
+
+○ I have an overview of all existing users in the system, and I can also search
+
+![image](https://user-images.githubusercontent.com/49925421/88678405-b541be80-d0ee-11ea-9c2f-50deed3d89fd.png)
+
+
+● As Host:
+
+
+![image](https://user-images.githubusercontent.com/49925421/88678826-25504480-d0ef-11ea-840d-c6caf67710e8.png)
+
+○ I have an overview of all the users who have made a reservation for my apartments and
+I can search among them
+
+## Apartment overview:
+
+● As an unregistered user or as a Guest I can view all apartments
+with the status ACTIVE:
+
+![Apartments](https://user-images.githubusercontent.com/49925421/88680501-da373100-d0f0-11ea-98a2-8b8b9a91fe84.jpg)
+
+○ I can search the apartment
+
+![ApartmentsSearch](https://user-images.githubusercontent.com/49925421/88680945-55004c00-d0f1-11ea-8342-6b12e569d116.jpg)
+
+
+○ I have the option of sorting apartments according to all criteria
+
+![SortApartments](https://user-images.githubusercontent.com/49925421/88681291-b3c5c580-d0f1-11ea-9d36-c3e590bba3b9.jpg)
+
+○ I have a review of Guest comments on the apartments
+
+![ViewComments](https://user-images.githubusercontent.com/49925421/88681667-1b7c1080-d0f2-11ea-870b-cbd4d3baf937.jpg)
+
+● As a Host I have the opportunity to:
+
+○ View, sort and filter by all criteria, but only your own
+apartments with the status ACTIVE
+
+○ I have an overview of my apartments with the status INACTIVE
+
+○ I can change the information about my apartment:
+
+■ All changes must be valid - if a required field is not filled in,
+an error message is displayed next to the corresponding field
+
+■ Pressing the send button sends a change request to the server
+
+■ In the event of a successful data change, the user is notified
+
+■ In case of unsuccessful data change, an error is displayed to the user
+
+○ I can wipe my apartment
+
+● As an Administrator you can:
+
+○ I see all apartments regardless of their status
+
+○ I am modifying the information about the apartment (same change procedure as the host)
+
+○ I am deleting all existing apartments
