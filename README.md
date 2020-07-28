@@ -143,6 +143,7 @@ user type
 ## Functionalities
 
 #### ● Registration
+![SingUp](https://user-images.githubusercontent.com/49925421/88675446-3e56f680-d0eb-11ea-9e86-44c1947a8d59.jpg)
 
 ● As a non-logged in user:
 
@@ -163,3 +164,37 @@ unique and the Guest has been successfully created and logged into the applicati
 his role
 
 ■ In case of failure to create a new Guest, an error message is displayed
+
+
+#### Log in
+
+![LogIn](https://user-images.githubusercontent.com/49925421/88675620-63e40000-d0eb-11ea-9635-0d2568c4fe70.jpg)
+
+● As a non-logged in user:
+
+○ If I want to log in:
+
+■ Enter the username and password in the fields provided for logging in
+
+■ Both fields must be filled in, otherwise they are next to an empty field
+prints an error message
+
+■ Pressing the send button sends a request to the server
+
+■ In case of successful login, the user is redirected to the overview
+pages in accordance with its role
+
+■ If the login fails, an error message and the user are displayed
+remains on the login page
+
+#### Logout
+
+![logOut](https://user-images.githubusercontent.com/49925421/88675872-b6252100-d0eb-11ea-8254-f955c0bcacd6.jpg)
+
+● As a logged-in user of any type
+
+  ○ I have the option to log out of the system
+
+  ○ Pressing the send button sends a session invalidation request to the server
+
+  ○ Upon successful logout, the login page opens
