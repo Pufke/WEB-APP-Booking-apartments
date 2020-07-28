@@ -199,20 +199,22 @@ remains on the login page
 
   ○ Upon successful logout, the login page opens
   
-### Modification of personal data
+#### Modification of personal data
 
-#### ● As a logged in user of any type:
+![Profile](https://user-images.githubusercontent.com/49925421/88676776-c7226200-d0ec-11ea-84f6-d47596cceb5a.jpg)
 
-##### ○ I have insight into my personal data
+ ● As a logged in user of any type:
 
-##### ○ I can change my personal data as well as my password (except username)
+ ○ I have insight into my personal data
 
-###### ■ All changes must be valid - if a field is not filled in or passwords
+ ○ I can change my personal data as well as my password (except username)
+
+ ■ All changes must be valid - if a field is not filled in or passwords
 are not appropriate (old is not good or new and control are not the same), in addition
 an error message is printed in the corresponding field
 
-###### ■ Pressing the send button sends a change request to the server
+ ■ Pressing the send button sends a change request to the server
 
-###### ■ In the event of a successful change, the user is notified
+ ■ In the event of a successful change, the user is notified
 
-###### ■ In case of unsuccessful change of the data to the user, an error is printed
+ ■ In case of unsuccessful change of the data to the user, an error is printed
