@@ -296,3 +296,56 @@ an error message is displayed next to the corresponding field
 ○ I am modifying the information about the apartment (same change procedure as the host)
 
 ○ I am deleting all existing apartments
+
+## Adding an apartment
+
+● As Host:
+
+○ I can add a new apartment:
+
+![image](https://user-images.githubusercontent.com/49925421/88685703-829bc400-d0f6-11ea-9f1a-20b63c69cbab.png)
+
+![image](https://user-images.githubusercontent.com/49925421/88685897-c4c50580-d0f6-11ea-8f96-38d577246dab.png)
+
+■ It is necessary to enter the necessary data in the fields (apartment type, number
+room, number of guests, location, etc.)
+Note: There is an overview of all available facilities of the apartment
+can assign to the apartment
+
+■ Pressing the send button sends a request to add the apartment to
+server
+
+■ If the addition is successful, the user is notified
+
+■ In case of unsuccessful addition, an error is printed to the user
+Note: The initial status of the apartment is INACTIVE, and the Host is who he is
+initiated creation
+
+## Maintenance of the contents of the apartment
+
+● As an administrator, I am also in charge of maintaining the list that represents the contents of the apartment:
+
+![image](https://user-images.githubusercontent.com/49925421/88686969-f094bb00-d0f7-11ea-9901-976f72c17aa4.png)
+
+○ I can add a new entity to the list of apartment contents:
+
+![image](https://user-images.githubusercontent.com/49925421/88687224-4c5f4400-d0f8-11ea-8dea-b2668bcd73a9.png)
+
+■ It is necessary to enter the name of the new content
+
+■ Pressing the send button sends a request to add content
+apartments on the server
+
+■ If the addition is successful, the user is notified
+
+■ In the event of a failed change, an error is printed for the user
+
+○ I can change the names of the existing contents of the apartment
+
+![image](https://user-images.githubusercontent.com/49925421/88687294-600aaa80-d0f8-11ea-80ee-dfa114387bc0.png)
+
+○ I can delete some existing contents of the apartment (it is necessary to delete that
+content and all apartments that have it)
+
+![image](https://user-images.githubusercontent.com/49925421/88687353-74e73e00-d0f8-11ea-8165-30be0bcf1fc0.png)
+
