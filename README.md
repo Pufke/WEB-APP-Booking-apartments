@@ -40,8 +40,7 @@ The application handles the following entities:
 
 ### ● Address
 
-- in the format: Street and number, City, Postal code (eg Sutjeska 3, Novi Sad
-21000)
+- in the format: Street and number, City, Postal code (eg Sutjeska 3, Novi Sad 21000)
 
 ### ● Apartment
 
